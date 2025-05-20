@@ -1,7 +1,9 @@
 package fiap.com.sensorium.controller;
 
 import fiap.com.sensorium.domain.situacao.ReadSituacaoDto;
+import fiap.com.sensorium.domain.situacao.Situacao;
 import fiap.com.sensorium.domain.situacao.SituacaoRepository;
+import fiap.com.sensorium.service.SituacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +23,18 @@ public class SituacaoController {
     @Autowired
     private SituacaoRepository repository;
 
-    @GetMapping
-    public ResponseEntity<Page<ReadSituacaoDto>> listByStatus(@PageableDefault(size = 10, page = 0, sort = {"status"}) Pageable pageable, @RequestParam(required = false) String status) {
-        var page = (status != null) ? repository.findByStatus( status, pageable ).map(ReadSituacaoDto::new) : repository.findAll(pageable).map(ReadSituacaoDto::new);
-        return ResponseEntity.ok(page);
+    @Autowired
+    private SituacaoService situacaoService;
 
+    @GetMapping
+    public ResponseEntity<Page<ReadSituacaoDto>> listByStatus(
+            @PageableDefault(size = 10, sort = "status") Pageable pageable,
+            @RequestParam(required = false) String status
+    ) {
+        Page<Situacao> page = (status != null)
+                ? situacaoService.findByStatus(status, pageable)
+                : situacaoService.findAll(pageable);
+
+        return ResponseEntity.ok(page.map(ReadSituacaoDto::new));
     }
 }

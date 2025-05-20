@@ -5,9 +5,13 @@ import fiap.com.sensorium.domain.filial.FilialRepository;
 import fiap.com.sensorium.domain.funcionario.Funcionario;
 import fiap.com.sensorium.domain.funcionario.FuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class FilialService {
@@ -18,6 +22,8 @@ public class FilialService {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
+    @Cacheable(value = "filiais",
+            key = "{#nomeFilial, #estado, #pageable.pageNumber, #pageable.pageSize, #pageable.sort.toString()}")
     public Page<Filial> filterQuery(
             String nomeFilial,
             String estado,
@@ -33,10 +39,14 @@ public class FilialService {
         return filialRepository.findAll(pageable);
     }
 
-    // New method to load responsible employee
-    private Funcionario loadResponsavel(Long idResponsavel) {
-        return funcionarioRepository.findById(idResponsavel)
-                .orElseThrow(() -> new RuntimeException("Responsável não encontrado"));
+    @Cacheable(value = "filial", key = "#id")
+    public Optional<Filial> findById(Long id) {
+        return filialRepository.findById(id);
+    }
+
+    @CacheEvict(value = {"filiais", "filial"}, allEntries = true)
+    public void clearCache() {
+
     }
 
 }

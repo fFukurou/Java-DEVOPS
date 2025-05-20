@@ -407,6 +407,6 @@ INSERT INTO funcionario (id_func, cargo, id_dados)
 VALUES (50, 'Doutor Gerente', 19);
 
 
-
+commit;
 
 

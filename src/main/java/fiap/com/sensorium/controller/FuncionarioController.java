@@ -22,6 +22,7 @@ public class FuncionarioController {
     @Autowired
     private FuncionarioService funcionarioService;
 
+    // GET
     @GetMapping
     public ResponseEntity<Page<ReadFuncionarioDto>> listAll(
             @RequestParam(required = false) String cargo,
@@ -34,10 +35,18 @@ public class FuncionarioController {
         return ResponseEntity.ok(funcionarios.map(ReadFuncionarioDto::new));
     }
 
+    // GET BY ID
     @GetMapping("/{id}")
     public ResponseEntity<ReadFuncionarioDto> getById(@PathVariable Long id) {
-        return funcionarioRepository.findById(id)
+        return funcionarioService.findById(id)
                 .map(funcionario -> ResponseEntity.ok(new ReadFuncionarioDto(funcionario)))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // CLEAR CACHE
+    @PostMapping("/clear-cache")
+    public ResponseEntity<Void> clearCache() {
+        funcionarioService.clearCache();
+        return ResponseEntity.noContent().build();
     }
 }

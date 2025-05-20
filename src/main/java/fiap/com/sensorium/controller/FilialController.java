@@ -34,8 +34,14 @@ public class FilialController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ReadFilialDto> getById(@PathVariable Long id) {
-        return filialRepository.findById(id)
+        return filialService.findById(id)
                 .map(filial -> ResponseEntity.ok(new ReadFilialDto(filial)))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/clear-cache")
+    public ResponseEntity<Void> clearCache() {
+        filialService.clearCache();
+        return ResponseEntity.noContent().build();
     }
 }

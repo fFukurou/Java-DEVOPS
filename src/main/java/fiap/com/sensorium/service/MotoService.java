@@ -9,9 +9,15 @@ import fiap.com.sensorium.domain.motorista.MotoristaRepository;
 import fiap.com.sensorium.domain.setor.SetorRepository;
 import fiap.com.sensorium.domain.situacao.SituacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class MotoService {
@@ -75,7 +81,8 @@ public class MotoService {
         }
     }
 
-
+    @Cacheable(value = "motos",
+            key = "{#condicao, #setorId, #pageable.pageNumber, #pageable.pageSize, #pageable.sort.toString()}")
     public Page<Moto> filterQuery(String condicao, Long setorId, Pageable pageable) {
         if (condicao != null && setorId != null) {
             // Both filters
@@ -92,4 +99,15 @@ public class MotoService {
         }
 
     }
+
+    @Cacheable(value = "moto", key = "#id")
+    public Optional<Moto> findById(Long id) {
+        return motoRepository.findById(id);
+    }
+
+    @CacheEvict(value = {"motos", "moto"}, allEntries = true)
+    public void clearCache() {
+
+    }
+
 }

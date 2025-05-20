@@ -37,8 +37,15 @@ public class ModeloController {
     // GET BY ID
     @GetMapping("/{id}")
     public ResponseEntity<ReadModeloDto> getById(@PathVariable Long id) {
-        return modeloRepository.findById(id)
+        return modeloService.findById(id)
                 .map(modelo -> ResponseEntity.ok(new ReadModeloDto(modelo)))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // CLEAR CACHE
+    @PostMapping("/clear-cache")
+    public ResponseEntity<Void> clearModeloCache() {
+        modeloService.clearCache();
+        return ResponseEntity.noContent().build();
     }
 }

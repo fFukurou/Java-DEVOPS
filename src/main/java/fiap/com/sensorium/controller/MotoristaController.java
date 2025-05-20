@@ -5,6 +5,7 @@ import fiap.com.sensorium.domain.moto.ReadMotoDto;
 import fiap.com.sensorium.domain.motorista.Motorista;
 import fiap.com.sensorium.domain.motorista.MotoristaRepository;
 import fiap.com.sensorium.domain.motorista.ReadMotoristaDto;
+import fiap.com.sensorium.service.MotoristaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,9 @@ public class MotoristaController {
     @Autowired
     private MotoristaRepository motoristaRepository;
 
+    @Autowired
+    private MotoristaService motoristaService;
+
 
     // GET
     @GetMapping
@@ -26,19 +30,24 @@ public class MotoristaController {
             @RequestParam(required = false) String plano,
             @PageableDefault(size = 10, sort = "id") Pageable pageable
     ) {
-
-        Page<Motorista> motoristas;
-
-        motoristas = (plano != null) ? motoristaRepository.findByPlanoContainingIgnoreCase(plano, pageable) : motoristaRepository.findAll(pageable);
-
-        return ResponseEntity.ok(motoristas.map(ReadMotoristaDto::new));
+        return ResponseEntity.ok(
+                motoristaService.filterQuery(plano, pageable)
+                        .map(ReadMotoristaDto::new)
+        );
     }
 
     // GET BY ID
     @GetMapping("/{id}")
     public ResponseEntity<ReadMotoristaDto> getById(@PathVariable Long id) {
-        return motoristaRepository.findById(id)
+        return motoristaService.findById(id)
                 .map(motorista -> ResponseEntity.ok(new ReadMotoristaDto(motorista)))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // CLEAR CACHE
+    @PostMapping("/clear-cache")
+    public ResponseEntity<Void> clearCache() {
+        motoristaService.clearCache();
+        return ResponseEntity.noContent().build();
     }
 }

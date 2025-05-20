@@ -1,5 +1,3 @@
-- Move Some Logic to Service Layer
-- Finish Controllers
 - ErrorHandling
-- CACHE
+- Swagger / DOCS
 - README
