@@ -46,21 +46,8 @@ public class MotoController {
             @RequestParam(required = false) Long setorId,
             @PageableDefault(size = 10, sort = "placa") Pageable pageable
     ) {
-        Page<Moto> motos;
+        Page<Moto> motos = motoService.filterQuery(condicao, setorId, pageable);
 
-        if (condicao != null && setorId != null) {
-            // Both filters
-            motos = motoRepository.findByCondicaoAndSetorIdIgnoreCase(condicao, setorId, pageable);
-        } else if (condicao != null) {
-            // Only condicao filter
-            motos = motoRepository.findByCondicaoIgnoreCase(condicao, pageable);
-        } else if (setorId != null) {
-            // Only setor filter
-            motos = motoRepository.findBySetorId(setorId, pageable);
-        } else {
-            // No filters
-            motos = motoRepository.findAll(pageable);
-        }
         return ResponseEntity.ok(motos.map(ReadMotoDto::new));
     }
 

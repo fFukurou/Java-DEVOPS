@@ -9,6 +9,8 @@ import fiap.com.sensorium.domain.motorista.MotoristaRepository;
 import fiap.com.sensorium.domain.setor.SetorRepository;
 import fiap.com.sensorium.domain.situacao.SituacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -71,5 +73,23 @@ public class MotoService {
         if (situacaoId != null) {
             situacaoRepository.findById(situacaoId).ifPresent(moto::setSituacao);
         }
+    }
+
+
+    public Page<Moto> filterQuery(String condicao, Long setorId, Pageable pageable) {
+        if (condicao != null && setorId != null) {
+            // Both filters
+            return motoRepository.findByCondicaoAndSetorId(condicao, setorId, pageable);
+        } else if (condicao != null) {
+            // Only condicao filter
+            return motoRepository.findByCondicaoIgnoreCase(condicao, pageable);
+        } else if (setorId != null) {
+            // Only setor filter
+            return motoRepository.findBySetorId(setorId, pageable);
+        } else {
+            // No filters
+            return motoRepository.findAll(pageable);
+        }
+
     }
 }
