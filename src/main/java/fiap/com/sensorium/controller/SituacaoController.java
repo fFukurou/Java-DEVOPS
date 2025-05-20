@@ -9,6 +9,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,10 +20,11 @@ public class SituacaoController {
 
     @Autowired
     private SituacaoRepository repository;
-
+    
     @GetMapping
-    public ResponseEntity<Page<ReadSituacaoDto>> listAll(@PageableDefault(size = 10, page = 0, sort = {"nome"}) Pageable pageable) {
-        var page = repository.findAll(pageable).map(ReadSituacaoDto::new);
+    public ResponseEntity<Page<ReadSituacaoDto>> listByStatus(@PageableDefault(size = 10, page = 0, sort = {"status"}) Pageable pageable, @RequestParam(required = false) String status) {
+        var page = (status != null) ? repository.findByStatus( status, pageable ).map(ReadSituacaoDto::new) : repository.findAll(pageable).map(ReadSituacaoDto::new);
         return ResponseEntity.ok(page);
+
     }
 }
