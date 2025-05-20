@@ -7,7 +7,7 @@ public record ReadSimpleFilialDto(
     public ReadSimpleFilialDto(Filial filial) {
         this(
                 filial.getId(),
-                filial.getNome()
+                filial.getNomeFilial()
             );
         }
 }

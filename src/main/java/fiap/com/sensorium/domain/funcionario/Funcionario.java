@@ -28,6 +28,6 @@ public class Funcionario {
     @JoinColumn(name = "id_dados", nullable = false)
     private Dados dados;
 
-    @OneToMany(mappedBy = "responsavel")
+    @OneToMany(mappedBy = "funcionario")
     private List<Filial> filiais = new ArrayList<>();
 }

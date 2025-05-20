@@ -23,7 +23,7 @@ public class Filial {
     private Long id;
 
     @Column(name = "nome_filial", length = 150)
-    private String nome;
+    private String nomeFilial;
 
     @ManyToOne
     @JoinColumn(name = "id_endereco", nullable = false)
@@ -31,8 +31,10 @@ public class Filial {
 
     @ManyToOne
     @JoinColumn(name = "id_func", nullable = false)
-    private Funcionario responsavel;
+    private Funcionario funcionario;
 
     @OneToMany(mappedBy = "filial")
     private List<Patio> patios = new ArrayList<>();
+
+
 }
