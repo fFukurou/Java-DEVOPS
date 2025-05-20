@@ -39,7 +39,7 @@ public class MotoController {
     private MotoService motoService;
 
 
-
+    // GET
     @GetMapping
     public ResponseEntity<Page<ReadMotoDto>> listAll(
             @RequestParam(required = false) String condicao,
@@ -51,7 +51,7 @@ public class MotoController {
         return ResponseEntity.ok(motos.map(ReadMotoDto::new));
     }
 
-    // GET by ID
+    // GET BY ID
     @GetMapping("/{id}")
     public ResponseEntity<ReadMotoDto> getById(@PathVariable Long id) {
         return motoRepository.findById(id)
@@ -59,7 +59,7 @@ public class MotoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST create
+    // POST
     @PostMapping
     @Transactional
     public ResponseEntity<ReadMotoDto> create(@RequestBody @Valid CreateMotoDto dto) {
@@ -72,7 +72,7 @@ public class MotoController {
                 .body(new ReadMotoDto(savedMoto));
     }
 
-    // PUT update
+    // PUT
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<ReadMotoDto> update(

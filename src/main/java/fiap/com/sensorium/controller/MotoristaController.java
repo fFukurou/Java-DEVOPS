@@ -29,11 +29,7 @@ public class MotoristaController {
 
         Page<Motorista> motoristas;
 
-        if (plano != null) {
-            motoristas = motoristaRepository.findByPlanoContainingIgnoreCase(plano, pageable);
-        } else {
-            motoristas = motoristaRepository.findAll(pageable);
-        }
+        motoristas = (plano != null) ? motoristaRepository.findByPlanoContainingIgnoreCase(plano, pageable) : motoristaRepository.findAll(pageable);
 
         return ResponseEntity.ok(motoristas.map(ReadMotoristaDto::new));
     }

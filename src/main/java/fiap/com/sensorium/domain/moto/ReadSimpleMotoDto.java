@@ -1,11 +1,11 @@
 package fiap.com.sensorium.domain.moto;
 
-public record ReadMotoSituacaoDto(
+public record ReadSimpleMotoDto(
         Long id,
         String placa,
         String condicao
 ) {
-    public ReadMotoSituacaoDto(Moto moto) {
+    public ReadSimpleMotoDto(Moto moto) {
         this(moto.getId(), moto.getPlaca(), moto.getCondicao());
     }
 }
