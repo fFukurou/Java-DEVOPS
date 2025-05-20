@@ -361,11 +361,50 @@ BEGIN
 END;
 /
 
+------ --  EXTRA INSERTS ---------------
+---- DADOS
+
+-- 2. João Silva (São Paulo)
+INSERT INTO dados (id_dados, cpf, telefone, email, senha, nome)
+VALUES (15, '34567890123', '11997776666', 'joao.silva@email.com', 'joao@456', 'João Silva');
+
+-- 3. Carlos Pereira (Rio de Janeiro)
+INSERT INTO dados (id_dados, cpf, telefone, email, senha, nome)
+VALUES (16, '45678901234', '21995554444', 'carlos.pereira@email.com', 'carlos789', 'Carlos Pereira');
+
+-- 4. Ana Santos (Minas Gerais)
+INSERT INTO dados (id_dados, cpf, telefone, email, senha, nome)
+VALUES (17, '56789012345', '31993332222', 'ana.santos@email.com', 'ana1011', 'Ana Santos');
+
+-- 5. Pedro Almeida (Bahia)
+INSERT INTO dados (id_dados, cpf, telefone, email, senha, nome)
+VALUES (18, '67890123456', '71991112233', 'pedro.almeida@email.com', 'pedro1213', 'Pedro Almeida');
+
+-- 6. Luiza Fernandes (Santa Catarina) - Bonus
+INSERT INTO dados (id_dados, cpf, telefone, email, senha, nome)
+VALUES (19, '78901234567', '47998887777', 'luiza.fernandes@email.com', 'luiza1415', 'Luiza Fernandes');
 
 
+-------- FUNCIONARIOS
+-- 2. João Silva - Mecânico Chefe
+INSERT INTO funcionario (id_func, cargo, id_dados)
+VALUES (30, 'Mecânico Chefe', 15);
 
+-- 3. Carlos Pereira - Atendente
+INSERT INTO funcionario (id_func, cargo, id_dados)
+VALUES (35, 'Deus', 16);
 
+-- 4. Ana Santos - Coordenadora de Logística
+INSERT INTO funcionario (id_func, cargo, id_dados)
+VALUES (45, 'Gerente Supremo', 17);
 
+-- 5. Pedro Almeida - Especialista em Manutenção
+INSERT INTO funcionario (id_func, cargo, id_dados)
+VALUES (40, 'Especialista Especial', 18);
+
+-- 6. Luiza Fernandes - Supervisora (Bonus)
+INSERT INTO funcionario (id_func, cargo, id_dados)
+VALUES (50, 'Doutor Gerente', 19);
 
 
 

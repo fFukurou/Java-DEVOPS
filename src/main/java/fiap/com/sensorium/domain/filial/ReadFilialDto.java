@@ -10,6 +10,7 @@ public record ReadFilialDto(
         Long id,
         String nomeFilial,
         EnderecoDto endereco,
+        ReadSimpleFuncionarioDto responsavel,
         ReadSimpleFuncionarioDto funcionario,
         List<ReadPatioDto> patios
 ) {
@@ -18,6 +19,7 @@ public record ReadFilialDto(
                 filial.getId(),
                 filial.getNomeFilial(),
                 new EnderecoDto(filial.getEndereco()),
+                new ReadSimpleFuncionarioDto(filial.getResponsavel()),
                 new ReadSimpleFuncionarioDto(filial.getFuncionario()),
                 filial.getPatios().stream()
                         .map(ReadPatioDto::new)

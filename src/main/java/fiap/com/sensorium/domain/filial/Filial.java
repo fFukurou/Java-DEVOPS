@@ -30,6 +30,10 @@ public class Filial {
     private Endereco endereco;
 
     @ManyToOne
+    @JoinColumn(name = "id_responsavel", nullable = false)
+    private Funcionario responsavel;
+
+    @ManyToOne
     @JoinColumn(name = "id_func", nullable = false)
     private Funcionario funcionario;
 

@@ -2,6 +2,8 @@ package fiap.com.sensorium.service;
 
 import fiap.com.sensorium.domain.filial.Filial;
 import fiap.com.sensorium.domain.filial.FilialRepository;
+import fiap.com.sensorium.domain.funcionario.Funcionario;
+import fiap.com.sensorium.domain.funcionario.FuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,9 @@ public class FilialService {
 
     @Autowired
     private FilialRepository filialRepository;
+
+    @Autowired
+    private FuncionarioRepository funcionarioRepository;
 
     public Page<Filial> filterQuery(
             String nomeFilial,
@@ -26,6 +31,12 @@ public class FilialService {
             return filialRepository.findByEstadoIgnoreCase(estado, pageable);
         }
         return filialRepository.findAll(pageable);
+    }
+
+    // New method to load responsible employee
+    private Funcionario loadResponsavel(Long idResponsavel) {
+        return funcionarioRepository.findById(idResponsavel)
+                .orElseThrow(() -> new RuntimeException("Responsável não encontrado"));
     }
 
 }
