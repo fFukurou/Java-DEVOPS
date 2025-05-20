@@ -1,0 +1,48 @@
+package fiap.com.sensorium.controller;
+
+import fiap.com.sensorium.domain.moto.Moto;
+import fiap.com.sensorium.domain.moto.ReadMotoDto;
+import fiap.com.sensorium.domain.motorista.Motorista;
+import fiap.com.sensorium.domain.motorista.MotoristaRepository;
+import fiap.com.sensorium.domain.motorista.ReadMotoristaDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("motoristas")
+public class MotoristaController {
+
+    @Autowired
+    private MotoristaRepository motoristaRepository;
+
+
+    // GET
+    @GetMapping
+    public ResponseEntity<Page<ReadMotoristaDto>> listAll(
+            @RequestParam(required = false) String plano,
+            @PageableDefault(size = 10, sort = "id") Pageable pageable
+    ) {
+
+        Page<Motorista> motoristas;
+
+        if (plano != null) {
+            motoristas = motoristaRepository.findByPlanoContainingIgnoreCase(plano, pageable);
+        } else {
+            motoristas = motoristaRepository.findAll(pageable);
+        }
+
+        return ResponseEntity.ok(motoristas.map(ReadMotoristaDto::new));
+    }
+
+    // GET BY ID
+    @GetMapping("/{id}")
+    public ResponseEntity<ReadMotoristaDto> getById(@PathVariable Long id) {
+        return motoristaRepository.findById(id)
+                .map(motorista -> ResponseEntity.ok(new ReadMotoristaDto(motorista)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+}
