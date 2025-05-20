@@ -5,6 +5,7 @@ import fiap.com.sensorium.domain.motorista.Motorista;
 import fiap.com.sensorium.domain.setor.Setor;
 import fiap.com.sensorium.domain.situacao.Situacao;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,11 @@ public class Moto {
     @Column(name = "id_moto")
     private Long id;
 
-    @Column(length = 7)
+    @Column(length = 7, unique = true)
+    @Pattern(
+            regexp = "^(?:[A-Z]{3}[0-9][A-Z][0-9]{2}|[A-Z]{3}[0-9]{4})$",
+            message = "Placa deve seguir padrão MERCOSUL (ABC1D23) ou antigo (AAA1111)"
+    )
     private String placa;
 
     @Column(length = 17)

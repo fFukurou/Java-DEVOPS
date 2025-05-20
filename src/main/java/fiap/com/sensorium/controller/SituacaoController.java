@@ -20,7 +20,7 @@ public class SituacaoController {
 
     @Autowired
     private SituacaoRepository repository;
-    
+
     @GetMapping
     public ResponseEntity<Page<ReadSituacaoDto>> listByStatus(@PageableDefault(size = 10, page = 0, sort = {"status"}) Pageable pageable, @RequestParam(required = false) String status) {
         var page = (status != null) ? repository.findByStatus( status, pageable ).map(ReadSituacaoDto::new) : repository.findAll(pageable).map(ReadSituacaoDto::new);
