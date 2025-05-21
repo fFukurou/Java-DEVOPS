@@ -37,10 +37,9 @@ public class FuncionarioController {
 
     // GET BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<ReadFuncionarioDto> getById(@PathVariable Long id) {
-        return funcionarioService.findById(id)
-                .map(funcionario -> ResponseEntity.ok(new ReadFuncionarioDto(funcionario)))
-                .orElse(ResponseEntity.notFound().build());
+    public ReadFuncionarioDto getById(@PathVariable Long id) {
+        // Service throws EntityNotFoundException if not found
+        return new ReadFuncionarioDto(funcionarioService.findByIdOrThrow(id));
     }
 
     // CLEAR CACHE

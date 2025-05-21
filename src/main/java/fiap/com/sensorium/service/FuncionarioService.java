@@ -2,6 +2,7 @@ package fiap.com.sensorium.service;
 
 import fiap.com.sensorium.domain.funcionario.Funcionario;
 import fiap.com.sensorium.domain.funcionario.FuncionarioRepository;
+import fiap.com.sensorium.infra.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Service
@@ -35,9 +37,15 @@ public class FuncionarioService {
         return funcionarioRepository.findAll(pageable);
     }
 
+    public Funcionario findByIdOrThrow(Long id) {
+        return funcionarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado com ID: " + id));
+    }
+
+    // Update the existing findById (optional, but recommended for consistency):
     @Cacheable(value = "funcionario", key = "#id")
     public Optional<Funcionario> findById(Long id) {
-        return funcionarioRepository.findById(id);
+        return Optional.ofNullable(this.findByIdOrThrow(id)); // Wraps the exception-throwing method
     }
 
     @CacheEvict(value = {"funcionarios", "funcionario"}, allEntries = true)

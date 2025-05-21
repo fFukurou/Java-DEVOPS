@@ -1,7 +1,10 @@
 package fiap.com.sensorium.service;
 
+import fiap.com.sensorium.domain.modelo.CreateModeloDto;
 import fiap.com.sensorium.domain.modelo.Modelo;
 import fiap.com.sensorium.domain.modelo.ModeloRepository;
+import fiap.com.sensorium.domain.modelo.UpdateModeloDto;
+import fiap.com.sensorium.infra.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -35,12 +38,51 @@ public class ModeloService {
         return modeloRepository.findAll(pageable);
     }
 
+    @CacheEvict(value = {"modelos", "modelo"}, allEntries = true)
+    public Modelo create(Modelo modelo) {
+        return modeloRepository.save(modelo);
+    }
+
+    @CachePut(value = "modelo", key = "#modelo.id")
+    @CacheEvict(value = "modelos", allEntries = true)
+    public Modelo update(Modelo modelo) {
+        return modeloRepository.save(modelo);
+    }
+
+    @CacheEvict(value = {"modelos", "modelo"}, key = "#id")
+    public void delete(Long id) {
+        modeloRepository.deleteById(id);
+    }
+
+    public Modelo findByIdOrThrow(Long id) {
+        return modeloRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Modelo não encontrado"));
+    }
+
     @Cacheable(value = "modelo", key = "#id")
     public Optional<Modelo> findById(Long id) {
         return modeloRepository.findById(id);
     }
-
     @CacheEvict(value = {"modelos", "modelo"}, allEntries = true)
     public void clearCache() {
+    }
+
+    // HELPER METHOD
+    public void copyDtoToModel(Object dto, Modelo modelo) {
+        if (dto instanceof CreateModeloDto createDto) {
+            modelo.setNome(createDto.nome());
+            modelo.setFrenagem(createDto.frenagem());
+            modelo.setSistemaPartida(createDto.sistemaPartida());
+            modelo.setTanque(createDto.tanque());
+            modelo.setCombustivel(createDto.combustivel());
+            modelo.setConsumo(createDto.consumo());
+        } else if (dto instanceof UpdateModeloDto updateDto) {
+            modelo.setNome(updateDto.nome());
+            modelo.setFrenagem(updateDto.frenagem());
+            modelo.setSistemaPartida(updateDto.sistemaPartida());
+            modelo.setTanque(updateDto.tanque());
+            modelo.setCombustivel(updateDto.combustivel());
+            modelo.setConsumo(updateDto.consumo());
+        }
     }
 }

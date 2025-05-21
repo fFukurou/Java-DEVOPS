@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import fiap.com.sensorium.domain.filial.Filial;
 import fiap.com.sensorium.domain.filial.FilialRepository;
 import fiap.com.sensorium.domain.filial.ReadFilialDto;
+import fiap.com.sensorium.infra.exception.EntityNotFoundException;
 import fiap.com.sensorium.service.FilialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ public class FilialController {
     @Autowired
     private FilialService filialService;
 
+    // GET
     @GetMapping
     public ResponseEntity<Page<ReadFilialDto>> listAll(
             @RequestParam(required = false) String nomeFilial,
@@ -32,13 +34,14 @@ public class FilialController {
         return ResponseEntity.ok(filiais.map(ReadFilialDto::new));
     }
 
+    // GET BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<ReadFilialDto> getById(@PathVariable Long id) {
+    public ReadFilialDto getById(@PathVariable Long id) {
         return filialService.findById(id)
-                .map(filial -> ResponseEntity.ok(new ReadFilialDto(filial)))
-                .orElse(ResponseEntity.notFound().build());
+                .map(ReadFilialDto::new)
+                .orElseThrow(() -> new EntityNotFoundException("Filial não encontrada com ID: " + id));
     }
-
+    // CLEAR CACHE
     @PostMapping("/clear-cache")
     public ResponseEntity<Void> clearCache() {
         filialService.clearCache();

@@ -8,6 +8,7 @@ import fiap.com.sensorium.domain.moto.UpdateMotoDto;
 import fiap.com.sensorium.domain.motorista.MotoristaRepository;
 import fiap.com.sensorium.domain.setor.SetorRepository;
 import fiap.com.sensorium.domain.situacao.SituacaoRepository;
+import fiap.com.sensorium.infra.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -99,6 +100,12 @@ public class MotoService {
         }
 
     }
+
+    public Moto findByIdOrThrow(Long id) {
+        return motoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Moto não encontrada com ID: " + id));
+    }
+
 
     @Cacheable(value = "moto", key = "#id")
     public Optional<Moto> findById(Long id) {

@@ -1,12 +1,13 @@
 package fiap.com.sensorium.domain.filial;
 
+import fiap.com.sensorium.infra.exception.CustomJpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface FilialRepository extends JpaRepository<Filial, Long> {
+public interface FilialRepository extends CustomJpaRepository<Filial, Long> {
 
     Page<Filial> findByNomeFilialContainingIgnoreCase(String nomeFilial, Pageable pageable);
 

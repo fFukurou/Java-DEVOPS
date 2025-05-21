@@ -5,6 +5,7 @@ import fiap.com.sensorium.domain.moto.ReadMotoDto;
 import fiap.com.sensorium.domain.motorista.Motorista;
 import fiap.com.sensorium.domain.motorista.MotoristaRepository;
 import fiap.com.sensorium.domain.motorista.ReadMotoristaDto;
+import fiap.com.sensorium.infra.exception.EntityNotFoundException;
 import fiap.com.sensorium.service.MotoristaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,10 +39,10 @@ public class MotoristaController {
 
     // GET BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<ReadMotoristaDto> getById(@PathVariable Long id) {
+    public ReadMotoristaDto getById(@PathVariable Long id) {
         return motoristaService.findById(id)
-                .map(motorista -> ResponseEntity.ok(new ReadMotoristaDto(motorista)))
-                .orElse(ResponseEntity.notFound().build());
+                .map(ReadMotoristaDto::new)
+                .orElseThrow(() -> new EntityNotFoundException("Motorista não encontrado com ID: " + id));
     }
 
     // CLEAR CACHE

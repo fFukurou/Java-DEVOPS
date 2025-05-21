@@ -53,10 +53,8 @@ public class MotoController {
 
     // GET BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<ReadMotoDto> getById(@PathVariable Long id) {
-        return motoService.findById(id)
-                .map(moto -> ResponseEntity.ok(new ReadMotoDto(moto)))
-                .orElse(ResponseEntity.notFound().build());
+    public ReadMotoDto getById(@PathVariable Long id) {
+        return new ReadMotoDto(motoService.findByIdOrThrow(id));
     }
 
     // POST
@@ -77,32 +75,24 @@ public class MotoController {
     // PUT
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<ReadMotoDto> update(
+    public ReadMotoDto update(
             @PathVariable Long id,
             @RequestBody @Valid UpdateMotoDto dto
     ) {
-        return motoService.findById(id)
-                .map(moto -> {
-
-                    motoService.updateMotoFromDto(moto, dto);
-                    motoService.clearCache();
-
-                    return ResponseEntity.ok(new ReadMotoDto(moto));
-                })
-                .orElse(ResponseEntity.notFound().build());
+        Moto moto = motoService.findByIdOrThrow(id);
+        motoService.updateMotoFromDto(moto, dto);
+        motoService.clearCache();
+        return new ReadMotoDto(moto);
     }
 
     // DELETE
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (motoRepository.existsById(id)) {
-            motoRepository.deleteById(id);
-            motoService.clearCache();
-
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        Moto moto = motoService.findByIdOrThrow(id);
+        motoRepository.delete(moto);
+        motoService.clearCache();
+        return ResponseEntity.noContent().build();
     }
 
     // CLEAR CACHE
