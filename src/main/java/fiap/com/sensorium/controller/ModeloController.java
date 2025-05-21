@@ -39,7 +39,7 @@ public class ModeloController {
     @ApiResponse(responseCode = "200", description = "Lista de modelos retornada com sucesso")
     @GetMapping
     public ResponseEntity<Page<ReadModeloDto>> listAll(
-            @Parameter(description = "Nome para filtro (opcional)", example = "CB500")
+            @Parameter(description = "Nome para filtro (opcional)", example = "Kawasaki Ninja")
             @RequestParam(required = false) String nome,
 
             @Parameter(description = "Tipo de combustível para filtro (opcional)", example = "Gasolina")
@@ -59,7 +59,7 @@ public class ModeloController {
     })
     @GetMapping("/{id}")
     public ReadModeloDto getById(
-            @Parameter(description = "ID do modelo", example = "1")
+            @Parameter(description = "ID do modelo", example = "4")
             @PathVariable Long id
     ) {
         Modelo modelo = modeloService.findById(id)
@@ -99,7 +99,7 @@ public class ModeloController {
     @PutMapping("/{id}")
     @Transactional
     public ReadModeloDto update(
-            @Parameter(description = "ID do modelo a ser atualizado", example = "1")
+            @Parameter(description = "ID do modelo a ser atualizado", example = "4")
             @PathVariable Long id,
 
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -121,7 +121,7 @@ public class ModeloController {
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Void> delete(
-            @Parameter(description = "ID do modelo a ser excluído", example = "1")
+            @Parameter(description = "ID do modelo a ser excluído", example = "3")
             @PathVariable Long id
     ) {
         modeloService.findByIdOrThrow(id);
