@@ -1,3 +1,2 @@
-- ErrorHandling
 - Swagger / DOCS
 - README
