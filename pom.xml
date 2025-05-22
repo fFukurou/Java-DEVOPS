@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>fiap.com</groupId>
-	<artifactId>sensorium</artifactId>
+	<artifactId>ostresmotoqueirosdoapocalipseverde</artifactId>
 	<version>0.5.0 SPRINT2</version>
-	<name>sensorium</name>
+	<name>ostresmotoqueirosdoapocalipseverde</name>
 	<description>Project for the 2025 challenge of ADS FIAP</description>
 	<url/>
 	<licenses>
