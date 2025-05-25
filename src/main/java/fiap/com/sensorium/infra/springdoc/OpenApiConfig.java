@@ -11,7 +11,7 @@ public class OpenApiConfig {
     public OpenAPI sensoriumOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Sensorium API")
+                        .title("Os Tres Motoqueiros do Apocalipse Verde - API")
                         .description("API documentation for FIAP ADS 2025 'challenge' project")
                         .version("v0.5"));
     }
