@@ -24,10 +24,6 @@ az vm create \
   --public-ip-sku Basic \
   --output json
 
-# Obter o IP público da VM (opcional, mas útil para debug)
-VM_IP=$(az vm show -d -g $RESOURCE_GROUP -n $VM_NAME --query publicIps -o tsv)
-echo "IP da VM: $VM_IP"
-
 # Garantir que a porta 8080 esteja liberada no NSG associado
 NSG_NAME=$(az network nic show \
   --resource-group $RESOURCE_GROUP \
@@ -60,5 +56,3 @@ az vm run-command invoke \
     docker build -t otmav-api . &&
     docker run -d -p 8080:8080 otmav-api
   "
-
-echo "Acesse a aplicação em: http://$VM_IP:8080/swagger-ui/index.html"
