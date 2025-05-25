@@ -101,16 +101,16 @@ CREATE TABLE moto (
 
 ------------------------------------------ Inserts -----------------------------------------
 
-INSERT INTO dados VALUES (1, '12345678901', '11999999999', 'joao@email.com', 'senha123', 'Jo?o Silva');
-INSERT INTO dados VALUES (2, '23456789012', '21988888888', 'maria@email.com', 'senha123', 'Maria Oliveira');
-INSERT INTO dados VALUES (3, '34567890123', '31977777777', 'carlos@email.com', 'senha123', 'Carlos Lima');
-INSERT INTO dados VALUES (4, '45678901234', '41966666666', 'ana@email.com', 'senha123', 'Ana Paula');
-INSERT INTO dados VALUES (5, '56789012345', '51955555555', 'lucas@email.com', 'senha123', 'Lucas Mendes');
-INSERT INTO dados VALUES (6, '67890123456', '61944444444', 'fernanda@email.com', 'senha123', 'Fernanda Rocha');
-INSERT INTO dados VALUES (7, '78901234567', '71933333333', 'rafael@email.com', 'senha123', 'Rafael Souza');
-INSERT INTO dados VALUES (8, '89012345678', '81922222222', 'juliana@email.com', 'senha123', 'Juliana Castro');
-INSERT INTO dados VALUES (9, '90123456789', '91911111111', 'andre@email.com', 'senha123', 'Andr? Barbosa');
-INSERT INTO dados VALUES (10, '01234567890', '11900000000', 'patricia@email.com', 'senha123', 'Patr?cia Ferreira');
+INSERT INTO dados VALUES (1, '12345678901', '11999999999', 'joao@email.com', 'Joao@123', 'Joao Silva');
+INSERT INTO dados VALUES (2, '23456789012', '21988888888', 'maria@email.com', 'MariaO23', 'Maria Oliveira');
+INSERT INTO dados VALUES (3, '34567890123', '31977777777', 'carlos@email.com', 'Carlos@010203', 'Carlos Lima');
+INSERT INTO dados VALUES (4, '45678901234', '41966666666', 'ana@email.com', 'Paula23', 'Ana Paula');
+INSERT INTO dados VALUES (5, '56789012345', '51955555555', 'lucas@email.com', 'Lucas1129', 'Lucas Mendes');
+INSERT INTO dados VALUES (6, '67890123456', '61944444444', 'fernanda@email.com', 'F@4587', 'Fernanda Rocha');
+INSERT INTO dados VALUES (7, '78901234567', '71933333333', 'rafael@email.com', 'Rafinha@60', 'Rafael Souza');
+INSERT INTO dados VALUES (8, '89012345678', '81922222222', 'juliana@email.com', 'julianaC_23', 'Juliana Castro');
+INSERT INTO dados VALUES (9, '90123456789', '91911111111', 'andre@email.com', 'AndresaBarbosa@123', 'Andra Barbosa');
+INSERT INTO dados VALUES (10, '01234567890', '11900000000', 'patricia@email.com', '1234Patricia', 'Patricia Ferreira');
 
 
 INSERT INTO modelo VALUES (1, 'Honda CG 160', 'FreioADisco', 'PartidaEletrica ', 16, 'Gasolina', 40);
@@ -121,9 +121,9 @@ INSERT INTO modelo VALUES (5, 'Harley Sportster', 'FreioHidraulico', 'PartidaSta
 
 
 INSERT INTO situacao VALUES (1, 'Motor quebrado', 'Aguardando processamento', 'Ativo');
-INSERT INTO situacao VALUES (2, 'Sem placa', 'Processo em execu??o', 'Ativo');
-INSERT INTO situacao VALUES (3, 'Conclu?do', 'Processo finalizado com sucesso', 'Ativo');
-INSERT INTO situacao VALUES (4, 'Cancelado', 'Processo cancelado pelo usu?rio ou sistema', 'Inativo');
+INSERT INTO situacao VALUES (2, 'Sem placa', 'Processo em execução', 'Ativo');
+INSERT INTO situacao VALUES (3, 'Concluído', 'Processo finalizado com sucesso', 'Ativo');
+INSERT INTO situacao VALUES (4, 'Cancelado', 'Processo cancelado pelo usuário ou sistema', 'Inativo');
 INSERT INTO situacao VALUES (5, 'Manutencao', 'Em manutencao no momento', 'Manutencao');
 
 
@@ -163,11 +163,10 @@ INSERT INTO patio VALUES (5, 10, 25, 300, 5);
 
 
 INSERT INTO setor VALUES (1, 10, 15, 200, 'Setor A', 'Setor de motos leves', 1);
-INSERT INTO setor VALUES (2, 8, 12, 180, 'Setor B', 'Setor de motos m?dias', 2);
+INSERT INTO setor VALUES (2, 8, 12, 180, 'Setor B', 'Setor de motos médias', 2);
 INSERT INTO setor VALUES (3, 5, 8, 150, 'Setor C', 'Setor de motos pesadas', 3);
 INSERT INTO setor VALUES (4, 12, 20, 220, 'Setor D', 'Setor de testes', 4);
-INSERT INTO setor VALUES (5, 6, 10, 170, 'Setor E', 'Setor de manuten??o', 5);
-
+INSERT INTO setor VALUES (5, 6, 10, 170, 'Setor E', 'Setor de manutenção', 5);
 
 INSERT INTO moto VALUES (1001, 'ABC1234', '9BWZZZ377VT004251', 'ATIVA', '23.56', '46.64', 201, 1, 1, 1);
 INSERT INTO moto VALUES (1002, 'XYZ5678', '8ADZZZ333LV019876', 'INATIVA', '22.97', '43.20', 202, 2, 2, 2);
@@ -176,7 +175,11 @@ INSERT INTO moto VALUES (1004, 'DEF8765', '1HGCM82633A004352', 'ATIVA', '19.55',
 INSERT INTO moto VALUES (1005, 'GHI3456', '2FTRX18W1XCA12345', 'INATIVA', '20.78', '44.87', 205, 5, 5, 5);
 
 -------------------------------------------PLSQL--------------------------------------
+SET SERVEROUTPUT ON;
 
+
+
+-- 1. Total de motos por situação
 BEGIN
   FOR reg IN (
     SELECT s.nome AS situacao, COUNT(m.id_moto) AS total_motos
@@ -189,7 +192,9 @@ BEGIN
   END LOOP;
 END;
 /
+--------------------------------------------------------
 
+-- 2. Total de funcionários por cargo e filial
 BEGIN
   FOR reg IN (
     SELECT f.cargo, COUNT(f.id_func) AS total_funcionarios, fi.nome_filial
@@ -202,17 +207,13 @@ BEGIN
   END LOOP;
 END;
 /
+--------------------------------------------------------
 
-
--------------------------------------------------------------------------------------------
-
+-- 3. Exibição de consumo: anterior, atual e próximo
 DECLARE
   CURSOR c_modelo IS
-    SELECT consumo FROM (
-      SELECT consumo, ROW_NUMBER() OVER (ORDER BY id_modelo) AS rn
-      FROM modelo
-    );
-    
+    SELECT consumo FROM modelo ORDER BY id_modelo;
+
   TYPE consumo_tab IS TABLE OF modelo.consumo%TYPE INDEX BY PLS_INTEGER;
   v_consumos consumo_tab;
   v_count    INTEGER := 0;
@@ -226,140 +227,73 @@ BEGIN
   -- Exibe os dados com linha anterior e próxima
   FOR i IN 1 .. v_count LOOP
     DBMS_OUTPUT.PUT_LINE(
-      'Anterior: ' || NVL(TO_CHAR(v_consumos.EXISTS(i - 1) THEN v_consumos(i - 1)), 'Vazio') || ' | ' ||
+      'Anterior: ' || NVL(TO_CHAR(CASE WHEN v_consumos.EXISTS(i - 1) THEN v_consumos(i - 1) ELSE NULL END), 'Vazio') || ' | ' ||
       'Atual: ' || v_consumos(i) || ' | ' ||
-      'Próximo: ' || NVL(TO_CHAR(v_consumos.EXISTS(i + 1) THEN v_consumos(i + 1)), 'Vazio')
+      'Próximo: ' || NVL(TO_CHAR(CASE WHEN v_consumos.EXISTS(i + 1) THEN v_consumos(i + 1) ELSE NULL END), 'Vazio')
     );
   END LOOP;
 END;
 /
 
 
----------------------------Codigo para gerar ID automatico-----------------------------------------
-DROP SEQUENCE seq_dados;
-DROP SEQUENCE seq_modelo;
-DROP SEQUENCE seq_situacao;
-DROP SEQUENCE seq_endereco;
-DROP SEQUENCE seq_funcionario;
-DROP SEQUENCE seq_motorista;
-DROP SEQUENCE seq_filial;
-DROP SEQUENCE seq_patio;
-DROP SEQUENCE seq_setor;
-DROP SEQUENCE seq_moto;
-
-
--- SEQUENCES
-CREATE SEQUENCE seq_dados START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE seq_modelo START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE seq_situacao START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE seq_endereco START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE seq_funcionario START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE seq_motorista START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE seq_filial START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE seq_patio START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE seq_setor START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE seq_moto START WITH 1 INCREMENT BY 1;
-
--- TRIGGERS
-CREATE OR REPLACE TRIGGER trg_dados
-BEFORE INSERT ON dados
-FOR EACH ROW
+-- 1. Total de motos por situação
 BEGIN
-  IF :NEW.id_dados IS NULL THEN
-    :NEW.id_dados := seq_dados.NEXTVAL;
-  END IF;
+  FOR reg IN (
+    SELECT s.nome AS situacao, COUNT(m.id_moto) AS total_motos
+    FROM moto m
+    JOIN situacao s ON m.id_situacao = s.id_situacao
+    GROUP BY s.nome
+    ORDER BY total_motos DESC
+  ) LOOP
+    DBMS_OUTPUT.PUT_LINE('Situação: ' || reg.situacao || ' - Total de motos: ' || reg.total_motos);
+  END LOOP;
+END;
+/
+--------------------------------------------------------
+
+-- 2. Total de funcionários por cargo e filial
+BEGIN
+  FOR reg IN (
+    SELECT f.cargo, COUNT(f.id_func) AS total_funcionarios, fi.nome_filial
+    FROM funcionario f
+    JOIN filial fi ON f.id_func = fi.id_func
+    GROUP BY f.cargo, fi.nome_filial
+    ORDER BY fi.nome_filial
+  ) LOOP
+    DBMS_OUTPUT.PUT_LINE('Cargo: ' || reg.cargo || ' - Total: ' || reg.total_funcionarios || ' - Filial: ' || reg.nome_filial);
+  END LOOP;
 END;
 /
 
-CREATE OR REPLACE TRIGGER trg_modelo
-BEFORE INSERT ON modelo
-FOR EACH ROW
+--------------------------------------------------------
+
+-- 3. Exibição de consumo: anterior, atual e próximo
+DECLARE
+  CURSOR c_modelo IS
+    SELECT consumo FROM modelo ORDER BY id_modelo;
+
+  TYPE consumo_tab IS TABLE OF modelo.consumo%TYPE INDEX BY PLS_INTEGER;
+  v_consumos consumo_tab;
+  v_count    INTEGER := 0;
 BEGIN
-  IF :NEW.id_modelo IS NULL THEN
-    :NEW.id_modelo := seq_modelo.NEXTVAL;
-  END IF;
+  -- Carrega os dados na coleção
+  FOR rec IN c_modelo LOOP
+    v_count := v_count + 1;
+    v_consumos(v_count) := rec.consumo;
+  END LOOP;
+
+  -- Exibe os dados com linha anterior e próxima
+  FOR i IN 1 .. v_count LOOP
+    DBMS_OUTPUT.PUT_LINE(
+      'Anterior: ' || NVL(TO_CHAR(CASE WHEN v_consumos.EXISTS(i - 1) THEN v_consumos(i - 1) ELSE NULL END), 'Vazio') || ' | ' ||
+      'Atual: ' || v_consumos(i) || ' | ' ||
+      'Próximo: ' || NVL(TO_CHAR(CASE WHEN v_consumos.EXISTS(i + 1) THEN v_consumos(i + 1) ELSE NULL END), 'Vazio')
+    );
+  END LOOP;
 END;
 /
 
-CREATE OR REPLACE TRIGGER trg_situacao
-BEFORE INSERT ON situacao
-FOR EACH ROW
-BEGIN
-  IF :NEW.id_situacao IS NULL THEN
-    :NEW.id_situacao := seq_situacao.NEXTVAL;
-  END IF;
-END;
-/
 
-CREATE OR REPLACE TRIGGER trg_endereco
-BEFORE INSERT ON endereco
-FOR EACH ROW
-BEGIN
-  IF :NEW.id_endereco IS NULL THEN
-    :NEW.id_endereco := seq_endereco.NEXTVAL;
-  END IF;
-END;
-/
-
-CREATE OR REPLACE TRIGGER trg_funcionario
-BEFORE INSERT ON funcionario
-FOR EACH ROW
-BEGIN
-  IF :NEW.id_func IS NULL THEN
-    :NEW.id_func := seq_funcionario.NEXTVAL;
-  END IF;
-END;
-/
-
-CREATE OR REPLACE TRIGGER trg_motorista
-BEFORE INSERT ON motorista
-FOR EACH ROW
-BEGIN
-  IF :NEW.id_motorista IS NULL THEN
-    :NEW.id_motorista := seq_motorista.NEXTVAL;
-  END IF;
-END;
-/
-
-CREATE OR REPLACE TRIGGER trg_filial
-BEFORE INSERT ON filial
-FOR EACH ROW
-BEGIN
-  IF :NEW.id_filial IS NULL THEN
-    :NEW.id_filial := seq_filial.NEXTVAL;
-  END IF;
-END;
-/
-
-CREATE OR REPLACE TRIGGER trg_patio
-BEFORE INSERT ON patio
-FOR EACH ROW
-BEGIN
-  IF :NEW.id_patio IS NULL THEN
-    :NEW.id_patio := seq_patio.NEXTVAL;
-  END IF;
-END;
-/
-
-CREATE OR REPLACE TRIGGER trg_setor
-BEFORE INSERT ON setor
-FOR EACH ROW
-BEGIN
-  IF :NEW.id_setor IS NULL THEN
-    :NEW.id_setor := seq_setor.NEXTVAL;
-  END IF;
-END;
-/
-
-CREATE OR REPLACE TRIGGER trg_moto
-BEFORE INSERT ON moto
-FOR EACH ROW
-BEGIN
-  IF :NEW.id_moto IS NULL THEN
-    :NEW.id_moto := seq_moto.NEXTVAL;
-  END IF;
-END;
-/
 
 ------ --  EXTRA INSERTS ---------------
 ---- DADOS
@@ -408,5 +342,49 @@ VALUES (50, 'Doutor Gerente', 19);
 
 
 commit;
+
+
+DROP SEQUENCE DADOS_SEQ;
+DROP SEQUENCE MOTORISTA_SEQ;
+DROP SEQUENCE FUNCIONARIO_SEQ;
+DROP SEQUENCE ENDERECO_SEQ;
+DROP SEQUENCE FILIAL_SEQ;
+DROP SEQUENCE PATIO_SEQ;
+DROP SEQUENCE SETOR_SEQ;
+DROP SEQUENCE MOTO_SEQ;
+DROP SEQUENCE MODELO_SEQ;
+DROP SEQUENCE SITUACAO_SEQ;
+
+
+
+CREATE SEQUENCE DADOS_SEQ START WITH 1000 INCREMENT BY 1;
+CREATE SEQUENCE MOTORISTA_SEQ START WITH 1000 INCREMENT BY 1;
+CREATE SEQUENCE FUNCIONARIO_SEQ START WITH 1000 INCREMENT BY 1;
+CREATE SEQUENCE ENDERECO_SEQ START WITH 1000 INCREMENT BY 1;
+CREATE SEQUENCE FILIAL_SEQ START WITH 1000 INCREMENT BY 1;
+CREATE SEQUENCE PATIO_SEQ START WITH 1000 INCREMENT BY 1;
+CREATE SEQUENCE SETOR_SEQ START WITH 1000 INCREMENT BY 1;
+CREATE SEQUENCE MOTO_SEQ START WITH 1000 INCREMENT BY 1;
+CREATE SEQUENCE MODELO_SEQ START WITH 1000 INCREMENT BY 1;
+CREATE SEQUENCE SITUACAO_SEQ START WITH 1000 INCREMENT BY 1;
+
+
+ALTER TABLE dados MODIFY id_dados DEFAULT DADOS_SEQ.NEXTVAL;
+ALTER TABLE motorista MODIFY id_motorista DEFAULT MOTORISTA_SEQ.NEXTVAL;
+ALTER TABLE funcionario MODIFY id_func DEFAULT FUNCIONARIO_SEQ.NEXTVAL;
+ALTER TABLE endereco MODIFY id_endereco DEFAULT ENDERECO_SEQ.NEXTVAL;
+ALTER TABLE filial MODIFY id_filial DEFAULT FILIAL_SEQ.NEXTVAL;
+ALTER TABLE patio MODIFY id_patio DEFAULT PATIO_SEQ.NEXTVAL;
+ALTER TABLE setor MODIFY id_setor DEFAULT SETOR_SEQ.NEXTVAL;
+ALTER TABLE moto MODIFY id_moto DEFAULT MOTO_SEQ.NEXTVAL;
+ALTER TABLE modelo MODIFY id_modelo DEFAULT MODELO_SEQ.NEXTVAL;
+ALTER TABLE situacao MODIFY id_situacao DEFAULT SITUACAO_SEQ.NEXTVAL;
+
+
+
+
+
+
+
 
 
