@@ -1,4 +1,6 @@
-# Instruções de Execução
+# Parte de Java
+
+## Instruções de Execução
 
 1. Clonar o projeto.
 2. Abrir o projeto (de preferência com IntelliJ).
@@ -11,16 +13,32 @@
 
 Se ao executar o projeto, o IntelliJ cuspir o erro "java: cannot find symbol", vá em File -> Settings (atalho CTRL + ALT + S) -> Build, Execution, Deployment -> Compiler -> Annotation Processors -> Selecione "sensorium" - > Marque a opção "Obtain processors from project classpath" ao invés de "Processor path:"
 
-# Integrantes
+## Integrantes
 
 - Vicenzo Massao - 554833
 - Luiz Heimberg - 556864
 - Erick Alves - 556862
 
-# Descrição
+## Descrição
 
 Os Três cavaleiros do Apocalipse tem como objetivo auxiliar a empresa Mottu no problema de mapeamento das motos em seus pátios, onde usamos tecnologias IOT e um mapa interativo para mapear a região do pátio, além de poder separar por setores personalizados o próprio pátio.
 
-![alt text](imgs/image-1.png)
-![alt text](imgs/classic.png)
 ![alt text](imgs/image.png)
+
+---
+
+# Parte DevOps
+
+## Modo de Execução
+
+1- Abrir o terminal 
+2- Clonar o Repositorio - "git clone https://github.com/Os-Tres-Motoqueiros-do-Apocalipse-Verde/Java-Advanced.git"
+3- Abrir o projeto - "cd Java-Advanced" 
+4- Logar na Azure - "az login"
+5- rodar o .sh - "./criar_otmav.sh"
+
+## Integrantes
+
+- Vicenzo Massao - 554833
+- Luiz Heimberg - 556864
+- Erick Alves - 556862
