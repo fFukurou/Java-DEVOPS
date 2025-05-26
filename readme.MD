@@ -31,11 +31,15 @@ Os Três cavaleiros do Apocalipse tem como objetivo auxiliar a empresa Mottu no 
 
 ## Modo de Execução
 
-1- Abrir o terminal 
-2- Clonar o Repositorio - "git clone https://github.com/Os-Tres-Motoqueiros-do-Apocalipse-Verde/Java-Advanced.git"
-3- Abrir o projeto - "cd Java-Advanced" 
-4- Logar na Azure - "az login"
-5- rodar o .sh - "./criar_otmav.sh"
+- Abrir o terminal 
+
+- Clonar o Repositorio - "git clone https://github.com/Os-Tres-Motoqueiros-do-Apocalipse-Verde/Java-Advanced.git"
+
+- Abrir o projeto - "cd Java-Advanced" 
+
+- Logar na Azure - "az login"
+
+- rodar o .sh - "./criar_otmav.sh"
 
 ## Integrantes
 
