@@ -23,7 +23,9 @@ Se ao executar o projeto, o IntelliJ cuspir o erro "java: cannot find symbol", v
 
 Os Três cavaleiros do Apocalipse tem como objetivo auxiliar a empresa Mottu no problema de mapeamento das motos em seus pátios, onde usamos tecnologias IOT e um mapa interativo para mapear a região do pátio, além de poder separar por setores personalizados o próprio pátio.
 
+![alt text](imgs/image-1.png)
 ![alt text](imgs/image.png)
+![alt text](imgs/classic.png)
 
 ---
 
@@ -33,7 +35,7 @@ Os Três cavaleiros do Apocalipse tem como objetivo auxiliar a empresa Mottu no 
 
 - Abrir o terminal
 - Clonar o Repositorio - "git clone https://github.com/Os-Tres-Motoqueiros-do-Apocalipse-Verde/Java-Advanced.git"
-- Abrir o projeto - "cd Java-Advanced" 
+- Abrir o projeto - "cd Java-Advanced"
 - Logar na Azure - "az login"
 - rodar o .sh - "./criar_otmav.sh"
 
