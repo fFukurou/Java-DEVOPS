@@ -1,4 +1,3 @@
--- DONE -- 
+-- DONE --
 
-Next Sprint:
-- Implement Auth and more elegant way to handle errors.
+- Improve SecurityConfig after endpoints are done.
