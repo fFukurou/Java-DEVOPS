@@ -1,11 +1,15 @@
 package br.com.fiap.otmav.domain.dados;
 
+import br.com.fiap.otmav.domain.funcionario.Funcionario;
+import br.com.fiap.otmav.domain.motorista.Motorista;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "dados")
@@ -40,4 +44,10 @@ public class Dados {
     @Size(max = 150)
     @Column(name = "nome", length = 150, nullable = false)
     private String nome;
+
+    @OneToMany(mappedBy = "dados", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Motorista> motoristas;
+
+    @OneToMany(mappedBy = "dados", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Funcionario> funcionarios;
 }

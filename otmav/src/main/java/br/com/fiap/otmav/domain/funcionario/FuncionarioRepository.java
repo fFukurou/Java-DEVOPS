@@ -36,4 +36,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> 
     @Query("SELECT f FROM Funcionario f JOIN FETCH f.dados WHERE f.id = :id")
     Optional<Funcionario> findByIdWithDados(@Param("id") Long id);
 
+    @Query("SELECT f FROM Funcionario f JOIN FETCH f.dados d WHERE d.email = :email")
+    Optional<Funcionario> findByDadosEmailFetchDados(@Param("email") String email);
+
 }

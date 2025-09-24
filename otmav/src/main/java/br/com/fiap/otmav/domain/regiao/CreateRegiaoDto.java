@@ -4,6 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record CreateRegiaoDto(
-        @Size(max = 4000) String localizacaoWkt,
+        @Size(max = 4000) String localizacao,
         @NotNull Double area
 ) {}

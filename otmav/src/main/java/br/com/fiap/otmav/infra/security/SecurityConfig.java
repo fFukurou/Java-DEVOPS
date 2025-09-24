@@ -30,26 +30,31 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+
                         // Swagger / OpenAPI
                         .requestMatchers("/swagger-ui.html/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
-                        // public auth endpoints
-                        .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/funcionarios").permitAll() // allow registration if desired
-                        // read access public (example)
-                        .requestMatchers(HttpMethod.GET, "/api/dados/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/filiais/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/funcionarios/**").authenticated()
-                        // modify endpoints require authentication
-                        .requestMatchers(HttpMethod.POST, "/api/dados/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/dados/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/filiais/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/filiais/**").permitAll()
-                        // DELETE operations reserved for ADMIN role
+
+                        // ADMIN
+                        .requestMatchers(HttpMethod.POST, "/api/filiais/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
-                        .requestMatchers("/api/regioes/**").permitAll()
-                        // fallback: authenticated for everything else
+                        .requestMatchers(HttpMethod.GET, "/api/regioes/**").hasRole("ADMIN")
+
+                        // auth necessaria
+                        .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/filiais/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/dados/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/logout").authenticated()
+
+                        // endpoints publicos
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/funcionarios").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/dados/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/filiais/**").permitAll()
+
+
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

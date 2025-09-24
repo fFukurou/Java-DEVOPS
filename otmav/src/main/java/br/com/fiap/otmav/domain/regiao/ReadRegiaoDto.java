@@ -2,7 +2,7 @@ package br.com.fiap.otmav.domain.regiao;
 
 public record ReadRegiaoDto(
         Long id,
-        String localizacaoWkt,
+        String localizacao,
         Double area
 ) {
     public ReadRegiaoDto(Regiao r) {

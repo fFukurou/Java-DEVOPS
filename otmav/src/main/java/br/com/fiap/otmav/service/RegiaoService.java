@@ -19,7 +19,7 @@ public class RegiaoService {
     @Transactional
     public ReadRegiaoDto create(CreateRegiaoDto dto) {
         Regiao r = new Regiao();
-        r.setLocalizacaoWkt(dto.localizacaoWkt());
+        r.setLocalizacaoWkt(dto.localizacao());
         r.setArea(dto.area());
         return new ReadRegiaoDto(regiaoRepository.save(r));
     }
@@ -39,7 +39,7 @@ public class RegiaoService {
     public ReadRegiaoDto update(Long id, UpdateRegiaoDto dto) {
         Regiao r = regiaoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Regiao not found with id: " + id));
-        if (dto.localizacaoWkt() != null) r.setLocalizacaoWkt(dto.localizacaoWkt());
+        if (dto.localizacao() != null) r.setLocalizacaoWkt(dto.localizacao());
         if (dto.area() != null) r.setArea(dto.area());
         return new ReadRegiaoDto(regiaoRepository.save(r));
     }
