@@ -48,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/filiais/**").permitAll()
                         // DELETE operations reserved for ADMIN role
                         .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
+                        .requestMatchers("/api/regioes/**").permitAll()
                         // fallback: authenticated for everything else
                         .anyRequest().authenticated()
                 )

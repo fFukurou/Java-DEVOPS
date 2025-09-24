@@ -1,6 +1,9 @@
 package br.com.fiap.otmav.domain.endereco;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,10 +20,31 @@ public class Endereco {
     @Column(name = "id_endereco")
     private Long id;
 
-    // Optional fields — remove/replace with your real columns:
-    @Column(name = "rua", length = 200)
-    private String rua;
+    @NotNull
+    @Column(name = "numero", nullable = false)
+    private Integer numero;
 
-    @Column(name = "cidade", length = 100)
-    private String cidade;
+    @NotBlank
+    @Size(max = 30)
+    @Column(name = "estado", length = 30, nullable = false)
+    private String estado;
+
+    @NotBlank
+    @Size(max = 50)
+    @Column(name = "codigo_pais", length = 50, nullable = false)
+    private String codigoPais;
+
+    @NotBlank
+    @Size(max = 50)
+    @Column(name = "codigo_postal", length = 50, nullable = false)
+    private String codigoPostal;
+
+    @Size(max = 150)
+    @Column(name = "complemento", length = 150)
+    private String complemento;
+
+    @NotBlank
+    @Size(max = 100)
+    @Column(name = "rua", length = 100, nullable = false)
+    private String rua;
 }

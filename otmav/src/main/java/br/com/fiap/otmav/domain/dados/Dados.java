@@ -29,7 +29,7 @@ public class Dados {
     private String telefone;
 
     @Size(max = 255)
-    @Column(name = "email", length = 255)
+    @Column(name = "email", length = 255, nullable = true, unique = true)
     private String email;
 
     @Size(max = 200)
