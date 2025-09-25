@@ -1,0 +1,13 @@
+<!-- templates/auth/access-denied.html -->
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"/><title>Acesso negado</title></head>
+<body>
+<div class="container mt-5">
+  <div th:replace="~{layout/fragments/messages :: messages}"></div>
+  <h3>Acesso negado</h3>
+  <p th:text="${error}">Você não tem permissão para acessar este recurso.</p>
+  <a class="btn btn-secondary" th:href="@{/}">Voltar</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+package br.com.fiap.otmav.infra.security;
+
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+@ControllerAdvice
+public class CsrfControllerAdvice {
+
+    @ModelAttribute
+    public void addCsrfToken(Model model, HttpServletRequest request) {
+        Object csrf = request.getAttribute("_csrf");
+        if (csrf != null) {
+            model.addAttribute("_csrf", csrf);
+        }
+    }
+}

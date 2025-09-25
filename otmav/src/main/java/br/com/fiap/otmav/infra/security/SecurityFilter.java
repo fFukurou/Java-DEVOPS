@@ -15,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import jakarta.servlet.http.Cookie;
+
 
 import java.io.IOException;
 
@@ -69,9 +71,22 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
 
     private String recoverToken(HttpServletRequest request) {
-        var authHeader = request.getHeader("Authorization");
-        if (authHeader == null) return null;
-        if (!authHeader.startsWith("Bearer ")) return null;
-        return authHeader.substring(7);
+        // 1) header
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7).trim();
+        }
+
+        // 2) cookie fallback
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if ("OTMAV_TOKEN".equals(c.getName())) {
+                    String value = c.getValue();
+                    if (value != null && !value.isBlank()) return value.trim();
+                }
+            }
+        }
+        return null;
     }
 }

@@ -1,0 +1,14 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: content">
+<section>
+    <h1>Confirm Delete</h1>
+    <p>Are you sure you want to delete filial <b th:text="${filial.nomeFilial}">Name</b> (id <span th:text="${filial.id}">1</span>)?</p>
+
+    <form th:action="@{|/filiais/${filial.id}/delete|}" method="post">
+        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <button type="submit">Yes, delete</button>
+        <a th:href="@{/filiais}">Cancel</a>
+    </form>
+</section>
+</html>

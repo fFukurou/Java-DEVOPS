@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Filial')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+  <h2 th:text="${filialId != null} ? 'Editar Filial' : 'Nova Filial'"></h2>
+
+  <!-- CREATE form -->
+  <form th:if="${filialId == null}"
+        th:action="@{/filiais}"
+        th:object="${createForm}"
+        method="post">
+    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+
+    <!-- show form-level errors (works because we are inside th:object context) -->
+    <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+      <ul>
+        <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
+      </ul>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Nome</label>
+      <input class="form-control" type="text" th:field="*{nome}" />
+      <div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Endereco</label>
+      <select class="form-select" th:field="*{enderecoId}">
+        <option value="">-- selecione --</option>
+        <option th:each="end : ${enderecos}" th:value="${end.id}" th:text="${end.rua}">End</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <button class="btn btn-primary" type="submit">Salvar</button>
+      <a class="btn btn-secondary" th:href="@{/filiais}">Cancelar</a>
+    </div>
+  </form>
+
+  <!-- EDIT form -->
+  <form th:if="${filialId != null}"
+        th:action="@{|/filiais/${filialId}|}"
+        th:object="${updateForm}"
+        method="post">
+    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+
+    <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+      <ul>
+        <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
+      </ul>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Nome</label>
+      <input class="form-control" type="text" th:field="*{nome}" />
+      <div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Endereco</label>
+      <select class="form-select" th:field="*{enderecoId}">
+        <option value="">-- selecione --</option>
+        <option th:each="end : ${enderecos}" th:value="${end.id}" th:text="${end.rua}">End</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <button class="btn btn-primary" type="submit">Salvar</button>
+      <a class="btn btn-secondary" th:href="@{/filiais}">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

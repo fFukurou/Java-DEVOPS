@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:replace="fragments/header :: title">OTMAV</title>
+    <link rel="stylesheet" th:href="@{/css/site.css}"/>
+</head>
+<body>
+<div th:replace="fragments/menu :: menu"></div>
+
+<main class="container">
+    <div th:fragment="content"></div>
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
