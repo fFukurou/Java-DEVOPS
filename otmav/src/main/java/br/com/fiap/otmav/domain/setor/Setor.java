@@ -3,6 +3,7 @@ package br.com.fiap.otmav.domain.setor;
 import br.com.fiap.otmav.domain.patio.Patio;
 import br.com.fiap.otmav.domain.regiao.Regiao;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -22,10 +23,12 @@ public class Setor {
     private Long id;
 
     @NotNull
+    @Min(value = 0, message = "Quantidade de motos nao pode ser negativa.")
     @Column(name = "qtd_moto", nullable = false)
     private Integer qtdMoto;
 
     @NotNull
+    @Min(value = 0, message = "Capacidade nao pode ser negativa.")
     @Column(name = "capacidade", nullable = false)
     private Integer capacidade;
 

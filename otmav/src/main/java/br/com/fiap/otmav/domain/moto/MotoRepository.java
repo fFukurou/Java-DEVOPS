@@ -28,4 +28,9 @@ public interface MotoRepository extends JpaRepository<Moto, Long> {
             @Param("situacaoId") Long situacaoId,
             Pageable pageable
     );
+
+    boolean existsByPlaca(String placa);
+
+    @Query("SELECT CASE WHEN COUNT(m) > 0 THEN true ELSE false END FROM Moto m WHERE m.placa = :placa AND m.id <> :id")
+    boolean existsByPlacaAndIdNot(@Param("placa") String placa, @Param("id") Long id);
 }

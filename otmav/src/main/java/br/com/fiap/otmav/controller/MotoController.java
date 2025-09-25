@@ -68,4 +68,24 @@ public class MotoController {
         motoService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    // ----- NEW FLOW: transfer moto to another setor -----
+    @Operation(summary = "Transfer moto to another setor")
+    @PostMapping("/{id}/transfer")
+    public ResponseEntity<ReadMotoDto> transferToSetor(
+            @PathVariable Long id,
+            @RequestBody @Valid TransferSetorDto dto) {
+        ReadMotoDto updated = motoService.transferToSetor(id, dto);
+        return ResponseEntity.ok(updated);
+    }
+
+    // ----- NEW FLOW: assign driver to moto -----
+    @Operation(summary = "Assign motorista to moto")
+    @PostMapping("/{id}/assign-driver")
+    public ResponseEntity<ReadMotoDto> assignDriver(
+            @PathVariable Long id,
+            @RequestBody @Valid AssignMotoristaDto dto) {
+        ReadMotoDto updated = motoService.assignDriver(id, dto);
+        return ResponseEntity.ok(updated);
+    }
 }
