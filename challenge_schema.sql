@@ -10,6 +10,10 @@ drop table motorista cascade constraints;
 drop table moto cascade constraints;
 drop table setor cascade constraints;
 
+DROP SEQUENCE SEQ_TOKEN_BLACKLIST;
+
+drop table TOKEN_BLACKLIST;
+
 DROP TABLE auditoria_moto CASCADE CONSTRAINTS;
 DROP SEQUENCE seq_auditoria;
 
