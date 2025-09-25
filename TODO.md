@@ -1,3 +1,4 @@
--- DONE --
-
-- Improve SecurityConfig after endpoints are done.
+- Thymeleaf
+- Analyze and refactor code
+- Gravar e Editar Vídeo
+- Atualizar README (endpoints, DB Connection...)
