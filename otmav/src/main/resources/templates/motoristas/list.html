@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/header :: head('Motoristas')}"></head>
 <body>
 <div th:replace="~{fragments/header :: mainHeader}"></div>
@@ -12,16 +12,33 @@
 
     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 
+    <!-- filters -->
+    <form class="row g-2 mb-3" th:action="@{/motoristas}" method="get">
+        <div class="col-auto">
+            <select class="form-select" name="plano">
+                <option value="">-- Todos planos --</option>
+                <option th:each="p : ${planos}" th:value="${p}" th:text="${p}">Plano</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="number" name="dadosId" th:value="${dadosId}" placeholder="dadosId"/>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary" type="submit">Filtrar</button>
+        </div>
+    </form>
+
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>ID</th><th>Plano</th><th>Dados (email)</th><th>Ações</th>
+            <th>ID</th><th>Plano</th><th>Nome</th><th>Email</th><th>Ações</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="m : ${motoristasPage.content}">
             <td th:text="${m.id}">1</td>
             <td th:text="${m.plano}">PLANO</td>
+            <td th:text="${m.dados != null ? m.dados.nome : '-'}">Nome</td>
             <td th:text="${m.dados != null ? m.dados.email : '-'}">email</td>
             <td>
                 <a class="btn btn-sm btn-outline-primary" th:href="@{|/motoristas/${m.id}/edit|}">Editar</a>
@@ -35,6 +52,7 @@
         </tbody>
     </table>
 
+    <!-- pagination -->
     <nav th:if="${motoristasPage.totalPages > 1}">
         <ul class="pagination">
             <li class="page-item" th:classappend="${motoristasPage.first} ? 'disabled'">
@@ -49,6 +67,7 @@
             </li>
         </ul>
     </nav>
+
 </div>
 
 <div th:replace="~{fragments/footer :: mainFooter}"></div>

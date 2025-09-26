@@ -66,7 +66,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/filiais/**").permitAll()
 
                         // Filiais pages: allow viewing but require auth for create/edit/delete routes
-
+                        .requestMatchers(HttpMethod.GET, "/motoristas/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/motoristas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/filiais/**").permitAll()
 
                         .anyRequest().authenticated()

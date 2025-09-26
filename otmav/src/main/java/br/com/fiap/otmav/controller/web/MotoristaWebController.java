@@ -1,12 +1,11 @@
 package br.com.fiap.otmav.controller.web;
 
 import br.com.fiap.otmav.domain.motorista.CreateMotoristaDto;
+import br.com.fiap.otmav.domain.motorista.MotoristaPlano;
 import br.com.fiap.otmav.domain.motorista.ReadMotoristaDto;
-import br.com.fiap.otmav.domain.motorista.UpdateMotoristaDto;
+import br.com.fiap.otmav.domain.dados.CreateDadosDto;
+import br.com.fiap.otmav.service.DadosService;
 import br.com.fiap.otmav.service.MotoristaService;
-import br.com.fiap.otmav.domain.dados.DadosRepository;
-import br.com.fiap.otmav.web.form.MotoristaCreateForm;
-import br.com.fiap.otmav.web.form.MotoristaUpdateForm;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import br.com.fiap.otmav.web.form.MotoristaCreateForm;
+import br.com.fiap.otmav.web.form.MotoristaUpdateForm;
 
 @Controller
 @RequestMapping("/motoristas")
@@ -26,21 +27,24 @@ public class MotoristaWebController {
     private MotoristaService motoristaService;
 
     @Autowired
-    private DadosRepository dadosRepository;
+    private DadosService dadosService;
 
     // LIST
     @GetMapping
     public String list(
-            @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) MotoristaPlano plano,
+            @RequestParam(required = false) Long dadosId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             Model model) {
 
-        int p = (page == null) ? 0 : page;
-        int s = (size == null) ? 10 : size;
-        Pageable pageable = PageRequest.of(p, s);
-        Page<ReadMotoristaDto> pageResp = motoristaService.findAllFiltered(null, null, pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ReadMotoristaDto> motoristas = motoristaService.findAllFiltered(plano, dadosId, pageable);
 
-        model.addAttribute("motoristasPage", pageResp);
+        model.addAttribute("motoristasPage", motoristas);
+        model.addAttribute("plano", plano);
+        model.addAttribute("dadosId", dadosId);
+        model.addAttribute("planos", MotoristaPlano.values());
         return "motoristas/list";
     }
 
@@ -48,7 +52,7 @@ public class MotoristaWebController {
     @GetMapping("/new")
     public String newForm(Model model) {
         model.addAttribute("createForm", new MotoristaCreateForm());
-        model.addAttribute("dadosList", dadosRepository.findAll());
+        model.addAttribute("planos", MotoristaPlano.values());
         return "motoristas/form";
     }
 
@@ -61,12 +65,17 @@ public class MotoristaWebController {
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("dadosList", dadosRepository.findAll());
+            model.addAttribute("planos", MotoristaPlano.values());
             return "motoristas/form";
         }
 
-        CreateMotoristaDto dto = new CreateMotoristaDto(form.getPlano(), form.getDadosId());
-        motoristaService.create(dto);
+        // 1) create Dados (uses DadosService to handle hashing/validation)
+        CreateDadosDto dadosDto = form.toCreateDadosDto();
+        var readDados = dadosService.create(dadosDto);
+
+        // 2) create Motorista linking to created Dados
+        CreateMotoristaDto createMotoristaDto = new CreateMotoristaDto(form.getPlano(), readDados.id());
+        motoristaService.create(createMotoristaDto);
 
         redirectAttributes.addFlashAttribute("success", "Motorista criado com sucesso!");
         return "redirect:/motoristas";
@@ -75,11 +84,11 @@ public class MotoristaWebController {
     // SHOW EDIT FORM
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
-        var rm = motoristaService.findById(id);
-        MotoristaUpdateForm form = new MotoristaUpdateForm(rm.plano(), rm.dados() != null ? rm.dados().id() : null);
+        ReadMotoristaDto rf = motoristaService.findById(id);
+        MotoristaUpdateForm form = new MotoristaUpdateForm(rf.plano(), rf.dados() != null ? rf.dados().id() : null);
         model.addAttribute("updateForm", form);
         model.addAttribute("motoristaId", id);
-        model.addAttribute("dadosList", dadosRepository.findAll());
+        model.addAttribute("planos", MotoristaPlano.values());
         return "motoristas/form";
     }
 
@@ -93,14 +102,12 @@ public class MotoristaWebController {
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("planos", MotoristaPlano.values());
             model.addAttribute("motoristaId", id);
-            model.addAttribute("dadosList", dadosRepository.findAll());
             return "motoristas/form";
         }
 
-        UpdateMotoristaDto dto = new UpdateMotoristaDto(form.getPlano(), form.getDadosId());
-        motoristaService.update(id, dto);
-
+        motoristaService.update(id, form.toUpdateDto());
         redirectAttributes.addFlashAttribute("success", "Motorista atualizado com sucesso!");
         return "redirect:/motoristas";
     }

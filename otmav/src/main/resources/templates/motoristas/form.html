@@ -21,21 +21,36 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Plano</label>
-            <select class="form-select" th:field="*{plano}">
-                <option th:each="p : ${T(br.com.fiap.otmav.domain.motorista.MotoristaPlano).values()}"
-                        th:value="${p}" th:text="${p}">PLANO</option>
-            </select>
-            <div class="text-danger" th:if="${#fields.hasErrors('plano')}" th:errors="*{plano}"></div>
+            <label class="form-label">Nome</label>
+            <input class="form-control" type="text" th:field="*{nome}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Dados (usuario)</label>
-            <select class="form-select" th:field="*{dadosId}">
-                <option value="">-- selecione --</option>
-                <option th:each="d : ${dadosList}" th:value="${d.id}" th:text="${d.email != null ? d.email : d.nome}">Dados</option>
+            <label class="form-label">CPF</label>
+            <input class="form-control" type="text" th:field="*{cpf}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input class="form-control" type="email" th:field="*{email}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Telefone</label>
+            <input class="form-control" type="text" th:field="*{telefone}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Senha</label>
+            <input class="form-control" type="password" th:field="*{senha}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Plano</label>
+            <select class="form-select" th:field="*{plano}">
+                <option th:each="p : ${planos}" th:value="${p}" th:text="${p}">Plano</option>
             </select>
-            <div class="text-danger" th:if="${#fields.hasErrors('dadosId')}" th:errors="*{dadosId}"></div>
         </div>
 
         <div class="mb-3">
@@ -60,17 +75,14 @@
         <div class="mb-3">
             <label class="form-label">Plano</label>
             <select class="form-select" th:field="*{plano}">
-                <option th:each="p : ${T(br.com.fiap.otmav.domain.motorista.MotoristaPlano).values()}"
-                        th:value="${p}" th:text="${p}">PLANO</option>
+                <option th:each="p : ${planos}" th:value="${p}" th:text="${p}">Plano</option>
             </select>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Dados (usuario)</label>
-            <select class="form-select" th:field="*{dadosId}">
-                <option value="">-- selecione --</option>
-                <option th:each="d : ${dadosList}" th:value="${d.id}" th:text="${d.email != null ? d.email : d.nome}">Dados</option>
-            </select>
+            <label class="form-label">Dados (id)</label>
+            <input class="form-control" type="number" th:field="*{dadosId}" />
+            <small class="text-muted">Leave blank to keep existing Dados</small>
         </div>
 
         <div class="mb-3">
