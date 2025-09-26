@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Motorista')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+    <h2 th:text="${motoristaId != null} ? 'Editar Motorista' : 'Novo Motorista'"></h2>
+
+    <!-- CREATE form -->
+    <form th:if="${motoristaId == null}"
+          th:action="@{/motoristas}"
+          th:object="${createForm}"
+          method="post">
+        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Plano</label>
+            <select class="form-select" th:field="*{plano}">
+                <option th:each="p : ${T(br.com.fiap.otmav.domain.motorista.MotoristaPlano).values()}"
+                        th:value="${p}" th:text="${p}">PLANO</option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('plano')}" th:errors="*{plano}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Dados (usuario)</label>
+            <select class="form-select" th:field="*{dadosId}">
+                <option value="">-- selecione --</option>
+                <option th:each="d : ${dadosList}" th:value="${d.id}" th:text="${d.email != null ? d.email : d.nome}">Dados</option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('dadosId')}" th:errors="*{dadosId}"></div>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+            <a class="btn btn-secondary" th:href="@{/motoristas}">Cancelar</a>
+        </div>
+    </form>
+
+    <!-- EDIT form -->
+    <form th:if="${motoristaId != null}"
+          th:action="@{|/motoristas/${motoristaId}|}"
+          th:object="${updateForm}"
+          method="post">
+        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Plano</label>
+            <select class="form-select" th:field="*{plano}">
+                <option th:each="p : ${T(br.com.fiap.otmav.domain.motorista.MotoristaPlano).values()}"
+                        th:value="${p}" th:text="${p}">PLANO</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Dados (usuario)</label>
+            <select class="form-select" th:field="*{dadosId}">
+                <option value="">-- selecione --</option>
+                <option th:each="d : ${dadosList}" th:value="${d.id}" th:text="${d.email != null ? d.email : d.nome}">Dados</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+            <a class="btn btn-secondary" th:href="@{/motoristas}">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9a27798f-85c2-4ea0-a01e-56c640d96a1a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/otmav/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/otmav/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/otmav/src/main/java/br/com/fiap/otmav/domain/filial/CreateFilialDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/otmav/src/main/java/br/com/fiap/otmav/domain/filial/CreateFilialDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/otmav/src/main/java/br/com/fiap/otmav/domain/filial/Filial.java" beforeDir="false" afterPath="$PROJECT_DIR$/otmav/src/main/java/br/com/fiap/otmav/domain/filial/Filial.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/otmav/src/main/java/br/com/fiap/otmav/infra/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/otmav/src/main/java/br/com/fiap/otmav/infra/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/otmav/src/main/java/br/com/fiap/otmav/infra/security/SecurityFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/otmav/src/main/java/br/com/fiap/otmav/infra/security/SecurityFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/otmav/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/otmav/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,9 +13,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="33CD7jHY3sbJzoS8SfPdDnVICiw" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -30,7 +26,10 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main"
+    "git-widget-placeholder": "main",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
   }
 }]]></component>
   <component name="TaskManager">

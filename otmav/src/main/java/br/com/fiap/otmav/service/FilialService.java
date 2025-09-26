@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +42,13 @@ public class FilialService {
     // LIST (paginated)
     public Page<ReadFilialDto> findAll(Pageable pageable) {
         return filialRepository.findAll(pageable).map(ReadFilialDto::new);
+    }
+
+    public List<ReadFilialDto> findAll() {
+        return filialRepository.findAll()
+                .stream()
+                .map(ReadFilialDto::new)
+                .collect(Collectors.toList());
     }
 
     // FIND ALL FILTERED

@@ -1,7 +1,6 @@
-<!-- fragments/header.html -->
-<!-- only fragments, no outer <html> or <body> tags -->
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!-- templates/fragments/header.html -->
+<!---- Header fragments (no outer html/body) ---->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="head(title)">
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -18,21 +17,13 @@
                     <li class="nav-item"><a class="nav-link" th:href="@{/filiais}">Filiais</a></li>
                 </ul>
                 <ul class="navbar-nav">
-                    <!-- logout shown when authenticated -->
                     <li class="nav-item" sec:authorize="isAuthenticated()">
                         <form th:action="@{/logout-web}" method="post" class="d-inline">
-                            <!-- add CSRF inputs only if available (safe navigation avoids NPE during parse) -->
-                            <input type="hidden"
-                                   th:name="${_csrf?.parameterName}"
-                                   th:value="${_csrf?.token}"
-                                   th:if="${_csrf != null}" />
-                            <button type="submit" class="btn btn-link nav-link" style="padding:0; border:0;">
-                                Sair
-                            </button>
+                            <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit" class="btn btn-link nav-link" style="padding:0; border:0;">Sair</button>
                         </form>
                     </li>
 
-                    <!-- login shown when anonymous -->
                     <li class="nav-item" sec:authorize="!isAuthenticated()">
                         <a class="nav-link" th:href="@{/login}">Entrar</a>
                     </li>

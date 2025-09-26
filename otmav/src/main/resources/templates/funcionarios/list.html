@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Funcionários')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center my-3">
+        <h1>Funcionários</h1>
+        <a class="btn btn-primary" th:href="@{/funcionarios/new}">Novo Funcionário</a>
+    </div>
+
+    <div th:replace="~{fragments/messages :: messages}"></div>
+
+    <form class="row g-2 mb-3" th:action="@{/funcionarios}" method="get">
+        <div class="col-auto">
+            <input class="form-control" type="text" name="cargo" th:value="${cargo}" placeholder="Cargo"/>
+        </div>
+        <div class="col-auto">
+            <select class="form-select" name="filialId">
+                <option value="">-- Todos --</option>
+                <option th:each="f : ${filiais}" th:value="${f.id}" th:text="${f.nome}">Filial</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary" type="submit">Filtrar</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+        <tr><th>ID</th><th>Cargo</th><th>Nome</th><th>Email</th><th>Filial</th><th>Ações</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="f : ${funcionariosPage.content}">
+            <td th:text="${f.id}">1</td>
+            <td th:text="${f.cargo}">Cargo</td>
+            <td th:text="${f.dados != null ? f.dados.nome() : '-'}">Nome</td>
+            <td th:text="${f.dados != null ? f.dados.email() : '-'}">Email</td>
+            <td th:text="${f.filial != null ? f.filial.nome() : '-'}">Filial</td>
+            <td>
+                <a class="btn btn-sm btn-outline-primary" th:href="@{|/funcionarios/${f.id}/edit|}">Editar</a>
+                <form th:action="@{|/funcionarios/${f.id}/delete|}" method="post" style="display:inline">
+                    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Confirma exclusão?')">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav th:if="${funcionariosPage.totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${funcionariosPage.first} ? 'disabled'">
+                <a class="page-link" th:href="@{/funcionarios(page=${funcionariosPage.number-1}, size=${funcionariosPage.size}, cargo=${cargo}, filialId=${filialId})}">Anterior</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, funcionariosPage.totalPages-1)}" th:classappend="${i == funcionariosPage.number} ? 'active'">
+                <a class="page-link" th:text="${i+1}" th:href="@{/funcionarios(page=${i}, size=${funcionariosPage.size}, cargo=${cargo}, filialId=${filialId})}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${funcionariosPage.last} ? 'disabled'">
+                <a class="page-link" th:href="@{/funcionarios(page=${funcionariosPage.number+1}, size=${funcionariosPage.size}, cargo=${cargo}, filialId=${filialId})}">Próxima</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

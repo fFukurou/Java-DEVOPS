@@ -60,7 +60,7 @@ public class SecurityConfig {
 
                         // public API endpoints
                         .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register", "/login", "/logout").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/login", "/logout", "access-denied").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/login", "/logout", "/access-denied", "access-denied").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/funcionarios").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/dados/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/filiais/**").permitAll()

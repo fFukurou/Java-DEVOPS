@@ -17,4 +17,24 @@ public record ReadFuncionarioDto(
                 f.getFilial() != null ? new ReadFilialDto(f.getFilial()) : null
         );
     }
+
+    @Override
+    public Long id() {
+        return id;
+    }
+
+    @Override
+    public String cargo() {
+        return cargo;
+    }
+
+    @Override
+    public ReadDadosDto dados() {
+        return dados;
+    }
+
+    @Override
+    public ReadFilialDto filial() {
+        return filial;
+    }
 }
