@@ -21,9 +21,13 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     private final SecurityFilter securityFilter;
+    private final CookieBlacklistLogoutHandler cookieLogoutHandler;
 
-    public SecurityConfig(SecurityFilter securityFilter) {
+    public SecurityConfig(SecurityFilter securityFilter,
+                          CookieBlacklistLogoutHandler cookieLogoutHandler) {
         this.securityFilter = securityFilter;
+        this.cookieLogoutHandler = cookieLogoutHandler;
+
     }
 
     @Bean
@@ -55,7 +59,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth/logout").authenticated()
 
                         // public API endpoints
-                        .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register", "/login", "/logout").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/login", "/logout", "access-denied").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/funcionarios").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/dados/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/filiais/**").permitAll()
@@ -63,6 +68,7 @@ public class SecurityConfig {
                         // Filiais pages: allow viewing but require auth for create/edit/delete routes
 
                         .requestMatchers(HttpMethod.GET, "/filiais/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
@@ -77,20 +83,23 @@ public class SecurityConfig {
                                 res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                             }
                         })
-                        .accessDeniedPage("/access-denied")
+//                        SE FOR WEB, ACCESS DENIED SERÁ UM REDIRECT; SE FOR JSON, SERÁ UM 403;
+                        .accessDeniedHandler(new CustomAccessDeniedHandler())
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 // we keep formLogin so Spring knows login page; but we actually use our WebAuthController
                 .formLogin(login -> login
-                        .loginPage("/login")                // your login GET page
-                        .loginProcessingUrl("/login")       // form POST target
+                        .loginPage("/login")// your login GET page
+                        .permitAll()
+                        .loginProcessingUrl("/permit_login")       // form POST target
                         .usernameParameter("email")         // <input name="email">
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/filiais", true)
+                        .defaultSuccessUrl("/", false)
                         .failureUrl("/login?error")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout-web")            // match the form action
+                        .addLogoutHandler(cookieLogoutHandler)     // <- register it here
                         .logoutSuccessUrl("/?logout")        // where to go after logout
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")

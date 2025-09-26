@@ -1,23 +1,35 @@
+<!-- src/main/resources/templates/auth/login.html -->
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: head('Login')"></head>
+<head th:replace="~{fragments/header :: head('Login')}"></head>
 <body>
-<div th:replace="fragments/header :: mainHeader"></div>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
 
 <div class="container mt-4">
     <h2>Entrar</h2>
 
-    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
-    <div th:if="${infoMessage}" class="alert alert-success" th:text="${infoMessage}"></div>
+    <!-- flash attributes from RedirectAttributes -->
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+    <!-- show popup alert as well when error exists -->
+    <script th:if="${error}">
+        /*<![CDATA[*/
+        alert([[${error}]]);
+        /*]]>*/
+    </script>
 
     <form th:action="@{/login}" method="post" autocomplete="on">
         <!-- explicit csrf -->
         <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
+        <!-- preserve redirectTo when present -->
+        <input type="hidden" name="redirectTo" th:value="${redirectTo}" th:if="${redirectTo != null}" />
+
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <!-- name must be "email" to match usernameParameter("email") -->
-            <input id="email" name="email" type="email" class="form-control" required autocomplete="email" />
+            <input id="email" name="email" type="email" class="form-control" required autocomplete="email"
+                   th:value="${loginDto != null} ? ${loginDto.email} : ''"/>
         </div>
 
         <div class="mb-3">

@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,6 +47,7 @@ public class WebAuthController {
     public String loginProcess(@ModelAttribute("loginDto") @Valid LoginDto dto,
                                BindingResult binding,
                                @RequestParam(value = "redirectTo", required = false) String redirectTo,
+                               HttpServletRequest request,
                                HttpServletResponse response,
                                RedirectAttributes redirectAttrs) {
         if (binding.hasErrors()) {
@@ -70,16 +73,39 @@ public class WebAuthController {
             // consider cookie.setSecure(true) in production with HTTPS
             response.addCookie(cookie);
 
-            redirectAttrs.addFlashAttribute("success", "Login efetuado com sucesso.");
+            // 1) Prefer saved request (Spring Security RequestCache)
+            HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
+            SavedRequest saved = requestCache.getRequest(request, response);
+            if (saved != null) {
+                String targetUrl = saved.getRedirectUrl();
+                // Basic safety: don't redirect to external sites
+                if (isLocalUrl(targetUrl, request)) {
+                    // remove saved request so it won't persist
+                    requestCache.removeRequest(request, response);
+                    return "redirect:" + targetUrl;
+                }
+            }
 
-            if (redirectTo != null && !redirectTo.isBlank()) {
+            // 2) fallback to redirectTo param (if present & safe)
+            if (redirectTo != null && !redirectTo.isBlank() && isLocalUrl(redirectTo, request)) {
                 return "redirect:" + redirectTo;
             }
-            return "redirect:/";
+
+            // 3) final fallback
+            return "redirect:/filiais"; // or "/"
         } catch (Exception ex) {
             redirectAttrs.addFlashAttribute("error", "Erro ao autenticar: " + ex.getMessage());
             return "redirect:/login";
         }
+    }
+
+    // Helper pra evitar redirecionamento para links externos (ataques)
+    private boolean isLocalUrl(String url, HttpServletRequest request) {
+        if (url == null || url.isBlank()) return false;
+        // Accept only relative (startsWith "/") or context-path-prefixed URLs
+        if (url.startsWith("/")) return true;
+        String ctx = request.getContextPath();
+        return ctx != null && !ctx.isEmpty() && url.startsWith(ctx + "/");
     }
 
     // web logout: blacklist cookie token and remove cookie

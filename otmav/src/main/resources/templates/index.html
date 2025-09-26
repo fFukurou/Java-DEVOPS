@@ -1,0 +1,17 @@
+<!-- src/main/resources/templates/index.html -->
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('OTMAV - Home')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container mt-4">
+    <h1>Bem-vindo ao OTMAV</h1>
+    <p>Esta é a página inicial provisória. Você está logado se ver o link "Sair".</p>
+
+    <div>
+        <a class="btn btn-primary" th:href="@{/filiais}">Ver Filiais</a>
+    </div>
+</div>
+</body>
+</html>

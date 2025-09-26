@@ -8,12 +8,15 @@ import br.com.fiap.otmav.service.FuncionarioService;
 import br.com.fiap.otmav.service.TokenBlacklistService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import br.com.fiap.otmav.service.TokenBlacklistService;
@@ -59,23 +62,49 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletRequest request) {
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
         String token = recoverToken(request);
         if (token == null) {
             logger.warn("Logout requested without Authorization header");
-            return ResponseEntity.status(401).build(); // unauthorized to logout without token
+            // also try cookie fallback (optional)
+            token = recoverTokenFromCookie(request);
+            if (token == null) {
+                return ResponseEntity.status(401).build();
+            }
         }
 
-        // Try to read expiry from token (robust)
         Instant expiresAt = tokenService.getExpirationInstant(token);
         if (expiresAt == null) {
-            // fallback: assume configured small TTL if not present — we still blacklist
-            logger.info("Could not read exp claim from token — blacklisting with fallback expiry");
-            expiresAt = Instant.now().plusSeconds(3600); // fallback 1 hour
+            expiresAt = Instant.now().plusSeconds(3600);
+        }
+        blacklistService.blacklistToken(token, expiresAt);
+
+        // Invalidate server session (important — prevents session-based auth from persisting)
+        var session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
         }
 
-        blacklistService.blacklistToken(token, expiresAt);
+        // Clear security context in the current thread
+        SecurityContextHolder.clearContext();
+
+        // Remove JSESSIONID cookie (helps browser/Swagger UI not reuse old session)
+        Cookie clearSession = new Cookie("JSESSIONID", "");
+        clearSession.setPath("/");
+        clearSession.setMaxAge(0);
+        response.addCookie(clearSession);
+
         return ResponseEntity.noContent().build();
+    }
+
+    private String recoverTokenFromCookie(HttpServletRequest request) {
+        if (request.getCookies() == null) return null;
+        for (Cookie c : request.getCookies()) {
+            if ("OTMAV_TOKEN".equals(c.getName()) && c.getValue() != null && !c.getValue().isBlank()) {
+                return c.getValue().trim();
+            }
+        }
+        return null;
     }
 
     private String recoverToken(HttpServletRequest request) {
