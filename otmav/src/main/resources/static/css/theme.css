@@ -1,0 +1,371 @@
+/* src/main/resources/static/css/theme.css
+   Dark metallic theme with subtle green accent (#089c2a)
+   + fixes for inputs/selects/dropdowns and a hero class
+*/
+
+/* color variables */
+:root{
+  --accent-green: #089c2a;
+  --accent-green-100: rgba(8,156,42,0.08);
+  --bg-900: #0b0c0d;
+  --bg-800: #111315;
+  --panel: #151718;
+  --muted: #9da6a6;
+  --text: #e6efee;
+  --subtle-border: rgba(255,255,255,0.04);
+  --focus-ring: rgba(8,156,42,0.12);
+}
+
+/* base page */
+body {
+  background: linear-gradient(180deg, #0b0c0d 0%, #0f1113 40%, #121416 100%);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* links */
+a { color: var(--accent-green); }
+a:hover, a:focus { color: #057a1d; text-decoration: none; }
+
+/* navbar */
+.navbar {
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-bottom: 1px solid var(--subtle-border);
+}
+.navbar-brand { color: var(--accent-green) !important; font-weight:700; }
+.navbar-dark .navbar-nav .nav-link { color: rgba(230,239,238,0.9); }
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus { color: var(--accent-green); }
+
+/* ensure search input inside navbar always has white text on dark background */
+.navbar .form-control,
+.navbar .form-select {
+  background: #0b0c0d;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* form controls (global) */
+.form-control, .form-select {
+  background: #0f1112;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 6px;
+  box-shadow: none;
+}
+
+/* placeholder color (make readable on dark BG) */
+.form-control::placeholder,
+.form-select::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: rgba(230,239,238,0.6);
+}
+
+/* vendor prefixed placeholders (for compatibility) */
+::-webkit-input-placeholder { color: rgba(230,239,238,0.6); }
+:-ms-input-placeholder { color: rgba(230,239,238,0.6); }
+::-ms-input-placeholder { color: rgba(230,239,238,0.6); }
+
+/* Focus: keep background dark, don't flip to white; add green ring */
+.form-control:focus,
+.form-select:focus {
+  background: #0f1112 !important;
+  color: var(--text) !important;
+  border-color: var(--accent-green) !important;
+  box-shadow: 0 0 0 0.18rem var(--focus-ring) !important;
+  outline: none;
+}
+
+/* For select dropdown arrow when focused */
+.form-select:focus::-ms-value { color: var(--text); }
+
+/* table styles */
+.table { color: var(--text); }
+.table thead { background: rgba(255,255,255,0.02); color: var(--muted); }
+.table-striped > tbody > tr:nth-of-type(odd) { background-color: rgba(255,255,255,0.012); }
+
+/* cards/panels */
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid var(--subtle-border);
+  color: var(--text);
+  border-radius: 12px;
+}
+
+/* primary buttons (green) */
+.btn-primary {
+  background-color: var(--accent-green);
+  border-color: #057a1d;
+  color: #ffffff;
+  box-shadow: none;
+}
+.btn-primary:hover, .btn-primary:focus {
+  background-color: #057a1d;
+  border-color: #046016;
+  color: #fff;
+}
+
+/* outline-primary for hero or lighter buttons */
+.btn-outline-primary {
+  color: var(--accent-green);
+  border-color: rgba(8,156,42,0.14);
+}
+.btn-outline-primary:hover {
+  background-color: var(--accent-green-100);
+  color: #ffffff;
+}
+
+/* dropdown menus & items */
+.dropdown-menu {
+  background: linear-gradient(180deg, #0f1112, #0d0e0f);
+  border: 1px solid rgba(255,255,255,0.04);
+  color: var(--text);
+}
+.dropdown-menu .dropdown-item {
+  color: var(--text);
+}
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+  background-color: var(--accent-green);
+  color: #fff;
+}
+
+/* ensure active/selected show readable color */
+.dropdown-menu .dropdown-item.active,
+.dropdown-menu .dropdown-item:active {
+  background-color: var(--accent-green);
+  color: #fff;
+}
+
+/* pagination */
+.pagination .page-item .page-link { color: var(--text); background: transparent; border-color: rgba(255,255,255,0.04); }
+.pagination .page-item.active .page-link { background: var(--accent-green); border-color: var(--accent-green); }
+
+/* subtle hover elevation for cards */
+.card:hover { transform: translateY(-4px); transition: transform 0.18s ease; }
+
+/* text muted */
+.text-muted { color: rgba(255,255,255,0.55) !important; }
+
+/* focus outlines */
+button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 2px; }
+
+/* Hero: green-accented metallic */
+.hero {
+  background: linear-gradient(135deg, rgba(8,156,42,0.06) 0%, rgba(16,18,17,0.8) 35%, #0f1112 100%);
+  border: 1px solid rgba(255,255,255,0.03);
+  padding: 3rem;
+  border-radius: 12px;
+  color: var(--text);
+}
+.hero h1 { color: var(--accent-green); font-weight: 800; letter-spacing: 0.6px; }
+.hero .lead { color: rgba(230,239,238,0.88); }
+
+/* small utility for hero buttons to use subtle outline look */
+.hero .btn-outline-light {
+  color: #ffffff;
+  border-color: rgba(255,255,255,0.12);
+}
+.hero .btn-outline-light:hover { color: var(--accent-green); background: rgba(255,255,255,0.02); }
+
+/* responsive tweaks */
+@media (max-width: 768px) {
+  .hero { padding: 2rem; }
+}
+
+/* last resort: make options readable in some browsers */
+.form-select option { color: var(--text); background: #0f1112; }
+
+/* QUICK LINK CARDS: subtle green gradient, thin outline, soft glow and lift on hover/focus */
+.quick-grid .card {
+  background: linear-gradient(135deg, rgba(8,156,42,0.04) 0%, rgba(16,18,17,0.7) 40%, rgba(15,17,18,0.85) 100%);
+  border: 1px solid rgba(8,156,42,0.12);
+  box-shadow: 0 6px 18px rgba(8,156,42,0.06), 0 2px 6px rgba(0,0,0,0.55);
+  border-radius: 12px;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  overflow: hidden;
+}
+
+/* inner body spacing & alignment */
+.quick-grid .card-body {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.15rem;
+}
+
+/* icon badge (square rounded) */
+.quick-grid .q-icon {
+  width: 54px;
+  height: 54px;
+  min-width: 54px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  background: linear-gradient(135deg, rgba(8,156,42,0.18), rgba(8,156,42,0.06));
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(8,156,42,0.06), inset 0 -4px 8px rgba(0,0,0,0.18);
+}
+
+/* typography inside card */
+.quick-grid .card-title {
+  margin-bottom: 0;
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: .1px;
+}
+.quick-grid .card-sub {
+  color: rgba(230,239,238,0.7);
+  font-size: 0.85rem;
+}
+
+/* hover / focus — lift + stronger green glow */
+.quick-grid a.quick-link {
+  display: block; /* ensure full-card clickable */
+  border-radius: 12px;
+  outline: none;
+  text-decoration: none;
+}
+.quick-grid a.quick-link:focus,
+.quick-grid a.quick-link:hover {
+  transform: translateY(-6px) scale(1.01);
+  z-index: 2;
+  box-shadow: 0 18px 40px rgba(8,156,42,0.09), 0 6px 12px rgba(0,0,0,0.55);
+  border-color: rgba(8,156,42,0.22);
+}
+
+/* keyboard accessibility: visible focus ring */
+.quick-grid a.quick-link:focus {
+  box-shadow: 0 18px 40px rgba(8,156,42,0.10), 0 6px 12px rgba(0,0,0,0.55), 0 0 0 4px rgba(8,156,42,0.10);
+}
+
+/* variants (optional): different subtle gradient per card type */
+.quick-grid .q-variant-1 .q-icon { background: linear-gradient(135deg, rgba(8,156,42,0.22), rgba(8,156,42,0.08)); }
+.quick-grid .q-variant-2 .q-icon { background: linear-gradient(135deg, rgba(6,120,200,0.12), rgba(8,156,42,0.04)); }
+.quick-grid .q-variant-3 .q-icon { background: linear-gradient(135deg, rgba(180,180,180,0.06), rgba(8,156,42,0.04)); }
+
+/* smaller screens tweak */
+@media (max-width: 576px) {
+  .quick-grid .q-icon { width:48px; height:48px; min-width:48px; font-size:1.25rem; }
+  .quick-grid .card-body { padding: .9rem; }
+}
+
+/* ======================
+   Tables — Dark metallic + green accents (stronger override)
+   ====================== */
+
+:root {
+  --accent-green: #089c2a;
+  --accent-green-strong: rgba(8,156,42,0.95);
+  --muted-text: rgba(230,239,238,0.78);
+  --table-row-odd: rgba(255,255,255,0.02);
+  --table-row-even: rgba(255,255,255,0.04);
+  --table-border: rgba(255,255,255,0.04);
+}
+
+/* Base table: make sure table background is transparent and text is light */
+.table {
+  background: transparent !important;
+  color: var(--muted-text) !important;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Ensure responsive container looks good */
+.table-responsive {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.03);
+  background: linear-gradient(180deg, rgba(18,18,18,0.72), rgba(12,12,12,0.82));
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+}
+
+/* Header row (th) */
+.table thead th {
+  background: linear-gradient(180deg, rgba(12,12,12,0.92), rgba(18,18,18,0.98)) !important;
+  color: var(--accent-green-strong) !important;
+  border-bottom: 1px solid var(--table-border) !important;
+  font-weight: 700;
+}
+
+/* Force table body rows to inherit dark background (overrides bootstrap defaults) */
+.table tbody tr,
+.table.table-striped tbody tr,
+.table > tbody > tr {
+  background: transparent !important;
+  color: var(--muted-text) !important;
+}
+
+/* Striped rows — stronger specificity and !important so these take effect */
+.table.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: var(--table-row-odd) !important;
+}
+.table.table-striped > tbody > tr:nth-of-type(even) {
+  background-color: var(--table-row-even) !important;
+}
+
+/* Also ensure each TD is transparent (sometimes Bootstrap sets white on td) */
+.table td,
+.table th {
+  background: transparent !important;
+  color: var(--muted-text) !important;
+  border-top: 1px solid rgba(255,255,255,0.03) !important;
+  padding: .72rem .9rem;
+}
+
+/* Hover highlight with subtle green glow */
+.table tbody tr:hover td {
+  background-color: rgba(8,156,42,0.03) !important;
+  color: #ffffff !important;
+}
+
+/* First column (ID) styling */
+.table td:first-child {
+  font-weight: 600;
+  color: #dfeff4 !important;
+  width: 90px;
+}
+
+/* Muted text inside tables */
+.table .text-muted, .table small {
+  color: rgba(230,239,238,0.62) !important;
+}
+
+/* Buttons in tables — use green outline variant */
+.table .btn-outline-primary,
+.table .btn-outline-info {
+  color: var(--accent-green) !important;
+  border-color: rgba(8,156,42,0.36) !important;
+  background: transparent !important;
+}
+.table .btn-outline-primary:hover,
+.table .btn-outline-info:hover,
+.table .btn-outline-primary:focus,
+.table .btn-outline-info:focus {
+  color: #fff !important;
+  background: linear-gradient(90deg, rgba(8,156,42,0.14), rgba(8,156,42,0.06)) !important;
+  border-color: var(--accent-green) !important;
+  box-shadow: 0 8px 30px rgba(8,156,42,0.06);
+}
+
+/* Pagination tweaks */
+.pagination .page-item .page-link {
+  background: transparent !important;
+  color: var(--muted-text) !important;
+  border: 1px solid rgba(255,255,255,0.03) !important;
+}
+.pagination .page-item.active .page-link {
+  background: linear-gradient(90deg, rgba(8,156,42,0.14), rgba(8,156,42,0.06)) !important;
+  color: #fff !important;
+  border-color: rgba(8,156,42,0.28) !important;
+}
+
+/* Small mobile adjustments */
+@media (max-width: 576px) {
+  .table td, .table th { padding: .5rem .6rem !important; }
+  .table td:first-child { width: 64px; }
+}
