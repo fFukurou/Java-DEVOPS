@@ -10,119 +10,172 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(NotFoundException ex) {
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),
-                "Resource not found",
-                ex.getMessage()
-        );
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    // Helper: decide if the request wants HTML
+    private boolean wantsHtml(HttpServletRequest request) {
+        String accept = request.getHeader("Accept");
+        if (accept == null) return false;
+        return accept.contains("text/html");
     }
+
+    // Generic builder for JSON ErrorResponse
+    private ResponseEntity<ErrorResponse> buildJson(HttpStatus status, String error, String message) {
+        ErrorResponse err = new ErrorResponse(status.value(), error, message);
+        return new ResponseEntity<>(err, status);
+    }
+
+    // ========== NotFoundException ==========
+    @ExceptionHandler(NotFoundException.class)
+    public Object handleNotFound(NotFoundException ex, HttpServletRequest request) {
+        if (wantsHtml(request)) {
+            ModelAndView mav = new ModelAndView("error/404");
+            mav.addObject("status", HttpStatus.NOT_FOUND.value());
+            mav.addObject("error", "Resource not found");
+            mav.addObject("message", ex.getMessage());
+            mav.addObject("path", request.getRequestURI());
+            return mav;
+        }
+        return buildJson(HttpStatus.NOT_FOUND, "Resource not found", ex.getMessage());
+    }
+
+    // ========== Validation errors ==========
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException ex) {
+    public Object handleValidationErrors(MethodArgumentNotValidException ex, HttpServletRequest request) {
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList());
 
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                "Validation failed",
-                errors.toString()
-        );
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        String message = errors.toString();
+
+        if (wantsHtml(request)) {
+            ModelAndView mav = new ModelAndView("error/error");
+            mav.addObject("status", HttpStatus.BAD_REQUEST.value());
+            mav.addObject("error", "Validation failed");
+            mav.addObject("message", message);
+            mav.addObject("path", request.getRequestURI());
+            return mav;
+        }
+        return buildJson(HttpStatus.BAD_REQUEST, "Validation failed", message);
     }
 
-
+    // ========== DuplicateEntry ==========
     @ExceptionHandler(DuplicateEntryException.class)
-    public ResponseEntity<ErrorResponse> handleDuplicateEntry(DuplicateEntryException ex) {
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.CONFLICT.value(),
-                "Duplicate entry",
-                ex.getMessage()
-        );
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    public Object handleDuplicateEntry(DuplicateEntryException ex, HttpServletRequest request) {
+        if (wantsHtml(request)) {
+            ModelAndView mav = new ModelAndView("error/error");
+            mav.addObject("status", HttpStatus.CONFLICT.value());
+            mav.addObject("error", "Duplicate entry");
+            mav.addObject("message", ex.getMessage());
+            mav.addObject("path", request.getRequestURI());
+            return mav;
+        }
+        return buildJson(HttpStatus.CONFLICT, "Duplicate entry", ex.getMessage());
     }
 
+    // ========== AccessDenied ==========
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.FORBIDDEN.value(),
-                "Access denied",
-                ex.getMessage()
-        );
-        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    public Object handleAccessDenied(AccessDeniedException ex, HttpServletRequest request) {
+        if (wantsHtml(request)) {
+            ModelAndView mav = new ModelAndView("error/error");
+            mav.addObject("status", HttpStatus.FORBIDDEN.value());
+            mav.addObject("error", "Access denied");
+            mav.addObject("message", ex.getMessage());
+            mav.addObject("path", request.getRequestURI());
+            return mav;
+        }
+        return buildJson(HttpStatus.FORBIDDEN, "Access denied", ex.getMessage());
     }
 
+    // ========== IllegalArgument ==========
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                "Invalid argument",
-                ex.getMessage()
-        );
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    public Object handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
+        if (wantsHtml(request)) {
+            ModelAndView mav = new ModelAndView("error/error");
+            mav.addObject("status", HttpStatus.BAD_REQUEST.value());
+            mav.addObject("error", "Invalid argument");
+            mav.addObject("message", ex.getMessage());
+            mav.addObject("path", request.getRequestURI());
+            return mav;
+        }
+        return buildJson(HttpStatus.BAD_REQUEST, "Invalid argument", ex.getMessage());
     }
 
+    // ========== DataIntegrityViolation ==========
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.CONFLICT.value(),
-                "Data integrity violation",
-                "Operation would violate data integrity constraints"
-        );
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    public Object handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
+        if (wantsHtml(request)) {
+            ModelAndView mav = new ModelAndView("error/error");
+            mav.addObject("status", HttpStatus.CONFLICT.value());
+            mav.addObject("error", "Data integrity violation");
+            mav.addObject("message", "Operation would violate data integrity constraints");
+            mav.addObject("path", request.getRequestURI());
+            return mav;
+        }
+        return buildJson(HttpStatus.CONFLICT, "Data integrity violation", "Operation would violate data integrity constraints");
     }
 
+    // ========== Authentication exceptions (app-specific) ==========
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorResponse> handleAuthentication(AuthenticationException ex) {
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.UNAUTHORIZED.value(),
-                "Authentication Failed",
-                ex.getMessage()
-        );
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    public Object handleAuthentication(AuthenticationException ex, HttpServletRequest request) {
+        if (wantsHtml(request)) {
+            ModelAndView mav = new ModelAndView("error/error");
+            mav.addObject("status", HttpStatus.UNAUTHORIZED.value());
+            mav.addObject("error", "Authentication Failed");
+            mav.addObject("message", ex.getMessage());
+            mav.addObject("path", request.getRequestURI());
+            return mav;
+        }
+        return buildJson(HttpStatus.UNAUTHORIZED, "Authentication Failed", ex.getMessage());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex) {
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.UNAUTHORIZED.value(),
-                "Authentication failed",
-                "Invalid login or password"
-        );
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    public Object handleBadCredentials(BadCredentialsException ex, HttpServletRequest request) {
+        if (wantsHtml(request)) {
+            ModelAndView mav = new ModelAndView("error/error");
+            mav.addObject("status", HttpStatus.UNAUTHORIZED.value());
+            mav.addObject("error", "Authentication failed");
+            mav.addObject("message", "Invalid login or password");
+            mav.addObject("path", request.getRequestURI());
+            return mav;
+        }
+        return buildJson(HttpStatus.UNAUTHORIZED, "Authentication failed", "Invalid login or password");
     }
 
     @ExceptionHandler(DisabledException.class)
-    public ResponseEntity<ErrorResponse> handleDisabledUser(DisabledException ex) {
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.UNAUTHORIZED.value(),
-                "Authentication failed",
-                "User account is disabled"
-        );
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    public Object handleDisabledUser(DisabledException ex, HttpServletRequest request) {
+        if (wantsHtml(request)) {
+            ModelAndView mav = new ModelAndView("error/error");
+            mav.addObject("status", HttpStatus.UNAUTHORIZED.value());
+            mav.addObject("error", "Authentication failed");
+            mav.addObject("message", "User account is disabled");
+            mav.addObject("path", request.getRequestURI());
+            return mav;
+        }
+        return buildJson(HttpStatus.UNAUTHORIZED, "Authentication failed", "User account is disabled");
     }
 
-
+    // ========== Generic fallback ==========
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "An unexpected error occurred",
-                ex.getMessage()
-        );
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    public Object handleGenericException(Exception ex, HttpServletRequest request) {
+        // Log the exception server-side if you want (not included here to keep file small)
+        if (wantsHtml(request)) {
+            ModelAndView mav = new ModelAndView("error/error");
+            mav.addObject("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            mav.addObject("error", "An unexpected error occurred");
+            mav.addObject("message", ex.getMessage());
+            mav.addObject("path", request.getRequestURI());
+            return mav;
+        }
+        return buildJson(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", ex.getMessage());
     }
-
-
 }

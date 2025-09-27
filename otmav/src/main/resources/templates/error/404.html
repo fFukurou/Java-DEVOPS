@@ -1,0 +1,18 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Página não encontrada')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container mt-5">
+    <div class="alert alert-warning">
+        <h2>404 — Recurso não encontrado</h2>
+        <p>O recurso <b th:text="${path}">/path</b> não foi encontrado.</p>
+        <p th:if="${message}" th:text="${message}"></p>
+        <a class="btn btn-secondary" th:href="@{/}">Voltar para o início</a>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>
