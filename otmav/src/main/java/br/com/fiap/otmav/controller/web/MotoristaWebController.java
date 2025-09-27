@@ -48,6 +48,14 @@ public class MotoristaWebController {
         return "motoristas/list";
     }
 
+    // SHOW single motorista
+    @GetMapping("/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        ReadMotoristaDto rm = motoristaService.findById(id);
+        model.addAttribute("motorista", rm);
+        return "motoristas/show";
+    }
+
     // SHOW CREATE FORM
     @GetMapping("/new")
     public String newForm(Model model) {

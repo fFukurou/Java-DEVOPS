@@ -39,6 +39,7 @@
             <td th:text="${f.dados != null ? f.dados.email() : '-'}">Email</td>
             <td th:text="${f.filial != null ? f.filial.nome() : '-'}">Filial</td>
             <td>
+                <a class="btn btn-sm btn-outline-info" th:href="@{|/funcionarios/${f.id}|}">Ver</a>
                 <a class="btn btn-sm btn-outline-primary" th:href="@{|/funcionarios/${f.id}/edit|}">Editar</a>
                 <form th:action="@{|/funcionarios/${f.id}/delete|}" method="post" style="display:inline">
                     <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />

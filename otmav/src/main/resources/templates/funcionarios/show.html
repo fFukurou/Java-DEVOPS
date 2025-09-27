@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Funcionário')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Detalhes do Funcionário</h1>
+        <div>
+            <a class="btn btn-secondary" th:href="@{/funcionarios}">Voltar</a>
+            <a class="btn btn-primary" th:href="@{|/funcionarios/${funcionario.id()}/edit|}">Editar</a>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9" th:text="${funcionario.id()}">1</dd>
+
+                <dt class="col-sm-3">Cargo</dt>
+                <dd class="col-sm-9" th:text="${funcionario.cargo()}">Cargo</dd>
+
+                <dt class="col-sm-3">Dados (ID)</dt>
+                <dd class="col-sm-9">
+                    <span th:if="${funcionario.dados() != null}">
+                        <a th:href="@{|/dados/${funcionario.dados().id()}|}" th:text="${funcionario.dados().id()}">dados-id</a>
+                        <span th:if="${funcionario.dados().nome() != null}"> — <span th:text="${funcionario.dados().nome()}">Nome</span></span>
+                    </span>
+                    <span th:if="${funcionario.dados() == null}">-</span>
+                </dd>
+
+                <dt class="col-sm-3">Filial</dt>
+                <dd class="col-sm-9" th:text="${funcionario.filial() != null ? funcionario.filial().nome() : '-'}">Filial</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

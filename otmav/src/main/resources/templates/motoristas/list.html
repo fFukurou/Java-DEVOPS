@@ -38,9 +38,10 @@
         <tr th:each="m : ${motoristasPage.content}">
             <td th:text="${m.id}">1</td>
             <td th:text="${m.plano}">PLANO</td>
-            <td th:text="${m.dados != null ? m.dados.nome : '-'}">Nome</td>
-            <td th:text="${m.dados != null ? m.dados.email : '-'}">email</td>
+            <td th:text="${m.dados != null ? m.dados.nome() : '-'}">Nome</td>
+            <td th:text="${m.dados != null ? m.dados.email() : '-'}">email</td>
             <td>
+                <a class="btn btn-sm btn-outline-info" th:href="@{|/motoristas/${m.id}|}">Ver</a>
                 <a class="btn btn-sm btn-outline-primary" th:href="@{|/motoristas/${m.id}/edit|}">Editar</a>
 
                 <form th:action="@{|/motoristas/${m.id}/delete|}" method="post" style="display:inline">

@@ -51,6 +51,14 @@ public class FuncionarioWebController {
         return "funcionarios/list";
     }
 
+    // SHOW single funcionario
+    @GetMapping("/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        ReadFuncionarioDto rf = funcionarioService.findById(id);
+        model.addAttribute("funcionario", rf);
+        return "funcionarios/show";
+    }
+
     // SHOW CREATE FORM (inline Dados)
     @GetMapping("/new")
     public String newForm(Model model) {
