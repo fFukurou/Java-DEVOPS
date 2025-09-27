@@ -2,11 +2,14 @@ package br.com.fiap.otmav.domain.patio;
 
 import br.com.fiap.otmav.domain.filial.Filial;
 import br.com.fiap.otmav.domain.regiao.Regiao;
+import br.com.fiap.otmav.domain.setor.Setor;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "patio")
@@ -35,4 +38,7 @@ public class Patio {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_regiao", referencedColumnName = "id_regiao")
     private Regiao regiao;
+
+    @OneToMany(mappedBy = "patio", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Setor> setores;
 }

@@ -1,6 +1,7 @@
 package br.com.fiap.otmav.domain.motorista;
 
 import br.com.fiap.otmav.domain.dados.Dados;
+import br.com.fiap.otmav.domain.moto.Moto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,6 +9,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "motorista")
@@ -29,4 +32,7 @@ public class Motorista {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_dados", referencedColumnName = "id_dados", nullable = false)
     private Dados dados;
+
+    @OneToMany(mappedBy = "motorista", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Moto> motos;
 }

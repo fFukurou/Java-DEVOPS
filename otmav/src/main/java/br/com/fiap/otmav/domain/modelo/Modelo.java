@@ -1,5 +1,6 @@
 package br.com.fiap.otmav.domain.modelo;
 
+import br.com.fiap.otmav.domain.moto.Moto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,6 +8,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "modelo")
@@ -45,4 +48,7 @@ public class Modelo {
     @NotNull
     @Column(name = "consumo")
     private Integer consumo;
+
+    @OneToMany(mappedBy = "modelo", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Moto> motos;
 }

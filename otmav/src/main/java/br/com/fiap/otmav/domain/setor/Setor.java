@@ -1,5 +1,6 @@
 package br.com.fiap.otmav.domain.setor;
 
+import br.com.fiap.otmav.domain.moto.Moto;
 import br.com.fiap.otmav.domain.patio.Patio;
 import br.com.fiap.otmav.domain.regiao.Regiao;
 import jakarta.persistence.*;
@@ -9,6 +10,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "setor")
@@ -52,4 +55,7 @@ public class Setor {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_regiao", referencedColumnName = "id_regiao")
     private Regiao regiao;
+
+    @OneToMany(mappedBy = "setor", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Moto> motos;
 }

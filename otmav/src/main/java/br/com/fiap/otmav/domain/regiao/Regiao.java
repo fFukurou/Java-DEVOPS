@@ -1,10 +1,14 @@
 package br.com.fiap.otmav.domain.regiao;
 
+import br.com.fiap.otmav.domain.patio.Patio;
+import br.com.fiap.otmav.domain.setor.Setor;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "regiao")
@@ -27,4 +31,10 @@ public class Regiao {
     @NotNull
     @Column(name = "area", nullable = false)
     private Double area;
+
+    @OneToMany(mappedBy = "regiao", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Patio> patios;
+
+    @OneToMany(mappedBy = "regiao", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Setor> setores;
 }

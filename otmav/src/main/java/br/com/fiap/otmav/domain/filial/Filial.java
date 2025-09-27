@@ -1,12 +1,16 @@
 package br.com.fiap.otmav.domain.filial;
 
 import br.com.fiap.otmav.domain.endereco.Endereco;
+import br.com.fiap.otmav.domain.funcionario.Funcionario;
+import br.com.fiap.otmav.domain.patio.Patio;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "filial")
@@ -29,27 +33,11 @@ public class Filial {
     @JoinColumn(name = "id_endereco", referencedColumnName = "id_endereco")
     private Endereco endereco;
 
-    public Long getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "filial", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Patio> patios;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @OneToMany(mappedBy = "filial", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Funcionario> funcionarios;
 
-    public String getNome() {
-        return nome;
-    }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
 }

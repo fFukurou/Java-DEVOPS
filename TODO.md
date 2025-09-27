@@ -1,7 +1,4 @@
-- General Error Pages (/error and url that doesn't exist (404));
-- Better Header
 - Update SecurityConfig after routing is done;
-- Change Color... maybe?
 - Analyze and refactor code
 - Gravar e Editar Vídeo
 - Atualizar README (endpoints, DB Connection...)

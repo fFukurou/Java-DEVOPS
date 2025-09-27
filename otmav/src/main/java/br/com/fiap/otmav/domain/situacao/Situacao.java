@@ -1,11 +1,14 @@
 package br.com.fiap.otmav.domain.situacao;
 
+import br.com.fiap.otmav.domain.moto.Moto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "situacao")
@@ -31,4 +34,7 @@ public class Situacao {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 50, nullable = false)
     private SituacaoStatus status;
+
+    @OneToMany(mappedBy = "situacao", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Moto> motos;
 }

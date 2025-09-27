@@ -1,5 +1,6 @@
 package br.com.fiap.otmav.domain.endereco;
 
+import br.com.fiap.otmav.domain.filial.Filial;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,6 +8,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "endereco")
@@ -47,4 +50,7 @@ public class Endereco {
     @Size(max = 100)
     @Column(name = "rua", length = 100, nullable = false)
     private String rua;
+
+    @OneToMany(mappedBy = "endereco", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Filial> filiais;
 }
