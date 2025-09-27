@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Situações')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center my-3">
+        <h1>Situações</h1>
+        <a class="btn btn-primary" th:href="@{/situacoes/new}">Nova Situação</a>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+    <!-- filters -->
+    <form class="row g-2 mb-3" th:action="@{/situacoes}" method="get">
+        <div class="col-auto">
+            <input class="form-control" type="text" name="nome" th:value="${nome}" placeholder="Nome"/>
+        </div>
+        <div class="col-auto">
+            <select class="form-select" name="status">
+                <option value="">-- Todos Status --</option>
+                <option th:each="st : ${allStatuses}" th:value="${st}" th:text="${st}" th:selected="${st == status}">Status</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary" type="submit">Filtrar</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th><th>Nome</th><th>Descrição</th><th>Status</th><th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="s : ${situacoesPage.content}">
+            <td th:text="${s.id}">1</td>
+            <td th:text="${s.nome}">Nome</td>
+            <td th:text="${s.descricao}">Desc</td>
+            <td th:text="${s.status}">ATIVO</td>
+            <td>
+                <a class="btn btn-sm btn-outline-primary" th:href="@{|/situacoes/${s.id}/edit|}">Editar</a>
+
+                <form th:action="@{|/situacoes/${s.id}/delete|}" method="post" style="display:inline">
+                    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Confirma exclusão?')">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- pagination -->
+    <nav th:if="${situacoesPage.totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${situacoesPage.first} ? 'disabled'">
+                <a class="page-link" th:href="@{/situacoes(page=${situacoesPage.number-1}, size=${situacoesPage.size}, nome=${nome}, status=${status})}">Anterior</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, situacoesPage.totalPages-1)}"
+                th:classappend="${i == situacoesPage.number} ? 'active'">
+                <a class="page-link" th:text="${i+1}" th:href="@{/situacoes(page=${i}, size=${situacoesPage.size}, nome=${nome}, status=${status})}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${situacoesPage.last} ? 'disabled'">
+                <a class="page-link" th:href="@{/situacoes(page=${situacoesPage.number+1}, size=${situacoesPage.size}, nome=${nome}, status=${status})}">Próxima</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

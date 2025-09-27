@@ -103,7 +103,7 @@ CREATE TABLE moto (
     id_moto       NUMBER(16) CONSTRAINT id_moto_pk PRIMARY KEY,
     placa         VARCHAR2(7),
     chassi        VARCHAR2(17),
-    condicao      VARCHAR2(8) NOT NULL,
+    condicao      VARCHAR2(255) NOT NULL,
     localizacao_moto VARCHAR2(255)  NOT NULL,
     id_motorista  NUMBER(15) CONSTRAINT id_motorista_fk REFERENCES motorista,
     id_modelo     NUMBER(15) CONSTRAINT id_modelo_fk REFERENCES modelo,

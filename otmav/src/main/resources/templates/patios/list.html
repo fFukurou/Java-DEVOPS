@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Pátios')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center my-3">
+        <h1>Pátios</h1>
+        <a class="btn btn-primary" th:href="@{/patios/new}">Novo Pátio</a>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+    <!-- filters -->
+    <form class="row g-2 mb-3" th:action="@{/patios}" method="get">
+        <div class="col-auto">
+            <input class="form-control" type="number" name="totalMotos" th:value="${totalMotos}" placeholder="Total motos"/>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="number" name="capacidadeMoto" th:value="${capacidadeMoto}" placeholder="Capacidade moto"/>
+        </div>
+        <div class="col-auto">
+            <select class="form-select" name="filialId">
+                <option value="">-- Filial (todos) --</option>
+                <option th:each="f : ${filiais}" th:value="${f.id}" th:text="${f.nome}">Filial</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <select class="form-select" name="regiaoId">
+                <option value="">-- Região (todos) --</option>
+                <option th:each="r : ${regioes}" th:value="${r.id}" th:text="${r.id + ' — ' + (r.localizacao != null ? r.localizacao : r.area)}">Região</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary" type="submit">Filtrar</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th><th>Total Motos</th><th>Capacidade</th><th>Filial</th><th>Região</th><th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${patiosPage.content}">
+            <td th:text="${p.id}">1</td>
+            <td th:text="${p.totalMotos}">10</td>
+            <td th:text="${p.capacidadeMoto}">20</td>
+            <td th:text="${p.filial != null ? p.filial.nome() : '-'}">Filial</td>
+            <td th:text="${p.regiao != null ? (p.regiao.localizacao() != null ? p.regiao.localizacao() : p.regiao.area()) : '-'}">Região</td>
+            <td>
+                <a class="btn btn-sm btn-outline-primary" th:href="@{|/patios/${p.id}/edit|}">Editar</a>
+
+                <form th:action="@{|/patios/${p.id}/delete|}" method="post" style="display:inline">
+                    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Confirma exclusão?')">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- pagination -->
+    <nav th:if="${patiosPage.totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${patiosPage.first} ? 'disabled'">
+                <a class="page-link" th:href="@{/patios(page=${patiosPage.number-1}, size=${patiosPage.size}, totalMotos=${totalMotos}, capacidadeMoto=${capacidadeMoto}, filialId=${filialId}, regiaoId=${regiaoId})}">Anterior</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, patiosPage.totalPages-1)}"
+                th:classappend="${i == patiosPage.number} ? 'active'">
+                <a class="page-link" th:text="${i+1}" th:href="@{/patios(page=${i}, size=${patiosPage.size}, totalMotos=${totalMotos}, capacidadeMoto=${capacidadeMoto}, filialId=${filialId}, regiaoId=${regiaoId})}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${patiosPage.last} ? 'disabled'">
+                <a class="page-link" th:href="@{/patios(page=${patiosPage.number+1}, size=${patiosPage.size}, totalMotos=${totalMotos}, capacidadeMoto=${capacidadeMoto}, filialId=${filialId}, regiaoId=${regiaoId})}">Próxima</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

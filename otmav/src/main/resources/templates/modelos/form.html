@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Modelo')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+    <h2 th:text="${modeloId != null} ? 'Editar Modelo' : 'Novo Modelo'"></h2>
+
+    <!-- CREATE -->
+    <form th:if="${modeloId == null}"
+          th:action="@{/modelos}"
+          th:object="${createForm}"
+          method="post">
+        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nome do Modelo</label>
+            <input class="form-control" type="text" th:field="*{nomeModelo}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('nomeModelo')}" th:errors="*{nomeModelo}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Frenagem</label>
+            <input class="form-control" type="text" th:field="*{frenagem}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Sistema de Partida</label>
+            <input class="form-control" type="text" th:field="*{sisPartida}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Tanque</label>
+            <input class="form-control" type="number" th:field="*{tanque}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('tanque')}" th:errors="*{tanque}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Tipo Combustível</label>
+            <select class="form-select" th:field="*{tipoCombustivel}">
+                <option value="">-- selecione --</option>
+                <option value="Gasolina" th:selected="${createForm.tipoCombustivel == 'Gasolina'}">Gasolina</option>
+                <option value="Diesel" th:selected="${createForm.tipoCombustivel == 'Diesel'}">Diesel</option>
+                <option value="Flex" th:selected="${createForm.tipoCombustivel == 'Flex'}">Flex</option>
+                <option value="Etanol" th:selected="${createForm.tipoCombustivel == 'Etanol'}">Etanol</option>
+                <option value="Elétrico" th:selected="${createForm.tipoCombustivel == 'Elétrico'}">Elétrico</option>
+                <option value="Híbrido" th:selected="${createForm.tipoCombustivel == 'Híbrido'}">Híbrido</option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('tipoCombustivel')}" th:errors="*{tipoCombustivel}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Consumo</label>
+            <input class="form-control" type="number" th:field="*{consumo}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('consumo')}" th:errors="*{consumo}"></div>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+            <a class="btn btn-secondary" th:href="@{/modelos}">Cancelar</a>
+        </div>
+    </form>
+
+    <!-- EDIT -->
+    <form th:if="${modeloId != null}"
+          th:action="@{|/modelos/${modeloId}|}"
+          th:object="${updateForm}"
+          method="post">
+        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nome do Modelo</label>
+            <input class="form-control" type="text" th:field="*{nomeModelo}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('nomeModelo')}" th:errors="*{nomeModelo}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Frenagem</label>
+            <input class="form-control" type="text" th:field="*{frenagem}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Sistema de Partida</label>
+            <input class="form-control" type="text" th:field="*{sisPartida}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Tanque</label>
+            <input class="form-control" type="number" th:field="*{tanque}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('tanque')}" th:errors="*{tanque}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Tipo Combustível</label>
+            <select class="form-select" th:field="*{tipoCombustivel}">
+                <option value="">-- selecione --</option>
+                <option value="Gasolina" th:selected="${updateForm.tipoCombustivel == 'Gasolina'}">Gasolina</option>
+                <option value="Diesel" th:selected="${updateForm.tipoCombustivel == 'Diesel'}">Diesel</option>
+                <option value="Flex" th:selected="${updateForm.tipoCombustivel == 'Flex'}">Flex</option>
+                <option value="Etanol" th:selected="${updateForm.tipoCombustivel == 'Etanol'}">Etanol</option>
+                <option value="Elétrico" th:selected="${updateForm.tipoCombustivel == 'Elétrico'}">Elétrico</option>
+                <option value="Híbrido" th:selected="${updateForm.tipoCombustivel == 'Híbrido'}">Híbrido</option>
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('tipoCombustivel')}" th:errors="*{tipoCombustivel}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Consumo</label>
+            <input class="form-control" type="number" th:field="*{consumo}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('consumo')}" th:errors="*{consumo}"></div>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+            <a class="btn btn-secondary" th:href="@{/modelos}">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

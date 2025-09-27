@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Setores')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center my-3">
+        <h1>Setores</h1>
+        <a class="btn btn-primary" th:href="@{/setores/new}">Novo Setor</a>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+    <!-- filters -->
+    <form class="row g-2 mb-3" th:action="@{/setores}" method="get">
+        <div class="col-auto">
+            <input class="form-control" type="number" name="qtdMoto" th:value="${qtdMoto}" placeholder="Qtd. motos"/>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="number" name="capacidade" th:value="${capacidade}" placeholder="Capacidade"/>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="text" name="nome" th:value="${nome}" placeholder="Nome"/>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="text" name="cor" th:value="${cor}" placeholder="Cor"/>
+        </div>
+        <div class="col-auto">
+            <select class="form-select" name="patioId">
+                <option value="">-- Patio --</option>
+                <option th:each="p : ${patios}" th:value="${p.id}" th:text="${p.id + ' — ' + (p.filial != null ? p.filial.nome : 'Patio ' + p.id)}">Patio</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <select class="form-select" name="regiaoId">
+                <option value="">-- Região --</option>
+                <option th:each="r : ${regioes}" th:value="${r.id}" th:text="${r.id + ' — ' + (r.localizacao != null ? r.localizacao : r.area)}">Regiao</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary" type="submit">Filtrar</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th><th>Qtd Moto</th><th>Capacidade</th><th>Nome</th><th>Cor</th><th>Patio</th><th>Região</th><th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="s : ${setoresPage.content}">
+            <td th:text="${s.id}">1</td>
+            <td th:text="${s.qtdMoto}">0</td>
+            <td th:text="${s.capacidade}">0</td>
+            <td th:text="${s.nomeSetor}">Nome</td>
+            <td th:text="${s.cor}">cor</td>
+            <td th:text="${s.patio != null ? s.patio.id : '-'}">Patio</td>
+            <td th:text="${s.regiao != null ? (s.regiao.localizacao != null ? s.regiao.localizacao : s.regiao.area) : '-'}">Regiao</td>
+            <td>
+                <a class="btn btn-sm btn-outline-primary" th:href="@{|/setores/${s.id}/edit|}">Editar</a>
+
+                <form th:action="@{|/setores/${s.id}/delete|}" method="post" style="display:inline">
+                    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                    <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Confirma exclusão?')">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- pagination -->
+    <nav th:if="${setoresPage.totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${setoresPage.first} ? 'disabled'">
+                <a class="page-link" th:href="@{/setores(page=${setoresPage.number-1}, size=${setoresPage.size}, qtdMoto=${qtdMoto}, capacidade=${capacidade}, nome=${nome}, cor=${cor}, patioId=${patioId}, regiaoId=${regiaoId})}">Anterior</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, setoresPage.totalPages-1)}"
+                th:classappend="${i == setoresPage.number} ? 'active'">
+                <a class="page-link" th:text="${i+1}" th:href="@{/setores(page=${i}, size=${setoresPage.size}, qtdMoto=${qtdMoto}, capacidade=${capacidade}, nome=${nome}, cor=${cor}, patioId=${patioId}, regiaoId=${regiaoId})}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${setoresPage.last} ? 'disabled'">
+                <a class="page-link" th:href="@{/setores(page=${setoresPage.number+1}, size=${setoresPage.size}, qtdMoto=${qtdMoto}, capacidade=${capacidade}, nome=${nome}, cor=${cor}, patioId=${patioId}, regiaoId=${regiaoId})}">Próxima</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

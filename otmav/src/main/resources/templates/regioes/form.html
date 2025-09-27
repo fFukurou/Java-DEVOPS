@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Região')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+    <h2 th:text="${regiaoId != null} ? 'Editar Região' : 'Nova Região'"></h2>
+
+    <!-- CREATE form -->
+    <form th:if="${regiaoId == null}"
+          th:action="@{/regioes}"
+          th:object="${createForm}"
+          method="post">
+        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Localização (WKT)</label>
+            <textarea class="form-control" rows="4" th:field="*{localizacao}"></textarea>
+            <div class="text-danger" th:if="${#fields.hasErrors('localizacao')}" th:errors="*{localizacao}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Área</label>
+            <input class="form-control" type="number" step="any" th:field="*{area}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('area')}" th:errors="*{area}"></div>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+            <a class="btn btn-secondary" th:href="@{/regioes}">Cancelar</a>
+        </div>
+    </form>
+
+    <!-- EDIT form -->
+    <form th:if="${regiaoId != null}"
+          th:action="@{|/regioes/${regiaoId}|}"
+          th:object="${updateForm}"
+          method="post">
+        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Localização (WKT)</label>
+            <textarea class="form-control" rows="4" th:field="*{localizacao}"></textarea>
+            <div class="text-danger" th:if="${#fields.hasErrors('localizacao')}" th:errors="*{localizacao}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Área</label>
+            <input class="form-control" type="number" step="any" th:field="*{area}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('area')}" th:errors="*{area}"></div>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+            <a class="btn btn-secondary" th:href="@{/regioes}">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

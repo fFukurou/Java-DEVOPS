@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Modelos')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center my-3">
+        <h1>Modelos</h1>
+        <a class="btn btn-primary" th:href="@{/modelos/new}">Novo Modelo</a>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+    <!-- filters -->
+    <form class="row g-2 mb-3" th:action="@{/modelos}" method="get">
+        <div class="col-auto">
+            <input class="form-control" type="text" name="nome" th:value="${nome}" placeholder="Nome do modelo"/>
+        </div>
+
+        <div class="col-auto">
+            <select class="form-select" name="tipoCombustivel">
+                <option value="">-- Todos --</option>
+                <option value="Gasolina" th:selected="${tipoCombustivel == 'Gasolina'}">Gasolina</option>
+                <option value="Diesel" th:selected="${tipoCombustivel == 'Diesel'}">Diesel</option>
+                <option value="Flex" th:selected="${tipoCombustivel == 'Flex'}">Flex</option>
+                <option value="Etanol" th:selected="${tipoCombustivel == 'Etanol'}">Etanol</option>
+                <option value="Elétrico" th:selected="${tipoCombustivel == 'Elétrico'}">Elétrico</option>
+                <option value="Híbrido" th:selected="${tipoCombustivel == 'Híbrido'}">Híbrido</option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <input class="form-control" type="number" name="tanque" th:value="${tanque}" placeholder="Tanque (exato)"/>
+        </div>
+
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary" type="submit">Filtrar</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Tipo Combustível</th>
+            <th>Tanque</th>
+            <th>Consumo</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="m : ${modelosPage.content}">
+            <td th:text="${m.id}">1</td>
+            <td th:text="${m.nomeModelo}">Nome</td>
+            <td th:text="${m.tipoCombustivel}">Tipo</td>
+            <td th:text="${m.tanque}">Tanque</td>
+            <td th:text="${m.consumo}">Consumo</td>
+            <td>
+                <a class="btn btn-sm btn-outline-primary" th:href="@{|/modelos/${m.id}/edit|}">Editar</a>
+
+                <form th:action="@{|/modelos/${m.id}/delete|}" method="post" style="display:inline">
+                    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Confirma exclusão?')">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- pagination -->
+    <nav th:if="${modelosPage.totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${modelosPage.first} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/modelos(page=${modelosPage.number-1}, size=${modelosPage.size}, nome=${nome}, tipoCombustivel=${tipoCombustivel}, tanque=${tanque})}">Anterior</a>
+            </li>
+
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, modelosPage.totalPages-1)}"
+                th:classappend="${i == modelosPage.number} ? 'active'">
+                <a class="page-link"
+                   th:text="${i+1}"
+                   th:href="@{/modelos(page=${i}, size=${modelosPage.size}, nome=${nome}, tipoCombustivel=${tipoCombustivel}, tanque=${tanque})}">1</a>
+            </li>
+
+            <li class="page-item" th:classappend="${modelosPage.last} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/modelos(page=${modelosPage.number+1}, size=${modelosPage.size}, nome=${nome}, tipoCombustivel=${tipoCombustivel}, tanque=${tanque})}">Próxima</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

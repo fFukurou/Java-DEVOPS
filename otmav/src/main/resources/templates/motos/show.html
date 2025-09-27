@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Moto')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Detalhes da Moto</h1>
+        <div>
+            <a class="btn btn-secondary" th:href="@{/motos}">Voltar</a>
+            <a class="btn btn-primary" th:href="@{|/motos/${moto.id}/edit|}">Editar</a>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9" th:text="${moto.id}">1</dd>
+
+                <dt class="col-sm-3">Placa</dt>
+                <dd class="col-sm-9" th:text="${moto.placa != null ? moto.placa : '-'}">ABC1234</dd>
+
+                <dt class="col-sm-3">Chassi</dt>
+                <dd class="col-sm-9" th:text="${moto.chassi != null ? moto.chassi : '-'}">CHASSI</dd>
+
+                <dt class="col-sm-3">Condição</dt>
+                <dd class="col-sm-9" th:text="${moto.condicao}">OK</dd>
+
+                <dt class="col-sm-3">Localização (WKT)</dt>
+                <dd class="col-sm-9"><pre th:text="${moto.localizacao}">POINT(...) </pre></dd>
+
+                <dt class="col-sm-3">Motorista</dt>
+                <dd class="col-sm-9">
+                    <span th:if="${moto.motorista != null}">
+                        <a th:text="${moto.motorista.id}">motorista-id</a>
+                        <span th:if="${moto.motorista.dados != null}"> — <span th:text="${moto.motorista.dados.nome}">Nome</span></span>
+                    </span>
+                    <span th:if="${moto.motorista == null}">-</span>
+                </dd>
+
+                <dt class="col-sm-3">Modelo</dt>
+                <dd class="col-sm-9">
+                    <span th:if="${moto.modelo != null}">
+                        <a th:text="${moto.modelo.nomeModelo}">Modelo nome</a>
+                        <small class="text-muted"> (id: <span th:text="${moto.modelo.id}">1</span>)</small>
+                    </span>
+                    <span th:if="${moto.modelo == null}">-</span>
+                </dd>
+
+                <dt class="col-sm-3">Setor</dt>
+                <dd class="col-sm-9">
+                    <span th:if="${moto.setor != null}">
+                        <a th:text="${moto.setor.nomeSetor != null ? moto.setor.nomeSetor : 'Setor ' + moto.setor.id}">Setor</a>
+                        <small class="text-muted"> (id: <span th:text="${moto.setor.id}">1</span>)</small>
+                    </span>
+                    <span th:if="${moto.setor == null}">-</span>
+                </dd>
+
+                <dt class="col-sm-3">Situação</dt>
+                <dd class="col-sm-9">
+                    <span th:if="${moto.situacao != null}">
+                        <span th:text="${moto.situacao.nome != null ? moto.situacao.nome : moto.situacao.status}">Situacao</span>
+                        <small class="text-muted"> (id: <span th:text="${moto.situacao.id}">1</span>)</small>
+                    </span>
+                    <span th:if="${moto.situacao == null}">-</span>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

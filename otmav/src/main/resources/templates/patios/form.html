@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Pátio')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+    <h2 th:text="${patioId != null} ? 'Editar Pátio' : 'Novo Pátio'"></h2>
+
+    <!-- CREATE form -->
+    <form th:if="${patioId == null}"
+          th:action="@{/patios}"
+          th:object="${createForm}"
+          method="post">
+        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Total de motos</label>
+            <input class="form-control" type="number" th:field="*{totalMotos}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('totalMotos')}" th:errors="*{totalMotos}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Capacidade por moto</label>
+            <input class="form-control" type="number" th:field="*{capacidadeMoto}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('capacidadeMoto')}" th:errors="*{capacidadeMoto}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Filial</label>
+            <select class="form-select" th:field="*{filialId}">
+                <option value="">-- selecione --</option>
+                <option th:each="f : ${filiais}" th:value="${f.id}" th:text="${f.nome}">Filial</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Região</label>
+            <select class="form-select" th:field="*{regiaoId}">
+                <option value="">-- selecione --</option>
+                <option th:each="r : ${regioes}" th:value="${r.id}" th:text="${r.id + ' — ' + (r.localizacao != null ? r.localizacao : r.area)}">Região</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+            <a class="btn btn-secondary" th:href="@{/patios}">Cancelar</a>
+        </div>
+    </form>
+
+    <!-- EDIT form -->
+    <form th:if="${patioId != null}"
+          th:action="@{|/patios/${patioId}|}"
+          th:object="${updateForm}"
+          method="post">
+        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Total de motos</label>
+            <input class="form-control" type="number" th:field="*{totalMotos}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('totalMotos')}" th:errors="*{totalMotos}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Capacidade por moto</label>
+            <input class="form-control" type="number" th:field="*{capacidadeMoto}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('capacidadeMoto')}" th:errors="*{capacidadeMoto}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Filial</label>
+            <select class="form-select" th:field="*{filialId}">
+                <option value="">-- selecione --</option>
+                <option th:each="f : ${filiais}" th:value="${f.id}" th:text="${f.nome}">Filial</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Região</label>
+            <select class="form-select" th:field="*{regiaoId}">
+                <option value="">-- selecione --</option>
+                <option th:each="r : ${regioes}" th:value="${r.id}" th:text="${r.id + ' — ' + (r.localizacao != null ? r.localizacao : r.area)}">Região</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+            <a class="btn btn-secondary" th:href="@{/patios}">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

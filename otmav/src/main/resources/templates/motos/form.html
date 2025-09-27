@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Moto')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+    <h2 th:text="${motoId != null} ? 'Editar Moto' : 'Nova Moto'"></h2>
+
+    <!-- CREATE form -->
+    <form th:if="${motoId == null}"
+          th:action="@{/motos}"
+          th:object="${createForm}"
+          method="post">
+        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Placa</label>
+            <input class="form-control" type="text" th:field="*{placa}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Chassi</label>
+            <input class="form-control" type="text" th:field="*{chassi}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Condição</label>
+            <input class="form-control" type="text" th:field="*{condicao}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Localização (WKT)</label>
+            <textarea class="form-control" th:field="*{localizacao}" rows="3"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Motorista</label>
+            <select class="form-select" th:field="*{motoristaId}">
+                <option value="">-- selecione --</option>
+                <option th:each="m : ${motoristas}" th:value="${m.id}" th:text="${m.id + ' — ' + m.dados.nome}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Modelo</label>
+            <select class="form-select" th:field="*{modeloId}">
+                <option value="">-- selecione --</option>
+                <option th:each="m : ${modelos}" th:value="${m.id}" th:text="${m.nomeModelo}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Setor</label>
+            <select class="form-select" th:field="*{setorId}">
+                <option value="">-- selecione --</option>
+                <option th:each="s : ${setores}" th:value="${s.id}" th:text="${s.id + ' — ' + (s.nomeSetor != null ? s.nomeSetor : 'Setor ' + s.id)}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Situação</label>
+            <select class="form-select" th:field="*{situacaoId}">
+                <option value="">-- selecione --</option>
+                <option th:each="s : ${situacoes}" th:value="${s.id}" th:text="${s.nome + ' (' + s.status + ')'}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+            <a class="btn btn-secondary" th:href="@{/motos}">Cancelar</a>
+        </div>
+    </form>
+
+    <!-- EDIT form -->
+    <form th:if="${motoId != null}"
+          th:action="@{|/motos/${motoId}|}"
+          th:object="${updateForm}"
+          method="post">
+        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Placa</label>
+            <input class="form-control" type="text" th:field="*{placa}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Chassi</label>
+            <input class="form-control" type="text" th:field="*{chassi}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Condição</label>
+            <input class="form-control" type="text" th:field="*{condicao}" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Localização (WKT)</label>
+            <textarea class="form-control" th:field="*{localizacao}" rows="3"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Motorista</label>
+            <select class="form-select" th:field="*{motoristaId}">
+                <option value="">-- selecione --</option>
+                <option th:each="m : ${motoristas}" th:value="${m.id}" th:text="${m.id + ' — ' + m.dados.nome}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Modelo</label>
+            <select class="form-select" th:field="*{modeloId}">
+                <option value="">-- selecione --</option>
+                <option th:each="m : ${modelos}" th:value="${m.id}" th:text="${m.nomeModelo}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Setor</label>
+            <select class="form-select" th:field="*{setorId}">
+                <option value="">-- selecione --</option>
+                <option th:each="s : ${setores}" th:value="${s.id}" th:text="${s.id + ' — ' + (s.nomeSetor != null ? s.nomeSetor : 'Setor ' + s.id)}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Situação</label>
+            <select class="form-select" th:field="*{situacaoId}">
+                <option value="">-- selecione --</option>
+                <option th:each="s : ${situacoes}" th:value="${s.id}" th:text="${s.nome + ' (' + s.status + ')'}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+            <a class="btn btn-secondary" th:href="@{/motos}">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

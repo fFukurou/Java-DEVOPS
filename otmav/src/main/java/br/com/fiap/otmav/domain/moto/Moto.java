@@ -33,8 +33,7 @@ public class Moto {
     private String chassi;
 
     @NotBlank
-    @Size(max = 8)
-    @Column(name = "condicao", length = 8, nullable = false)
+    @Column(name = "condicao", length = 255, nullable = false)
     private String condicao;
 
     // mapped as text WKT — column name kept as localizacao_moto in DB

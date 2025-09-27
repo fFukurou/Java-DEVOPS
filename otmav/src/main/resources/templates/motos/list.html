@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Motos')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center my-3">
+        <h1>Motos</h1>
+        <div>
+            <a class="btn btn-outline-secondary me-2" th:href="@{/motos/new}">Nova Moto</a>
+            <a class="btn btn-primary" th:href="@{/motos/manage}">Gerenciar Motos</a> <!-- placeholder for future page -->
+        </div>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+    <!-- filters -->
+    <form class="row g-2 mb-3" th:action="@{/motos}" method="get">
+        <div class="col-auto">
+            <input class="form-control" type="text" name="placa" th:value="${placa}" placeholder="Placa"/>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="text" name="chassi" th:value="${chassi}" placeholder="Chassi"/>
+        </div>
+        <div class="col-auto">
+            <select class="form-select" name="condicao">
+                <option value="">-- Condição --</option>
+                <option th:selected="${condicao == 'NOVO'}" value="NOVO">NOVO</option>
+                <option th:selected="${condicao == 'USADO'}" value="USADO">USADO</option>
+                <option th:selected="${condicao == 'QUEBRADA'}" value="QUEBRADA">QUEBRADA</option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <select class="form-select" name="motoristaId">
+                <option value="">-- Motorista --</option>
+                <option th:each="m : ${motoristas}" th:value="${m.id}" th:text="${m.id + ' — ' + m.dados.nome}" th:selected="${m.id == motoristaId}">Motorista</option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <select class="form-select" name="modeloId">
+                <option value="">-- Modelo --</option>
+                <option th:each="m : ${modelos}" th:value="${m.id}" th:text="${m.nomeModelo}" th:selected="${m.id == modeloId}">Modelo</option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <select class="form-select" name="setorId">
+                <option value="">-- Setor --</option>
+                <option th:each="s : ${setores}" th:value="${s.id}" th:text="${s.id + ' — ' + (s.nomeSetor != null ? s.nomeSetor : 'Setor ' + s.id)}" th:selected="${s.id == setorId}">Setor</option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <select class="form-select" name="situacaoId">
+                <option value="">-- Situação --</option>
+                <option th:each="s : ${situacoes}" th:value="${s.id}" th:text="${s.nome + ' (' + s.status + ')'}" th:selected="${s.id == situacaoId}">Situacao</option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary" type="submit">Filtrar</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th><th>Placa</th><th>Chassi</th><th>Condição</th><th>Motorista</th><th>Modelo</th><th>Setor</th><th>Situação</th><th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="m : ${motosPage.content}">
+            <td th:text="${m.id}">1</td>
+            <td th:text="${m.placa != null ? m.placa : '-'}">Placa</td>
+            <td th:text="${m.chassi != null ? m.chassi : '-'}">Chassi</td>
+            <td th:text="${m.condicao}">Condicao</td>
+            <td th:text="${m.motorista != null ? m.motorista.id + ' — ' + m.motorista.dados.nome : '-'}">Motorista</td>
+            <td th:text="${m.modelo != null ? m.modelo.nomeModelo : '-'}">Modelo</td>
+            <td th:text="${m.setor != null ? (m.setor.nomeSetor != null ? m.setor.nomeSetor : m.setor.id) : '-'}">Setor</td>
+            <td th:text="${m.situacao != null ? m.situacao.nome : '-'}">Situacao</td>
+            <td>
+                <a class="btn btn-sm btn-outline-primary" th:href="@{|/motos/${m.id}/edit|}">Editar</a>
+                <form th:action="@{|/motos/${m.id}/delete|}" method="post" style="display:inline">
+                    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Confirma exclusão?')">Excluir</button>
+                </form>
+                <a class="btn btn-sm btn-secondary" th:href="@{|/motos/${m.id}|}">Ver</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- pagination -->
+    <nav th:if="${motosPage.totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${motosPage.first} ? 'disabled'">
+                <a class="page-link" th:href="@{/motos(page=${motosPage.number-1}, size=${motosPage.size}, placa=${placa}, chassi=${chassi}, condicao=${condicao}, motoristaId=${motoristaId}, modeloId=${modeloId}, setorId=${setorId}, situacaoId=${situacaoId})}">Anterior</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, motosPage.totalPages-1)}"
+                th:classappend="${i == motosPage.number} ? 'active'">
+                <a class="page-link" th:text="${i+1}" th:href="@{/motos(page=${i}, size=${motosPage.size}, placa=${placa}, chassi=${chassi}, condicao=${condicao}, motoristaId=${motoristaId}, modeloId=${modeloId}, setorId=${setorId}, situacaoId=${situacaoId})}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${motosPage.last} ? 'disabled'">
+                <a class="page-link" th:href="@{/motos(page=${motosPage.number+1}, size=${motosPage.size}, placa=${placa}, chassi=${chassi}, condicao=${condicao}, motoristaId=${motoristaId}, modeloId=${modeloId}, setorId=${setorId}, situacaoId=${situacaoId})}">Próxima</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

@@ -1,9 +1,4 @@
 <div th:fragment="messages" xmlns:th="http://www.w3.org/1999/xhtml">
     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-
-    <!-- binding errors (global) -->
-    <div th:if="${#fields.hasGlobalErrors()}">
-        <div class="alert alert-danger" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
-    </div>
 </div>

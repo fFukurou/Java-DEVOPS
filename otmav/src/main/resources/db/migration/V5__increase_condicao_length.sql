@@ -1,0 +1,3 @@
+ALTER TABLE moto MODIFY (condicao VARCHAR2(255));
+
+COMMIT;

@@ -40,6 +40,8 @@ public class SecurityConfig {
                         // static and swagger
                         .requestMatchers("/swagger-ui.html/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/error/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/webjars/**", "/images/**").permitAll()
                         .requestMatchers("/", "/index", "/css/**", "/js/**", "/static/**", "/favicon.ico").permitAll()
@@ -69,6 +71,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/motoristas/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/motoristas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/filiais/**").permitAll()
+                        .requestMatchers("/dados/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/enderecos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/enderecos/**").hasRole("ADMIN")
+                        .requestMatchers("/enderecos/**").authenticated()
 
                         .anyRequest().authenticated()
                 )

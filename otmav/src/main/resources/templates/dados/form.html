@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Dados')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+    <h2 th:text="${dadosId != null} ? 'Editar Usuário' : 'Novo Usuário'"></h2>
+
+    <!-- CREATE form -->
+    <form th:if="${dadosId == null}"
+          th:action="@{/dados}"
+          th:object="${createForm}"
+          method="post">
+        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">CPF</label>
+            <input class="form-control" type="text" th:field="*{cpf}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Telefone</label>
+            <input class="form-control" type="text" th:field="*{telefone}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input class="form-control" type="email" th:field="*{email}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Senha</label>
+            <input class="form-control" type="password" th:field="*{senha}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input class="form-control" type="text" th:field="*{nome}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+            <a class="btn btn-secondary" th:href="@{/dados}">Cancelar</a>
+        </div>
+    </form>
+
+    <!-- EDIT form -->
+    <form th:if="${dadosId != null}"
+          th:action="@{|/dados/${dadosId}|}"
+          th:object="${updateForm}"
+          method="post">
+        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">CPF</label>
+            <input class="form-control" type="text" th:value="${cpf}" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Telefone</label>
+            <input class="form-control" type="text" th:field="*{telefone}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input class="form-control" type="email" th:field="*{email}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Senha (deixe em branco para não alterar)</label>
+            <input class="form-control" type="password" th:field="*{senha}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input class="form-control" type="text" th:field="*{nome}" />
+            <div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+            <a class="btn btn-secondary" th:href="@{/dados}">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

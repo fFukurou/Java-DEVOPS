@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Dados')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center my-3">
+        <h1>Users (Dados)</h1>
+        <a class="btn btn-primary" th:href="@{/dados/new}">Novo Usuário</a>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+    <!-- filters -->
+    <form class="row g-2 mb-3" th:action="@{/dados}" method="get">
+        <div class="col-auto">
+            <input class="form-control" type="text" name="cpf" th:value="${cpf}" placeholder="CPF"/>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="text" name="nome" th:value="${nome}" placeholder="Nome"/>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="text" name="email" th:value="${email}" placeholder="Email"/>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary" type="submit">Filtrar</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th><th>CPF</th><th>Nome</th><th>Email</th><th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="d : ${dadosPage.content}">
+            <td th:text="${d.id}">1</td>
+            <td th:text="${d.cpf}">123</td>
+            <td th:text="${d.nome}">Nome</td>
+            <td th:text="${d.email}">email@x</td>
+            <td>
+                <a class="btn btn-sm btn-outline-primary" th:href="@{|/dados/${d.id}/edit|}">Editar</a>
+
+                <form th:action="@{|/dados/${d.id}/delete|}" method="post" style="display:inline">
+                    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Confirma exclusão?')">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- pagination -->
+    <nav th:if="${dadosPage.totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${dadosPage.first} ? 'disabled'">
+                <a class="page-link" th:href="@{/dados(page=${dadosPage.number-1}, size=${dadosPage.size}, cpf=${cpf}, nome=${nome}, email=${email})}">Anterior</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, dadosPage.totalPages-1)}"
+                th:classappend="${i == dadosPage.number} ? 'active'">
+                <a class="page-link" th:text="${i+1}" th:href="@{/dados(page=${i}, size=${dadosPage.size}, cpf=${cpf}, nome=${nome}, email=${email})}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${dadosPage.last} ? 'disabled'">
+                <a class="page-link" th:href="@{/dados(page=${dadosPage.number+1}, size=${dadosPage.size}, cpf=${cpf}, nome=${nome}, email=${email})}">Próxima</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

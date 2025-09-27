@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Regiões')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center my-3">
+        <h1>Regiões</h1>
+        <a class="btn btn-primary" th:href="@{/regioes/new}">Nova Região</a>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+    <!-- filters -->
+    <form class="row g-2 mb-3" th:action="@{/regioes}" method="get">
+        <div class="col-auto">
+            <input class="form-control" type="number" step="any" name="area" th:value="${area}" placeholder="Área (exato)"/>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="text" name="searchWkt" th:value="${searchWkt}" placeholder="Buscar WKT"/>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary" type="submit">Filtrar</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th><th>Localização (WKT)</th><th>Área</th><th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${regiaoPage.content}">
+            <td th:text="${r.id}">1</td>
+            <td th:text="${r.localizacao}">WKT</td>
+            <td th:text="${r.area}">10.0</td>
+            <td>
+                <a class="btn btn-sm btn-outline-primary" th:href="@{|/regioes/${r.id}/edit|}">Editar</a>
+
+                <form th:action="@{|/regioes/${r.id}/delete|}" method="post" style="display:inline">
+                    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Confirma exclusão?')">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- pagination -->
+    <nav th:if="${regiaoPage.totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${regiaoPage.first} ? 'disabled'">
+                <a class="page-link" th:href="@{/regioes(page=${regiaoPage.number-1}, size=${regiaoPage.size}, area=${area}, searchWkt=${searchWkt})}">Anterior</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, regiaoPage.totalPages-1)}"
+                th:classappend="${i == regiaoPage.number} ? 'active'">
+                <a class="page-link" th:text="${i+1}" th:href="@{/regioes(page=${i}, size=${regiaoPage.size}, area=${area}, searchWkt=${searchWkt})}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${regiaoPage.last} ? 'disabled'">
+                <a class="page-link" th:href="@{/regioes(page=${regiaoPage.number+1}, size=${regiaoPage.size}, area=${area}, searchWkt=${searchWkt})}">Próxima</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>
