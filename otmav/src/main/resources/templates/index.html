@@ -1,17 +1,194 @@
 <!-- src/main/resources/templates/index.html -->
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/header :: head('OTMAV - Home')}"></head>
 <body>
 <div th:replace="~{fragments/header :: mainHeader}"></div>
 
-<div class="container mt-4">
-    <h1>Bem-vindo ao OTMAV</h1>
-    <p>Esta é a página inicial provisória. Você está logado se ver o link "Sair".</p>
+<main class="container my-5">
+    <!-- Hero -->
+    <section class="p-5 rounded-4 text-white" style="background: linear-gradient(135deg,#0d6efd 0%, #6610f2 100%);">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-5 fw-bold">OTMAV</h1>
+                <p class="lead mb-3">Painel de administração — gerencie motos, motoristas, pátios e cadastros com facilidade.</p>
+                <p class="mb-0">Use o menu acima para navegar. Se estiver autenticado, você verá opções adicionais.</p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a class="btn btn-light btn-lg me-2 mb-2" th:href="@{/motos}">Gerenciar Motos</a>
+                <a class="btn btn-outline-light btn-lg mb-2" th:href="@{/motoristas}">Motoristas</a>
+            </div>
+        </div>
+    </section>
 
-    <div>
-        <a class="btn btn-primary" th:href="@{/filiais}">Ver Filiais</a>
-    </div>
-</div>
+    <!-- Quick links cards -->
+    <section class="mt-4">
+        <h2 class="h4 mb-3">Acessos rápidos</h2>
+
+        <div class="row g-3">
+            <div class="col-6 col-md-4 col-xl-3">
+                <a th:href="@{/motos}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="me-3 fs-2">🏍️</div>
+                            <div>
+                                <h5 class="card-title mb-0">Motos</h5>
+                                <small class="text-muted">Gerenciar e visualizar</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl-3">
+                <a th:href="@{/motoristas}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="me-3 fs-2">🧑‍✈️</div>
+                            <div>
+                                <h5 class="card-title mb-0">Motoristas</h5>
+                                <small class="text-muted">Planos e dados</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl-3">
+                <a th:href="@{/funcionarios}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="me-3 fs-2">👨‍💼</div>
+                            <div>
+                                <h5 class="card-title mb-0">Funcionários</h5>
+                                <small class="text-muted">Controle de funcionários</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl-3">
+                <a th:href="@{/filiais}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="me-3 fs-2">🏢</div>
+                            <div>
+                                <h5 class="card-title mb-0">Filiais</h5>
+                                <small class="text-muted">Endereços e unidades</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl-3">
+                <a th:href="@{/patios}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="me-3 fs-2">📍</div>
+                            <div>
+                                <h5 class="card-title mb-0">Pátios</h5>
+                                <small class="text-muted">Capacidades e regiões</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl-3">
+                <a th:href="@{/regioes}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="me-3 fs-2">🗺️</div>
+                            <div>
+                                <h5 class="card-title mb-0">Regiões</h5>
+                                <small class="text-muted">Geometrias (WKT)</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl-3">
+                <a th:href="@{/setores}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="me-3 fs-2">🧩</div>
+                            <div>
+                                <h5 class="card-title mb-0">Setores</h5>
+                                <small class="text-muted"> Organização de pátios</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl-3">
+                <a th:href="@{/enderecos}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="me-3 fs-2">📬</div>
+                            <div>
+                                <h5 class="card-title mb-0">Endereços</h5>
+                                <small class="text-muted">Ruas e CEPs</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl-3">
+                <a th:href="@{/modelos}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="me-3 fs-2">🚗</div>
+                            <div>
+                                <h5 class="card-title mb-0">Modelos</h5>
+                                <small class="text-muted">Especificações de veículo</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl-3">
+                <a th:href="@{/situacoes}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="me-3 fs-2">⚙️</div>
+                            <div>
+                                <h5 class="card-title mb-0">Situações</h5>
+                                <small class="text-muted">Estados e descrições</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl-3">
+                <a th:href="@{/dados}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="me-3 fs-2">🧾</div>
+                            <div>
+                                <h5 class="card-title mb-0">Dados</h5>
+                                <small class="text-muted">Usuários / CPFs</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer call-to-action -->
+    <section class="mt-5 text-center">
+        <p class="mb-2 text-muted">Precisa de algo específico? Use o menu <strong>Cadastros</strong> ou <strong>Infraestrutura</strong>.</p>
+        <a class="btn btn-outline-primary" th:href="@{/motos}">Ir para Gerenciamento de Motos</a>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
 </body>
 </html>
