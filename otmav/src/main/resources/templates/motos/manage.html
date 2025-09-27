@@ -1,0 +1,137 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Gerenciar Motos')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Gerenciar Motos</h1>
+        <a class="btn btn-secondary" th:href="@{/motos}">Voltar à lista</a>
+    </div>
+
+    <!-- flash messages -->
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <!-- filters -->
+    <form class="row g-2 mb-3" th:action="@{/motos/manage}" method="get">
+        <div class="col-auto">
+            <input class="form-control" type="text" name="placa" th:value="${placa}" placeholder="Placa"/>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="text" name="chassi" th:value="${chassi}" placeholder="Chassi"/>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="text" name="condicao" th:value="${condicao}" placeholder="Condicao"/>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary" type="submit">Filtrar</button>
+        </div>
+    </form>
+
+    <!-- motos table -->
+    <div class="table-responsive mb-4">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Placa</th>
+                <th>Chassi</th>
+                <th>Condicao</th>
+                <th>Localizacao</th>
+                <th>Motorista</th>
+                <th>Modelo</th>
+                <th>Setor</th>
+                <th>Situação</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="m : ${motosPage.content}">
+                <td th:text="${m.id}">1</td>
+                <td th:text="${m.placa}">ABC1234</td>
+                <td th:text="${m.chassi}">CHASSI</td>
+                <td th:text="${m.condicao}">OK</td>
+                <td th:text="${m.localizacao}">WKT</td>
+                <td th:text="${m.motorista != null ? m.motorista.dados().nome() : '-'}">Motorista</td>
+                <td th:text="${m.modelo != null ? m.modelo.nomeModelo() : '-'}">Modelo</td>
+                <td th:text="${m.setor != null ? m.setor.nomeSetor() : '-'}">Setor</td>
+                <td th:text="${m.situacao != null ? m.situacao.nome() : '-'}">Situação</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row">
+        <!-- Transfer form -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">Transferir Moto para outro Setor</div>
+                <div class="card-body">
+                    <form th:action="@{/motos/manage/transfer}" th:object="${transferForm}" method="post">
+                        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <div class="mb-3">
+                            <label class="form-label">Moto</label>
+                            <select class="form-select" th:field="*{motoId}">
+                                <option value="">-- selecione --</option>
+                                <option th:each="m : ${motosPage.content}" th:value="${m.id}"
+                                        th:text="${m.id + ' — ' + (m.placa != null ? m.placa : (m.localizacao != null ? m.localizacao : ''))}">Moto</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Setor de destino</label>
+                            <select class="form-select" th:field="*{setorId}">
+                                <option value="">-- selecione --</option>
+                                <option th:each="s : ${setores}" th:value="${s.id}"
+                                        th:text="${s.id + ' — ' + (s.nomeSetor != null ? s.nomeSetor : (s.regiao != null ? s.regiao.localizacaoWkt : 'Região'))}">Setor</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <button class="btn btn-primary" type="submit">Transferir</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assign driver form -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">Atribuir Motorista à Moto</div>
+                <div class="card-body">
+                    <form th:action="@{/motos/manage/assign}" th:object="${assignForm}" method="post">
+                        <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <div class="mb-3">
+                            <label class="form-label">Moto</label>
+                            <select class="form-select" th:field="*{motoId}">
+                                <option value="">-- selecione --</option>
+                                <option th:each="m : ${motosPage.content}" th:value="${m.id}"
+                                        th:text="${m.id + ' — ' + (m.placa != null ? m.placa : (m.localizacao != null ? m.localizacao : ''))}">Moto</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Motorista</label>
+                            <select class="form-select" th:field="*{motoristaId}">
+                                <option value="">-- selecione --</option>
+                                <option th:each="mt : ${motoristas}" th:value="${mt.id}"
+                                        th:text="${mt.dados != null ? mt.dados.nome : 'Motorista ' + mt.id}">Motorista</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <button class="btn btn-primary" type="submit">Atribuir</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

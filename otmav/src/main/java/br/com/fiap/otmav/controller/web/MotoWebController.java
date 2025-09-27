@@ -1,19 +1,21 @@
 package br.com.fiap.otmav.controller.web;
 
-import br.com.fiap.otmav.domain.moto.CreateMotoDto;
-import br.com.fiap.otmav.domain.moto.ReadMotoDto;
-import br.com.fiap.otmav.domain.moto.UpdateMotoDto;
+import br.com.fiap.otmav.domain.moto.*;
+import br.com.fiap.otmav.domain.motorista.Motorista;
 import br.com.fiap.otmav.domain.motorista.ReadMotoristaDto;
 import br.com.fiap.otmav.domain.modelo.ReadModeloDto;
 import br.com.fiap.otmav.domain.setor.ReadSetorDto;
+import br.com.fiap.otmav.domain.setor.Setor;
 import br.com.fiap.otmav.domain.situacao.ReadSituacaoDto;
 import br.com.fiap.otmav.service.MotoService;
 import br.com.fiap.otmav.domain.motorista.MotoristaRepository;
 import br.com.fiap.otmav.domain.modelo.ModeloRepository;
 import br.com.fiap.otmav.domain.setor.SetorRepository;
 import br.com.fiap.otmav.domain.situacao.SituacaoRepository;
+import br.com.fiap.otmav.web.form.AssignForm;
 import br.com.fiap.otmav.web.form.MotoCreateForm;
 import br.com.fiap.otmav.web.form.MotoUpdateForm;
+import br.com.fiap.otmav.web.form.TransferForm;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,24 +28,24 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/motos")
 public class MotoWebController {
 
     @Autowired
     private MotoService motoService;
-
     @Autowired
     private MotoristaRepository motoristaRepository;
-
     @Autowired
     private ModeloRepository modeloRepository;
-
     @Autowired
     private SetorRepository setorRepository;
-
     @Autowired
     private SituacaoRepository situacaoRepository;
+    @Autowired
+    private MotoRepository motoRepository;
 
     // LIST
     @GetMapping
@@ -177,5 +179,75 @@ public class MotoWebController {
         motoService.delete(id);
         redirectAttributes.addFlashAttribute("success", "Moto excluída com sucesso!");
         return "redirect:/motos";
+    }
+
+    /**
+     * Manage page for motos: lists motos and provides forms to transfer or assign driver.
+     */
+    @GetMapping("/manage")
+    public String managePage(
+            @RequestParam(required = false) String placa,
+            @RequestParam(required = false) String chassi,
+            @RequestParam(required = false) String condicao,
+            Model model) {
+
+        // list a reasonable amount for selects (100). If you expect more, add pagination UI later.
+        Pageable big = PageRequest.of(0, 200);
+        var motosPage = motoService.findAllFiltered(placa, chassi, condicao, null, null, null, null, big);
+
+        // fetch selects options
+        List<Setor> setores = setorRepository.findAll();
+        List<Motorista> motoristas = motoristaRepository.findAll();
+
+        model.addAttribute("motosPage", motosPage);
+        model.addAttribute("setores", setores);
+        model.addAttribute("motoristas", motoristas);
+
+        // forms
+        model.addAttribute("transferForm", new TransferForm());
+        model.addAttribute("assignForm", new AssignForm());
+
+        // filter echo
+        model.addAttribute("placa", placa);
+        model.addAttribute("chassi", chassi);
+        model.addAttribute("condicao", condicao);
+
+        return "motos/manage";
+    }
+
+    /**
+     * Handle transfer form submission.
+     */
+    @PostMapping("/manage/transfer")
+    public String transferSubmit(@ModelAttribute("transferForm") @Valid TransferForm form,
+                                 RedirectAttributes redirectAttrs) {
+
+        try {
+            TransferSetorDto dto = new TransferSetorDto(form.getSetorId());
+            motoService.transferToSetor(form.getMotoId(), dto);
+            redirectAttrs.addFlashAttribute("success", "Moto transferida para o setor com sucesso.");
+        } catch (Exception ex) {
+            redirectAttrs.addFlashAttribute("error", "Falha ao transferir: " + ex.getMessage());
+        }
+
+        return "redirect:/motos/manage";
+    }
+
+    /**
+     * Handle assign driver form submission.
+     */
+    @PostMapping("/manage/assign")
+    public String assignSubmit(@ModelAttribute("assignForm") @Valid AssignForm form,
+                               RedirectAttributes redirectAttrs) {
+
+        try {
+            AssignMotoristaDto dto = new AssignMotoristaDto(form.getMotoristaId());
+            motoService.assignDriver(form.getMotoId(), dto);
+            redirectAttrs.addFlashAttribute("success", "Motorista atribuído com sucesso.");
+        } catch (Exception ex) {
+            redirectAttrs.addFlashAttribute("error", "Falha ao atribuir motorista: " + ex.getMessage());
+        }
+
+        return "redirect:/motos/manage";
     }
 }
