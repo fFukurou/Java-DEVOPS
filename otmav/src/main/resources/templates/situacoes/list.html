@@ -38,9 +38,12 @@
         <tr th:each="s : ${situacoesPage.content}">
             <td th:text="${s.id}">1</td>
             <td th:text="${s.nome}">Nome</td>
-            <td th:text="${s.descricao}">Desc</td>
+            <td th:text="${s.descricao != null ? ( #strings.length(s.descricao) > 80 ? #strings.substring(s.descricao,0,80) + '...' : s.descricao ) : '-' }">Desc</td>
             <td th:text="${s.status}">ATIVO</td>
             <td>
+                <!-- VIEW button -->
+                <a class="btn btn-sm btn-outline-secondary" th:href="@{|/situacoes/${s.id}|}">Ver</a>
+
                 <a class="btn btn-sm btn-outline-primary" th:href="@{|/situacoes/${s.id}/edit|}">Editar</a>
 
                 <form th:action="@{|/situacoes/${s.id}/delete|}" method="post" style="display:inline">

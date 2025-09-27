@@ -34,9 +34,17 @@
         <tbody>
         <tr th:each="r : ${regiaoPage.content}">
             <td th:text="${r.id}">1</td>
-            <td th:text="${r.localizacao}">WKT</td>
+            <td>
+                <span th:if="${r.localizacao != null}">
+                    <span th:text="${#strings.length(r.localizacao) > 80} ? ${#strings.substring(r.localizacao,0,80)} + '...' : ${r.localizacao}">WKT</span>
+                </span>
+                <span th:if="${r.localizacao == null}">-</span>
+            </td>
             <td th:text="${r.area}">10.0</td>
             <td>
+                <!-- NEW: Ver (view) button -->
+                <a class="btn btn-sm btn-outline-secondary" th:href="@{|/regioes/${r.id}|}">Ver</a>
+
                 <a class="btn btn-sm btn-outline-primary" th:href="@{|/regioes/${r.id}/edit|}">Editar</a>
 
                 <form th:action="@{|/regioes/${r.id}/delete|}" method="post" style="display:inline">

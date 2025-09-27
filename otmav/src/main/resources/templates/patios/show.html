@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Pátio')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Detalhes do Pátio</h1>
+        <div>
+            <a class="btn btn-secondary" th:href="@{/patios}">Voltar</a>
+            <a class="btn btn-primary" th:href="@{|/patios/${patio.id}/edit|}">Editar</a>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9" th:text="${patio.id}">1</dd>
+
+                <dt class="col-sm-3">Total de Motos</dt>
+                <dd class="col-sm-9" th:text="${patio.totalMotos}">10</dd>
+
+                <dt class="col-sm-3">Capacidade</dt>
+                <dd class="col-sm-9" th:text="${patio.capacidadeMoto}">20</dd>
+
+                <dt class="col-sm-3">Filial</dt>
+                <dd class="col-sm-9">
+                    <span th:if="${patio.filial != null}">
+                        <a th:href="@{|/filiais/${patio.filial.id()}|}" th:text="${patio.filial.nome()}">Filial nome</a>
+                        <small class="text-muted"> (id: <span th:text="${patio.filial.id()}">1</span>)</small>
+                    </span>
+                    <span th:if="${patio.filial == null}">-</span>
+                </dd>
+
+                <dt class="col-sm-3">Região</dt>
+                <dd class="col-sm-9">
+                    <span th:if="${patio.regiao != null}">
+                        <a th:href="@{|/regioes/${patio.regiao.id()}|}"
+                           th:text="${patio.regiao.localizacao() != null ? patio.regiao.localizacao() : patio.regiao.area()}">Região</a>
+                        <small class="text-muted"> (id: <span th:text="${patio.regiao.id()}">1</span>)</small>
+                    </span>
+                    <span th:if="${patio.regiao == null}">-</span>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

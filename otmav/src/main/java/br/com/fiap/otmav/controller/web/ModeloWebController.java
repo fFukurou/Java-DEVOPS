@@ -105,4 +105,13 @@ public class ModeloWebController {
         redirectAttributes.addFlashAttribute("success", "Modelo excluído com sucesso!");
         return "redirect:/modelos";
     }
+
+    // --------- SHOW (VIEW) ----------
+    // GET /modelos/{id}
+    @GetMapping("/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        ReadModeloDto rd = modeloService.findById(id);
+        model.addAttribute("modelo", rd);
+        return "modelos/show";
+    }
 }

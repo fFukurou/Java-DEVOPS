@@ -146,4 +146,12 @@ public class SetorWebController {
         redirectAttributes.addFlashAttribute("success", "Setor excluído com sucesso!");
         return "redirect:/setores";
     }
+
+    @GetMapping("/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        ReadSetorDto rd = setorService.findById(id);
+        model.addAttribute("setor", rd);
+        return "setores/show";
+    }
+
 }

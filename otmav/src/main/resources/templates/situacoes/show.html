@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Situação')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Detalhes da Situação</h1>
+        <div>
+            <a class="btn btn-secondary" th:href="@{/situacoes}">Voltar</a>
+            <a class="btn btn-primary" th:href="@{|/situacoes/${situacao.id}/edit|}">Editar</a>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9" th:text="${situacao.id}">1</dd>
+
+                <dt class="col-sm-3">Nome</dt>
+                <dd class="col-sm-9" th:text="${situacao.nome}">Nome</dd>
+
+                <dt class="col-sm-3">Descrição</dt>
+                <dd class="col-sm-9" th:text="${situacao.descricao != null ? situacao.descricao : '-'}">Descrição</dd>
+
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9" th:text="${situacao.status}">ATIVO</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

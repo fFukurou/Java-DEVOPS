@@ -1,8 +1,8 @@
 package br.com.fiap.otmav.controller.web;
 
 import br.com.fiap.otmav.domain.regiao.CreateRegiaoDto;
-import br.com.fiap.otmav.domain.regiao.UpdateRegiaoDto;
 import br.com.fiap.otmav.domain.regiao.ReadRegiaoDto;
+import br.com.fiap.otmav.domain.regiao.UpdateRegiaoDto;
 import br.com.fiap.otmav.service.RegiaoService;
 import br.com.fiap.otmav.web.form.RegiaoCreateForm;
 import br.com.fiap.otmav.web.form.RegiaoUpdateForm;
@@ -105,5 +105,13 @@ public class RegiaoWebController {
         regiaoService.delete(id);
         redirectAttributes.addFlashAttribute("success", "Região excluída com sucesso!");
         return "redirect:/regioes";
+    }
+
+    // SHOW single Regiao
+    @GetMapping("/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        ReadRegiaoDto r = regiaoService.findById(id);
+        model.addAttribute("regiao", r);
+        return "regioes/show";
     }
 }

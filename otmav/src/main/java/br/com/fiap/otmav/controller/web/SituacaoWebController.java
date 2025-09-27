@@ -107,4 +107,12 @@ public class SituacaoWebController {
         redirectAttributes.addFlashAttribute("success", "Situação excluída com sucesso!");
         return "redirect:/situacoes";
     }
+
+    // SHOW single Situacao
+    @GetMapping("/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        ReadSituacaoDto s = situacaoService.findById(id);
+        model.addAttribute("situacao", s);
+        return "situacoes/show";
+    }
 }

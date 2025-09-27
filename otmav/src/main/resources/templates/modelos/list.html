@@ -17,23 +17,19 @@
         <div class="col-auto">
             <input class="form-control" type="text" name="nome" th:value="${nome}" placeholder="Nome do modelo"/>
         </div>
-
         <div class="col-auto">
             <select class="form-select" name="tipoCombustivel">
-                <option value="">-- Todos --</option>
+                <option value="">-- Todos combustíveis --</option>
                 <option value="Gasolina" th:selected="${tipoCombustivel == 'Gasolina'}">Gasolina</option>
+                <option value="Etanol" th:selected="${tipoCombustivel == 'Etanol'}">Etanol</option>
                 <option value="Diesel" th:selected="${tipoCombustivel == 'Diesel'}">Diesel</option>
                 <option value="Flex" th:selected="${tipoCombustivel == 'Flex'}">Flex</option>
-                <option value="Etanol" th:selected="${tipoCombustivel == 'Etanol'}">Etanol</option>
                 <option value="Elétrico" th:selected="${tipoCombustivel == 'Elétrico'}">Elétrico</option>
-                <option value="Híbrido" th:selected="${tipoCombustivel == 'Híbrido'}">Híbrido</option>
             </select>
         </div>
-
         <div class="col-auto">
-            <input class="form-control" type="number" name="tanque" th:value="${tanque}" placeholder="Tanque (exato)"/>
+            <input class="form-control" type="number" name="tanque" th:value="${tanque}" placeholder="Tanque"/>
         </div>
-
         <div class="col-auto">
             <button class="btn btn-outline-secondary" type="submit">Filtrar</button>
         </div>
@@ -44,8 +40,8 @@
         <tr>
             <th>ID</th>
             <th>Nome</th>
-            <th>Tipo Combustível</th>
             <th>Tanque</th>
+            <th>Combustível</th>
             <th>Consumo</th>
             <th>Ações</th>
         </tr>
@@ -54,10 +50,11 @@
         <tr th:each="m : ${modelosPage.content}">
             <td th:text="${m.id}">1</td>
             <td th:text="${m.nomeModelo}">Nome</td>
-            <td th:text="${m.tipoCombustivel}">Tipo</td>
-            <td th:text="${m.tanque}">Tanque</td>
-            <td th:text="${m.consumo}">Consumo</td>
+            <td th:text="${m.tanque}">50</td>
+            <td th:text="${m.tipoCombustivel}">Gasolina</td>
+            <td th:text="${m.consumo}">12</td>
             <td>
+                <a class="btn btn-sm btn-outline-secondary" th:href="@{|/modelos/${m.id}|}">Ver</a>
                 <a class="btn btn-sm btn-outline-primary" th:href="@{|/modelos/${m.id}/edit|}">Editar</a>
 
                 <form th:action="@{|/modelos/${m.id}/delete|}" method="post" style="display:inline">
@@ -73,20 +70,14 @@
     <nav th:if="${modelosPage.totalPages > 1}">
         <ul class="pagination">
             <li class="page-item" th:classappend="${modelosPage.first} ? 'disabled'">
-                <a class="page-link"
-                   th:href="@{/modelos(page=${modelosPage.number-1}, size=${modelosPage.size}, nome=${nome}, tipoCombustivel=${tipoCombustivel}, tanque=${tanque})}">Anterior</a>
+                <a class="page-link" th:href="@{/modelos(page=${modelosPage.number-1}, size=${modelosPage.size}, nome=${nome}, tipoCombustivel=${tipoCombustivel}, tanque=${tanque})}">Anterior</a>
             </li>
-
             <li class="page-item" th:each="i : ${#numbers.sequence(0, modelosPage.totalPages-1)}"
                 th:classappend="${i == modelosPage.number} ? 'active'">
-                <a class="page-link"
-                   th:text="${i+1}"
-                   th:href="@{/modelos(page=${i}, size=${modelosPage.size}, nome=${nome}, tipoCombustivel=${tipoCombustivel}, tanque=${tanque})}">1</a>
+                <a class="page-link" th:text="${i+1}" th:href="@{/modelos(page=${i}, size=${modelosPage.size}, nome=${nome}, tipoCombustivel=${tipoCombustivel}, tanque=${tanque})}">1</a>
             </li>
-
             <li class="page-item" th:classappend="${modelosPage.last} ? 'disabled'">
-                <a class="page-link"
-                   th:href="@{/modelos(page=${modelosPage.number+1}, size=${modelosPage.size}, nome=${nome}, tipoCombustivel=${tipoCombustivel}, tanque=${tanque})}">Próxima</a>
+                <a class="page-link" th:href="@{/modelos(page=${modelosPage.number+1}, size=${modelosPage.size}, nome=${nome}, tipoCombustivel=${tipoCombustivel}, tanque=${tanque})}">Próxima</a>
             </li>
         </ul>
     </nav>

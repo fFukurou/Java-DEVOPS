@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Modelo')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Detalhes do Modelo</h1>
+        <div>
+            <a class="btn btn-secondary" th:href="@{/modelos}">Voltar</a>
+            <a class="btn btn-primary" th:href="@{|/modelos/${modelo.id}/edit|}">Editar</a>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9" th:text="${modelo.id}">1</dd>
+
+                <dt class="col-sm-3">Nome do Modelo</dt>
+                <dd class="col-sm-9" th:text="${modelo.nomeModelo}">Civic</dd>
+
+                <dt class="col-sm-3">Frenagem</dt>
+                <dd class="col-sm-9" th:text="${modelo.frenagem != null ? modelo.frenagem : '-'}">ABS</dd>
+
+                <dt class="col-sm-3">Sistema de Partida</dt>
+                <dd class="col-sm-9" th:text="${modelo.sisPartida != null ? modelo.sisPartida : '-'}">Eletrônico</dd>
+
+                <dt class="col-sm-3">Tanque</dt>
+                <dd class="col-sm-9" th:text="${modelo.tanque}">50</dd>
+
+                <dt class="col-sm-3">Tipo de Combustível</dt>
+                <dd class="col-sm-9" th:text="${modelo.tipoCombustivel}">Gasolina</dd>
+
+                <dt class="col-sm-3">Consumo</dt>
+                <dd class="col-sm-9" th:text="${modelo.consumo}">12</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

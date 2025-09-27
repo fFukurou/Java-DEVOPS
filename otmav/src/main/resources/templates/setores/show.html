@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Setor')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Detalhes do Setor</h1>
+        <div>
+            <a class="btn btn-secondary" th:href="@{/setores}">Voltar</a>
+            <a class="btn btn-primary" th:href="@{|/setores/${setor.id}/edit|}">Editar</a>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9" th:text="${setor.id}">1</dd>
+
+                <dt class="col-sm-3">Qtd. Motos</dt>
+                <dd class="col-sm-9" th:text="${setor.qtdMoto}">0</dd>
+
+                <dt class="col-sm-3">Capacidade</dt>
+                <dd class="col-sm-9" th:text="${setor.capacidade}">20</dd>
+
+                <dt class="col-sm-3">Nome</dt>
+                <dd class="col-sm-9" th:text="${setor.nomeSetor != null ? setor.nomeSetor : '-'}">Nome do Setor</dd>
+
+                <dt class="col-sm-3">Descrição</dt>
+                <dd class="col-sm-9" th:text="${setor.descricao != null ? setor.descricao : '-'}">Descrição</dd>
+
+                <dt class="col-sm-3">Cor</dt>
+                <dd class="col-sm-9" th:text="${setor.cor}">verde</dd>
+
+                <dt class="col-sm-3">Pátio</dt>
+                <dd class="col-sm-9">
+                    <span th:if="${setor.patio != null}">
+                        <a th:href="@{|/patios/${setor.patio.id()}|}" th:text="${'Pátio ' + setor.patio.id()}">Pátio</a>
+                    </span>
+                    <span th:if="${setor.patio == null}">-</span>
+                </dd>
+
+                <dt class="col-sm-3">Região</dt>
+                <dd class="col-sm-9">
+                    <span th:if="${setor.regiao != null}">
+                        <a th:href="@{|/regioes/${setor.regiao.id()}|}"
+                           th:text="${setor.regiao.localizacao() != null ? setor.regiao.localizacao() : setor.regiao.area()}">Região</a>
+                        <small class="text-muted"> (id: <span th:text="${setor.regiao.id()}">1</span>)</small>
+                    </span>
+                    <span th:if="${setor.regiao == null}">-</span>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

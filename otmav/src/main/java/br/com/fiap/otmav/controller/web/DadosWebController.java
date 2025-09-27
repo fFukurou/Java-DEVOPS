@@ -109,4 +109,13 @@ public class DadosWebController {
         redirectAttributes.addFlashAttribute("success", "Usuário excluído com sucesso!");
         return "redirect:/dados";
     }
+
+    // SHOW (view single Dados)
+    @GetMapping("/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        ReadDadosDto rd = dadosService.findById(id);
+        model.addAttribute("dados", rd);
+        return "dados/show";
+    }
+
 }

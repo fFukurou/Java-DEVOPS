@@ -71,6 +71,14 @@ public class EnderecoWebController {
         return "redirect:/enderecos";
     }
 
+    // SHOW single Endereco
+    @GetMapping("/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        ReadEnderecoDto rd = enderecoService.findById(id);
+        model.addAttribute("endereco", rd);
+        return "enderecos/show";
+    }
+
     // SHOW EDIT FORM
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {

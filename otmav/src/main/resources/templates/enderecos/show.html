@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Endereço')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Detalhes do Endereço</h1>
+        <div>
+            <a class="btn btn-secondary" th:href="@{/enderecos}">Voltar</a>
+            <a class="btn btn-primary" th:href="@{|/enderecos/${endereco.id}/edit|}">Editar</a>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9" th:text="${endereco.id}">1</dd>
+
+                <dt class="col-sm-3">Número</dt>
+                <dd class="col-sm-9" th:text="${endereco.numero}">123</dd>
+
+                <dt class="col-sm-3">Rua</dt>
+                <dd class="col-sm-9" th:text="${endereco.rua}">Rua Exemplo</dd>
+
+                <dt class="col-sm-3">Estado</dt>
+                <dd class="col-sm-9" th:text="${endereco.estado}">SP</dd>
+
+                <dt class="col-sm-3">Código País</dt>
+                <dd class="col-sm-9" th:text="${endereco.codigoPais}">BR</dd>
+
+                <dt class="col-sm-3">CEP</dt>
+                <dd class="col-sm-9" th:text="${endereco.codigoPostal}">01234-000</dd>
+
+                <dt class="col-sm-3">Complemento</dt>
+                <dd class="col-sm-9" th:text="${endereco.complemento != null ? endereco.complemento : '-'}">Apto 101</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>

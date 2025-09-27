@@ -75,6 +75,14 @@ public class FilialWebController {
         return "redirect:/filiais";
     }
 
+    // SHOW single Filial
+    @GetMapping("/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        ReadFilialDto rd = filialService.findById(id);
+        model.addAttribute("filial", rd);
+        return "filiais/show";
+    }
+
     // SHOW EDIT FORM
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {

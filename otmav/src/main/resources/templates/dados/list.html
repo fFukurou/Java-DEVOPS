@@ -41,6 +41,9 @@
             <td th:text="${d.nome}">Nome</td>
             <td th:text="${d.email}">email@x</td>
             <td>
+                <!-- VIEW button -->
+                <a class="btn btn-sm btn-outline-secondary" th:href="@{|/dados/${d.id}|}">Ver</a>
+
                 <a class="btn btn-sm btn-outline-primary" th:href="@{|/dados/${d.id}/edit|}">Editar</a>
 
                 <form th:action="@{|/dados/${d.id}/delete|}" method="post" style="display:inline">

@@ -40,6 +40,9 @@
             <td th:text="${f.nome}">Nome</td>
             <td th:text="${f.endereco != null ? f.endereco.rua : '-'}">Endereco</td>
             <td>
+                <!-- VIEW button -->
+                <a class="btn btn-sm btn-outline-secondary" th:href="@{|/filiais/${f.id}|}">Ver</a>
+
                 <a class="btn btn-sm btn-outline-primary" th:href="@{|/filiais/${f.id}/edit|}">Editar</a>
 
                 <form th:action="@{|/filiais/${f.id}/delete|}" method="post" style="display:inline">

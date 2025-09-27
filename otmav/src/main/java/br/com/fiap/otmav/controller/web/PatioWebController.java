@@ -1,11 +1,9 @@
 package br.com.fiap.otmav.controller.web;
-
+import br.com.fiap.otmav.domain.filial.FilialRepository;
 import br.com.fiap.otmav.domain.patio.CreatePatioDto;
 import br.com.fiap.otmav.domain.patio.ReadPatioDto;
 import br.com.fiap.otmav.domain.patio.UpdatePatioDto;
 import br.com.fiap.otmav.domain.regiao.ReadRegiaoDto;
-import br.com.fiap.otmav.domain.filial.ReadFilialDto;
-import br.com.fiap.otmav.domain.filial.FilialRepository;
 import br.com.fiap.otmav.domain.regiao.RegiaoRepository;
 import br.com.fiap.otmav.service.PatioService;
 import br.com.fiap.otmav.web.form.PatioCreateForm;
@@ -37,7 +35,7 @@ public class PatioWebController {
     @Autowired
     private RegiaoRepository regiaoRepository;
 
-    // LIST
+    // LIST (existing)
     @GetMapping
     public String list(
             @RequestParam(required = false) Integer totalMotos,
@@ -57,10 +55,8 @@ public class PatioWebController {
         model.addAttribute("filialId", filialId);
         model.addAttribute("regiaoId", regiaoId);
 
-        // filiais as DTOs or entities — your template reads f.nome so entities are fine
         model.addAttribute("filiais", filialRepository.findAll());
 
-        // IMPORTANT: convert Regiao entity -> ReadRegiaoDto so template can use .localizacao() and .area()
         List<ReadRegiaoDto> regioesDto = regiaoRepository.findAll()
                 .stream()
                 .map(ReadRegiaoDto::new)
@@ -70,7 +66,7 @@ public class PatioWebController {
         return "patios/list";
     }
 
-    // NEW FORM
+    // SHOW CREATE FORM (existing)
     @GetMapping("/new")
     public String newForm(Model model) {
         model.addAttribute("createForm", new PatioCreateForm());
@@ -83,7 +79,7 @@ public class PatioWebController {
         return "patios/form";
     }
 
-    // CREATE
+    // CREATE (existing)
     @PostMapping
     public String create(
             @ModelAttribute("createForm") @Valid PatioCreateForm form,
@@ -108,7 +104,15 @@ public class PatioWebController {
         return "redirect:/patios";
     }
 
-    // EDIT FORM
+    // SHOW single Patio (NEW)
+    @GetMapping("/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        ReadPatioDto rd = patioService.findById(id);
+        model.addAttribute("patio", rd);
+        return "patios/show";
+    }
+
+    // EDIT FORM (existing)
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
         ReadPatioDto p = patioService.findById(id);
@@ -124,7 +128,7 @@ public class PatioWebController {
         return "patios/form";
     }
 
-    // UPDATE
+    // UPDATE (existing)
     @PostMapping("/{id}")
     public String update(
             @PathVariable Long id,
@@ -151,7 +155,7 @@ public class PatioWebController {
         return "redirect:/patios";
     }
 
-    // DELETE
+    // DELETE (existing)
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         patioService.delete(id);

@@ -29,7 +29,8 @@
         <div class="col-auto">
             <select class="form-select" name="regiaoId">
                 <option value="">-- Região (todos) --</option>
-                <option th:each="r : ${regioes}" th:value="${r.id}" th:text="${r.id + ' — ' + (r.localizacao != null ? r.localizacao : r.area)}">Região</option>
+                <option th:each="r : ${regioes}" th:value="${r.id}"
+                        th:text="${r.id + ' — ' + (r.localizacao() != null ? r.localizacao() : r.area())}">Região</option>
             </select>
         </div>
         <div class="col-auto">
@@ -51,6 +52,9 @@
             <td th:text="${p.filial != null ? p.filial.nome() : '-'}">Filial</td>
             <td th:text="${p.regiao != null ? (p.regiao.localizacao() != null ? p.regiao.localizacao() : p.regiao.area()) : '-'}">Região</td>
             <td>
+                <!-- VIEW button -->
+                <a class="btn btn-sm btn-outline-secondary" th:href="@{|/patios/${p.id}|}">Ver</a>
+
                 <a class="btn btn-sm btn-outline-primary" th:href="@{|/patios/${p.id}/edit|}">Editar</a>
 
                 <form th:action="@{|/patios/${p.id}/delete|}" method="post" style="display:inline">

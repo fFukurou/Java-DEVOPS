@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Filial')}"></head>
+<body>
+<div th:replace="~{fragments/header :: mainHeader}"></div>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Detalhes da Filial</h1>
+        <div>
+            <a class="btn btn-secondary" th:href="@{/filiais}">Voltar</a>
+            <a class="btn btn-primary" th:href="@{|/filiais/${filial.id}/edit|}">Editar</a>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9" th:text="${filial.id}">1</dd>
+
+                <dt class="col-sm-3">Nome</dt>
+                <dd class="col-sm-9" th:text="${filial.nome}">Filial X</dd>
+
+                <dt class="col-sm-3">Endereço</dt>
+                <dd class="col-sm-9">
+                    <span th:if="${filial.endereco != null}">
+                        <a th:href="@{|/enderecos/${filial.endereco.id}|}" th:text="${filial.endereco.rua}">Rua</a>
+                        <small class="text-muted"> (id: <span th:text="${filial.endereco.id}">1</span>)</small>
+                    </span>
+                    <span th:if="${filial.endereco == null}">-</span>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: mainFooter}"></div>
+</body>
+</html>
