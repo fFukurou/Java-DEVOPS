@@ -15,7 +15,6 @@
     <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
 
-    <!-- show form-level errors (works because we are inside th:object context) -->
     <div th:if="${#fields.hasErrors()}" class="alert alert-danger">
       <ul>
         <li th:each="err : ${#fields.errors()}" th:text="${err}">Error</li>
@@ -42,7 +41,7 @@
     </div>
   </form>
 
-  <!-- EDIT form -->
+  <!-- EDIT -->
   <form th:if="${filialId != null}"
         th:action="@{|/filiais/${filialId}|}"
         th:object="${updateForm}"

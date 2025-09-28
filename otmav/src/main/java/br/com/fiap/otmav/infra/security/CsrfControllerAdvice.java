@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+// GARANTE THE Q O CSRF TOKEN É PASSADO PARA AS REQUISIÇÕES
 @ControllerAdvice
 public class CsrfControllerAdvice {
 

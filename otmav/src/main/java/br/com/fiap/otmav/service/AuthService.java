@@ -19,14 +19,10 @@ public class AuthService implements UserDetailsService {
         this.funcionarioRepository = funcionarioRepository;
     }
 
-    /**
-     * Loads a Funcionario by their email (stored inside Dados.email).
-     * Expects repository to provide a method findByDadosEmail(String email).
-     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Funcionario func = funcionarioRepository.findByDadosEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Funcionario not found with email: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("Funcionario nao encontrado com email: " + email));
         return new FuncionarioUserDetails(func);
     }
 }

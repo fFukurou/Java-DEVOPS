@@ -12,7 +12,7 @@
 
     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 
-    <!-- filters -->
+    <!-- FILTROS -->
     <form class="row g-2 mb-3" th:action="@{/setores}" method="get">
         <div class="col-auto">
             <input class="form-control" type="number" name="qtdMoto" th:value="${qtdMoto}" placeholder="Qtd. motos"/>
@@ -73,7 +73,7 @@
         </tbody>
     </table>
 
-    <!-- pagination -->
+    <!-- PAGINACAO -->
     <nav th:if="${setoresPage.totalPages > 1}">
         <ul class="pagination">
             <li class="page-item" th:classappend="${setoresPage.first} ? 'disabled'">

@@ -43,15 +43,15 @@ public class AuthController {
         this.blacklistService = blacklistService;
     }
 
-    @Operation(summary = "Authenticate and receive JWT token")
-    @ApiResponse(responseCode = "200", description = "Returns token")
+    @Operation(summary = "Recebe e autentica JWT Tokens")
+    @ApiResponse(responseCode = "200", description = "Retorna Token")
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginDto dto) {
         return funcionarioService.login(dto);
     }
 
-    @Operation(summary = "Register new Funcionario (creates Dados and Funcionario in one transaction)")
-    @ApiResponse(responseCode = "201", description = "Funcionario registered and Dados created")
+    @Operation(summary = "Registra novo funcionario (Cria Dados e Funcionario ao mesmo tempo)")
+    @ApiResponse(responseCode = "201", description = "Funcionario Registrado e Dados Criados")
     @PostMapping("/register")
     public ResponseEntity<ReadFuncionarioDto> register(
             @RequestBody @Valid RegisterFuncionarioDto dto,
@@ -65,8 +65,7 @@ public class AuthController {
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
         String token = recoverToken(request);
         if (token == null) {
-            logger.warn("Logout requested without Authorization header");
-            // also try cookie fallback (optional)
+            logger.warn("LOGOUT Requisitado sem o Header: Authorization");
             token = recoverTokenFromCookie(request);
             if (token == null) {
                 return ResponseEntity.status(401).build();
@@ -79,16 +78,16 @@ public class AuthController {
         }
         blacklistService.blacklistToken(token, expiresAt);
 
-        // Invalidate server session (important — prevents session-based auth from persisting)
+        // INVALIDA A SESSÃO
         var session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
 
-        // Clear security context in the current thread
+        // IMPORTANTE PARA NENHUMA TRANSAÇÃO/SESSÃO FICAR PRESA
         SecurityContextHolder.clearContext();
 
-        // Remove JSESSIONID cookie (helps browser/Swagger UI not reuse old session)
+        // REMOVE O COOKIE DA JSESSIONID
         Cookie clearSession = new Cookie("JSESSIONID", "");
         clearSession.setPath("/");
         clearSession.setMaxAge(0);
@@ -97,6 +96,7 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
+    // RECUPERA O TOKEN 'OTMAV_TOKEN' DOS COOKIES
     private String recoverTokenFromCookie(HttpServletRequest request) {
         if (request.getCookies() == null) return null;
         for (Cookie c : request.getCookies()) {
@@ -107,6 +107,7 @@ public class AuthController {
         return null;
     }
 
+    // PEGA O TOKEN DAS REQUISIÇÕES API (SÓ A PARTE IMPORTANTE)
     private String recoverToken(HttpServletRequest request) {
         var header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) return null;

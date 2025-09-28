@@ -1,9 +1,6 @@
-/* src/main/resources/static/css/theme.css
-   Dark metallic theme with subtle green accent (#089c2a)
-   + fixes for inputs/selects/dropdowns and a hero class
-*/
 
-/* color variables */
+
+/* CORES */
 :root{
   --accent-green: #089c2a;
   --accent-green-100: rgba(8,156,42,0.08);
@@ -16,7 +13,7 @@
   --focus-ring: rgba(8,156,42,0.12);
 }
 
-/* base page */
+/* PAGINA BASE */
 body {
   background: linear-gradient(180deg, #0b0c0d 0%, #0f1113 40%, #121416 100%);
   color: var(--text);
@@ -24,11 +21,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* links */
+/* LINKS */
 a { color: var(--accent-green); }
 a:hover, a:focus { color: #057a1d; text-decoration: none; }
 
-/* navbar */
+/* NAVBAR */
 .navbar {
   background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   border-bottom: 1px solid var(--subtle-border);
@@ -38,7 +35,7 @@ a:hover, a:focus { color: #057a1d; text-decoration: none; }
 .navbar-dark .navbar-nav .nav-link:hover,
 .navbar-dark .navbar-nav .nav-link:focus { color: var(--accent-green); }
 
-/* ensure search input inside navbar always has white text on dark background */
+
 .navbar .form-control,
 .navbar .form-select {
   background: #0b0c0d;
@@ -46,7 +43,7 @@ a:hover, a:focus { color: #057a1d; text-decoration: none; }
   border: 1px solid rgba(255,255,255,0.04);
 }
 
-/* form controls (global) */
+
 .form-control, .form-select {
   background: #0f1112;
   color: var(--text);
@@ -55,7 +52,7 @@ a:hover, a:focus { color: #057a1d; text-decoration: none; }
   box-shadow: none;
 }
 
-/* placeholder color (make readable on dark BG) */
+
 .form-control::placeholder,
 .form-select::placeholder,
 input::placeholder,
@@ -63,12 +60,12 @@ textarea::placeholder {
   color: rgba(230,239,238,0.6);
 }
 
-/* vendor prefixed placeholders (for compatibility) */
+
 ::-webkit-input-placeholder { color: rgba(230,239,238,0.6); }
 :-ms-input-placeholder { color: rgba(230,239,238,0.6); }
 ::-ms-input-placeholder { color: rgba(230,239,238,0.6); }
 
-/* Focus: keep background dark, don't flip to white; add green ring */
+
 .form-control:focus,
 .form-select:focus {
   background: #0f1112 !important;
@@ -78,15 +75,15 @@ textarea::placeholder {
   outline: none;
 }
 
-/* For select dropdown arrow when focused */
+
 .form-select:focus::-ms-value { color: var(--text); }
 
-/* table styles */
+/* TABLES */
 .table { color: var(--text); }
 .table thead { background: rgba(255,255,255,0.02); color: var(--muted); }
 .table-striped > tbody > tr:nth-of-type(odd) { background-color: rgba(255,255,255,0.012); }
 
-/* cards/panels */
+/* PAINEIS */
 .card {
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   border: 1px solid var(--subtle-border);
@@ -94,7 +91,7 @@ textarea::placeholder {
   border-radius: 12px;
 }
 
-/* primary buttons (green) */
+/* BOTOES PRIMARIOS */
 .btn-primary {
   background-color: var(--accent-green);
   border-color: #057a1d;
@@ -107,7 +104,7 @@ textarea::placeholder {
   color: #fff;
 }
 
-/* outline-primary for hero or lighter buttons */
+/* OUTLINE PRIMARY */
 .btn-outline-primary {
   color: var(--accent-green);
   border-color: rgba(8,156,42,0.14);
@@ -117,7 +114,7 @@ textarea::placeholder {
   color: #ffffff;
 }
 
-/* dropdown menus & items */
+/* DROPDOWN E ITEMS */
 .dropdown-menu {
   background: linear-gradient(180deg, #0f1112, #0d0e0f);
   border: 1px solid rgba(255,255,255,0.04);
@@ -132,27 +129,26 @@ textarea::placeholder {
   color: #fff;
 }
 
-/* ensure active/selected show readable color */
 .dropdown-menu .dropdown-item.active,
 .dropdown-menu .dropdown-item:active {
   background-color: var(--accent-green);
   color: #fff;
 }
 
-/* pagination */
+/* PAGINACAO */
 .pagination .page-item .page-link { color: var(--text); background: transparent; border-color: rgba(255,255,255,0.04); }
 .pagination .page-item.active .page-link { background: var(--accent-green); border-color: var(--accent-green); }
 
-/* subtle hover elevation for cards */
+/* HOVER CARDS */
 .card:hover { transform: translateY(-4px); transition: transform 0.18s ease; }
 
-/* text muted */
+
 .text-muted { color: rgba(255,255,255,0.55) !important; }
 
-/* focus outlines */
+/* BUTTON OUTLINE */
 button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 2px; }
 
-/* Hero: green-accented metallic */
+/* HERO -> VERDE METALICO */
 .hero {
   background: linear-gradient(135deg, rgba(8,156,42,0.06) 0%, rgba(16,18,17,0.8) 35%, #0f1112 100%);
   border: 1px solid rgba(255,255,255,0.03);
@@ -163,22 +159,21 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
 .hero h1 { color: var(--accent-green); font-weight: 800; letter-spacing: 0.6px; }
 .hero .lead { color: rgba(230,239,238,0.88); }
 
-/* small utility for hero buttons to use subtle outline look */
+
 .hero .btn-outline-light {
   color: #ffffff;
   border-color: rgba(255,255,255,0.12);
 }
 .hero .btn-outline-light:hover { color: var(--accent-green); background: rgba(255,255,255,0.02); }
 
-/* responsive tweaks */
+/* UM POUCO DE RESPONSIVIDADE */
 @media (max-width: 768px) {
   .hero { padding: 2rem; }
 }
 
-/* last resort: make options readable in some browsers */
 .form-select option { color: var(--text); background: #0f1112; }
 
-/* QUICK LINK CARDS: subtle green gradient, thin outline, soft glow and lift on hover/focus */
+/* QUICK LINK CARDS */
 .quick-grid .card {
   background: linear-gradient(135deg, rgba(8,156,42,0.04) 0%, rgba(16,18,17,0.7) 40%, rgba(15,17,18,0.85) 100%);
   border: 1px solid rgba(8,156,42,0.12);
@@ -188,7 +183,7 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
   overflow: hidden;
 }
 
-/* inner body spacing & alignment */
+/* ESPAÇAMENTO */
 .quick-grid .card-body {
   display: flex;
   align-items: center;
@@ -196,7 +191,7 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
   padding: 1.15rem;
 }
 
-/* icon badge (square rounded) */
+/* ICONES REDONDOS */
 .quick-grid .q-icon {
   width: 54px;
   height: 54px;
@@ -211,7 +206,7 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
   box-shadow: 0 4px 10px rgba(8,156,42,0.06), inset 0 -4px 8px rgba(0,0,0,0.18);
 }
 
-/* typography inside card */
+/* TIPOGRAFIA */
 .quick-grid .card-title {
   margin-bottom: 0;
   color: var(--text);
@@ -223,7 +218,6 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
   font-size: 0.85rem;
 }
 
-/* hover / focus — lift + stronger green glow */
 .quick-grid a.quick-link {
   display: block; /* ensure full-card clickable */
   border-radius: 12px;
@@ -238,24 +232,24 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
   border-color: rgba(8,156,42,0.22);
 }
 
-/* keyboard accessibility: visible focus ring */
+
 .quick-grid a.quick-link:focus {
   box-shadow: 0 18px 40px rgba(8,156,42,0.10), 0 6px 12px rgba(0,0,0,0.55), 0 0 0 4px rgba(8,156,42,0.10);
 }
 
-/* variants (optional): different subtle gradient per card type */
+
 .quick-grid .q-variant-1 .q-icon { background: linear-gradient(135deg, rgba(8,156,42,0.22), rgba(8,156,42,0.08)); }
 .quick-grid .q-variant-2 .q-icon { background: linear-gradient(135deg, rgba(6,120,200,0.12), rgba(8,156,42,0.04)); }
 .quick-grid .q-variant-3 .q-icon { background: linear-gradient(135deg, rgba(180,180,180,0.06), rgba(8,156,42,0.04)); }
 
-/* smaller screens tweak */
+
 @media (max-width: 576px) {
   .quick-grid .q-icon { width:48px; height:48px; min-width:48px; font-size:1.25rem; }
   .quick-grid .card-body { padding: .9rem; }
 }
 
 /* ======================
-   Tables — Dark metallic + green accents (stronger override)
+   TABLES (GERENCIAMENTO)
    ====================== */
 
 :root {
@@ -267,7 +261,7 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
   --table-border: rgba(255,255,255,0.04);
 }
 
-/* Base table: make sure table background is transparent and text is light */
+
 .table {
   background: transparent !important;
   color: var(--muted-text) !important;
@@ -275,7 +269,7 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
   border-spacing: 0;
 }
 
-/* Ensure responsive container looks good */
+
 .table-responsive {
   border-radius: 10px;
   overflow: hidden;
@@ -284,7 +278,7 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
   box-shadow: 0 6px 20px rgba(0,0,0,0.6);
 }
 
-/* Header row (th) */
+
 .table thead th {
   background: linear-gradient(180deg, rgba(12,12,12,0.92), rgba(18,18,18,0.98)) !important;
   color: var(--accent-green-strong) !important;
@@ -292,7 +286,7 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
   font-weight: 700;
 }
 
-/* Force table body rows to inherit dark background (overrides bootstrap defaults) */
+
 .table tbody tr,
 .table.table-striped tbody tr,
 .table > tbody > tr {
@@ -300,7 +294,7 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
   color: var(--muted-text) !important;
 }
 
-/* Striped rows — stronger specificity and !important so these take effect */
+
 .table.table-striped > tbody > tr:nth-of-type(odd) {
   background-color: var(--table-row-odd) !important;
 }
@@ -308,7 +302,6 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
   background-color: var(--table-row-even) !important;
 }
 
-/* Also ensure each TD is transparent (sometimes Bootstrap sets white on td) */
 .table td,
 .table th {
   background: transparent !important;
@@ -317,25 +310,25 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
   padding: .72rem .9rem;
 }
 
-/* Hover highlight with subtle green glow */
+
 .table tbody tr:hover td {
   background-color: rgba(8,156,42,0.03) !important;
   color: #ffffff !important;
 }
 
-/* First column (ID) styling */
+
 .table td:first-child {
   font-weight: 600;
   color: #dfeff4 !important;
   width: 90px;
 }
 
-/* Muted text inside tables */
+
 .table .text-muted, .table small {
   color: rgba(230,239,238,0.62) !important;
 }
 
-/* Buttons in tables — use green outline variant */
+
 .table .btn-outline-primary,
 .table .btn-outline-info {
   color: var(--accent-green) !important;
@@ -352,7 +345,7 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
   box-shadow: 0 8px 30px rgba(8,156,42,0.06);
 }
 
-/* Pagination tweaks */
+
 .pagination .page-item .page-link {
   background: transparent !important;
   color: var(--muted-text) !important;
@@ -364,7 +357,7 @@ button:focus, a:focus { outline: 3px solid rgba(8,156,42,0.10); outline-offset: 
   border-color: rgba(8,156,42,0.28) !important;
 }
 
-/* Small mobile adjustments */
+
 @media (max-width: 576px) {
   .table td, .table th { padding: .5rem .6rem !important; }
   .table td:first-child { width: 64px; }

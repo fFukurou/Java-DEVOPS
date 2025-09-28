@@ -36,7 +36,6 @@ public class ModeloUpdateForm {
         return new UpdateModeloDto(nomeModelo, frenagem, sisPartida, tanque, tipoCombustivel, consumo);
     }
 
-    // getters / setters
     public String getNomeModelo() { return nomeModelo; }
     public void setNomeModelo(String nomeModelo) { this.nomeModelo = nomeModelo; }
 

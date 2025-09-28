@@ -24,7 +24,7 @@ public class MotoristaService {
     @Transactional
     public ReadMotoristaDto create(CreateMotoristaDto dto) {
         Dados dados = dadosRepository.findById(dto.dadosId())
-                .orElseThrow(() -> new NotFoundException("Dados not found with id: " + dto.dadosId()));
+                .orElseThrow(() -> new NotFoundException("Dados nao encontrados com id: " + dto.dadosId()));
 
         Motorista m = new Motorista();
         m.setPlano(dto.plano());
@@ -41,18 +41,18 @@ public class MotoristaService {
     public ReadMotoristaDto findById(Long id) {
         return motoristaRepository.findById(id)
                 .map(ReadMotoristaDto::new)
-                .orElseThrow(() -> new NotFoundException("Motorista not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Motorista nao encontrado com id: " + id));
     }
 
     @Transactional
     public ReadMotoristaDto update(Long id, UpdateMotoristaDto dto) {
         Motorista m = motoristaRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Motorista not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Motorista nao encontrado com id: " + id));
 
         if (dto.plano() != null) m.setPlano(dto.plano());
         if (dto.dadosId() != null) {
             Dados dados = dadosRepository.findById(dto.dadosId())
-                    .orElseThrow(() -> new NotFoundException("Dados not found with id: " + dto.dadosId()));
+                    .orElseThrow(() -> new NotFoundException("Dados nao encontrados com id: " + dto.dadosId()));
             m.setDados(dados);
         }
 
@@ -62,7 +62,7 @@ public class MotoristaService {
     @Transactional
     public void delete(Long id) {
         if (!motoristaRepository.existsById(id)) {
-            throw new NotFoundException("Motorista not found with id: " + id);
+            throw new NotFoundException("Motorista nao encontrados com id: " + id);
         }
         motoristaRepository.deleteById(id);
     }

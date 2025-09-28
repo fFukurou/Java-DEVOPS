@@ -39,7 +39,7 @@ public class Moto {
     @Column(name = "localizacao_moto", length = 4000, nullable = false)
     private String localizacaoWkt;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_motorista", referencedColumnName = "id_motorista")
     private Motorista motorista;
 
@@ -47,7 +47,7 @@ public class Moto {
     @JoinColumn(name = "id_modelo", referencedColumnName = "id_modelo")
     private Modelo modelo;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_setor", referencedColumnName = "id_setor")
     private Setor setor;
 

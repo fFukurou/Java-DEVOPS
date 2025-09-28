@@ -32,12 +32,12 @@ public class PatioService {
 
         if (dto.filialId() != null) {
             var filial = filialRepository.findById(dto.filialId())
-                    .orElseThrow(() -> new NotFoundException("Filial not found with id: " + dto.filialId()));
+                    .orElseThrow(() -> new NotFoundException("Filial não encontrada com o id: " + dto.filialId()));
             p.setFilial(filial);
         }
         if (dto.regiaoId() != null) {
             var regiao = regiaoRepository.findById(dto.regiaoId())
-                    .orElseThrow(() -> new NotFoundException("Regiao not found with id: " + dto.regiaoId()));
+                    .orElseThrow(() -> new NotFoundException("Região não encontrada com o id: " + dto.regiaoId()));
             p.setRegiao(regiao);
         }
 
@@ -52,25 +52,25 @@ public class PatioService {
     public ReadPatioDto findById(Long id) {
         return patioRepository.findById(id)
                 .map(ReadPatioDto::new)
-                .orElseThrow(() -> new NotFoundException("Patio not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Pátio não encontrado com o id: " + id));
     }
 
     @Transactional
     public ReadPatioDto update(Long id, UpdatePatioDto dto) {
         Patio p = patioRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Patio not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Pátio não encontrado com o id: " + id));
 
         if (dto.totalMotos() != null) p.setTotalMotos(dto.totalMotos());
         if (dto.capacidadeMoto() != null) p.setCapacidadeMoto(dto.capacidadeMoto());
 
         if (dto.filialId() != null) {
             var filial = filialRepository.findById(dto.filialId())
-                    .orElseThrow(() -> new NotFoundException("Filial not found with id: " + dto.filialId()));
+                    .orElseThrow(() -> new NotFoundException("Filial não encontrada com o id: " + dto.filialId()));
             p.setFilial(filial);
         }
         if (dto.regiaoId() != null) {
             var regiao = regiaoRepository.findById(dto.regiaoId())
-                    .orElseThrow(() -> new NotFoundException("Regiao not found with id: " + dto.regiaoId()));
+                    .orElseThrow(() -> new NotFoundException("Região não encontrada com o id: " + dto.regiaoId()));
             p.setRegiao(regiao);
         }
 
@@ -80,7 +80,7 @@ public class PatioService {
     @Transactional
     public void delete(Long id) {
         if (!patioRepository.existsById(id)) {
-            throw new NotFoundException("Patio not found with id: " + id);
+            throw new NotFoundException("Pátio não encontrado com o id: " + id);
         }
         patioRepository.deleteById(id);
     }

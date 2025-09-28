@@ -5,9 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotBlank;
 
-/**
- * Used for the edit form. CPF is read-only on edit (DadosService.update doesn't change CPF).
- */
+
 public class DadosUpdateForm {
 
     @Size(max = 13)
@@ -24,7 +22,6 @@ public class DadosUpdateForm {
 
     public DadosUpdateForm() {}
 
-    // constructor used in editForm
     public DadosUpdateForm(String telefone, String email, String nome) {
         this.telefone = telefone;
         this.email = email;
@@ -35,16 +32,35 @@ public class DadosUpdateForm {
         return new UpdateDadosDto(telefone, email, senha, nome);
     }
 
-    // getters/setters
-    public String getTelefone() { return telefone; }
-    public void setTelefone(String telefone) { this.telefone = telefone; }
+    public String getTelefone() {
+        return telefone;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
 
-    public String getSenha() { return senha; }
-    public void setSenha(String senha) { this.senha = senha; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 }

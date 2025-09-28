@@ -8,7 +8,6 @@ public class FuncionarioCreateForm {
     @NotBlank @Size(max = 100)
     private String cargo;
 
-    // Dados fields
     @NotBlank @Size(min = 11, max = 11)
     private String cpf;
 
@@ -25,8 +24,6 @@ public class FuncionarioCreateForm {
     private String nome;
 
     private Long filialId;
-
-    // getters / setters
 
     public String getCargo() {
         return cargo;

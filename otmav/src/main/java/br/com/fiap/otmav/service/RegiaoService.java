@@ -32,13 +32,13 @@ public class RegiaoService {
     public ReadRegiaoDto findById(Long id) {
         return regiaoRepository.findById(id)
                 .map(ReadRegiaoDto::new)
-                .orElseThrow(() -> new NotFoundException("Regiao not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Região não encontrada com o id: " + id));
     }
 
     @Transactional
     public ReadRegiaoDto update(Long id, UpdateRegiaoDto dto) {
         Regiao r = regiaoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Regiao not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Região não encontrada com o id: " + id));
         if (dto.localizacao() != null) r.setLocalizacaoWkt(dto.localizacao());
         if (dto.area() != null) r.setArea(dto.area());
         return new ReadRegiaoDto(regiaoRepository.save(r));
@@ -47,7 +47,7 @@ public class RegiaoService {
     @Transactional
     public void delete(Long id) {
         if (!regiaoRepository.existsById(id)) {
-            throw new NotFoundException("Regiao not found with id: " + id);
+            throw new NotFoundException("Região não encontrada com o id: " + id);
         }
         regiaoRepository.deleteById(id);
     }

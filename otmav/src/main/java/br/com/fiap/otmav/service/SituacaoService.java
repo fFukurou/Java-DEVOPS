@@ -33,13 +33,13 @@ public class SituacaoService {
     public ReadSituacaoDto findById(Long id) {
         return situacaoRepository.findById(id)
                 .map(ReadSituacaoDto::new)
-                .orElseThrow(() -> new NotFoundException("Situacao not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Situação não encontrada com o id: " + id));
     }
 
     @Transactional
     public ReadSituacaoDto update(Long id, UpdateSituacaoDto dto) {
         Situacao s = situacaoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Situacao not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Situação não encontrada com o id: " + id));
 
         if (dto.nome() != null) s.setNome(dto.nome());
         if (dto.descricao() != null) s.setDescricao(dto.descricao());
@@ -51,7 +51,7 @@ public class SituacaoService {
     @Transactional
     public void delete(Long id) {
         if (!situacaoRepository.existsById(id)) {
-            throw new NotFoundException("Situacao not found with id: " + id);
+            throw new NotFoundException("Situação não encontrada com o id: " + id);
         }
         situacaoRepository.deleteById(id);
     }

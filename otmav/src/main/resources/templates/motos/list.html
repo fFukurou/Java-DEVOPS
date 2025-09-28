@@ -9,13 +9,13 @@
         <h1>Motos</h1>
         <div>
             <a class="btn btn-outline-secondary me-2" th:href="@{/motos/new}">Nova Moto</a>
-            <a class="btn btn-primary" th:href="@{/motos/manage}">Gerenciar Motos</a> <!-- placeholder for future page -->
+            <a class="btn btn-primary" th:href="@{/motos/manage}">Gerenciar Motos</a>
         </div>
     </div>
 
     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 
-    <!-- filters -->
+    <!-- FILTROS -->
     <form class="row g-2 mb-3" th:action="@{/motos}" method="get">
         <div class="col-auto">
             <input class="form-control" type="text" name="placa" th:value="${placa}" placeholder="Placa"/>
@@ -93,7 +93,7 @@
         </tbody>
     </table>
 
-    <!-- pagination -->
+    <!-- PAGINACAO -->
     <nav th:if="${motosPage.totalPages > 1}">
         <ul class="pagination">
             <li class="page-item" th:classappend="${motosPage.first} ? 'disabled'">

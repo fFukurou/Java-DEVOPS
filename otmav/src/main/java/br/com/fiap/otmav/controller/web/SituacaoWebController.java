@@ -37,7 +37,6 @@ public class SituacaoWebController {
         model.addAttribute("situacoesPage", pageResult);
         model.addAttribute("nome", nome);
         model.addAttribute("status", status);
-        // supply enum values for filter select
         model.addAttribute("allStatuses", SituacaoStatus.values());
 
         return "situacoes/list";
@@ -108,7 +107,7 @@ public class SituacaoWebController {
         return "redirect:/situacoes";
     }
 
-    // SHOW single Situacao
+    // SHOW Situacao
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
         ReadSituacaoDto s = situacaoService.findById(id);

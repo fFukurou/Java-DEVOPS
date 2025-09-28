@@ -48,7 +48,7 @@ public class MotoristaWebController {
         return "motoristas/list";
     }
 
-    // SHOW single motorista
+    // SHOW motorista
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
         ReadMotoristaDto rm = motoristaService.findById(id);
@@ -77,11 +77,9 @@ public class MotoristaWebController {
             return "motoristas/form";
         }
 
-        // 1) create Dados (uses DadosService to handle hashing/validation)
         CreateDadosDto dadosDto = form.toCreateDadosDto();
         var readDados = dadosService.create(dadosDto);
 
-        // 2) create Motorista linking to created Dados
         CreateMotoristaDto createMotoristaDto = new CreateMotoristaDto(form.getPlano(), readDados.id());
         motoristaService.create(createMotoristaDto);
 

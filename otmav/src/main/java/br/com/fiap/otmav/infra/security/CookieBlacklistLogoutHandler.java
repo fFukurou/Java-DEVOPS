@@ -1,4 +1,4 @@
-// src/main/java/br/com/fiap/otmav/infra/security/CookieBlacklistLogoutHandler.java
+
 package br.com.fiap.otmav.infra.security;
 
 import br.com.fiap.otmav.service.TokenBlacklistService;
@@ -27,13 +27,11 @@ public class CookieBlacklistLogoutHandler implements LogoutHandler {
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String token = null;
 
-        // Try Authorization header first
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7).trim();
         }
 
-        // Fallback to cookie
         if (token == null) {
             Cookie[] cookies = request.getCookies();
             if (cookies != null) {
@@ -47,18 +45,16 @@ public class CookieBlacklistLogoutHandler implements LogoutHandler {
         }
 
         if (token != null && !token.isBlank()) {
-            // Blacklist token using expiry from token if available
             Instant exp = tokenService.getExpirationInstant(token);
             if (exp == null) exp = Instant.now().plusSeconds(3600);
             blacklistService.blacklistToken(token, exp);
         }
 
-        // Remove cookie by setting empty value + maxAge=0 and path "/"
         Cookie clear = new Cookie("OTMAV_TOKEN", "");
         clear.setHttpOnly(true);
         clear.setPath("/");
         clear.setMaxAge(0);
-        // If your app uses secure cookies in production, you may also set clear.setSecure(true)
+
         response.addCookie(clear);
     }
 }

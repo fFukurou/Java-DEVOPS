@@ -12,7 +12,7 @@
 
     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 
-    <!-- filters -->
+    <!-- FILTROS -->
     <form class="row g-2 mb-3" th:action="@{/regioes}" method="get">
         <div class="col-auto">
             <input class="form-control" type="number" step="any" name="area" th:value="${area}" placeholder="Área (exato)"/>
@@ -42,7 +42,7 @@
             </td>
             <td th:text="${r.area}">10.0</td>
             <td>
-                <!-- NEW: Ver (view) button -->
+                <!-- 'VER' -->
                 <a class="btn btn-sm btn-outline-secondary" th:href="@{|/regioes/${r.id}|}">Ver</a>
 
                 <a class="btn btn-sm btn-outline-primary" th:href="@{|/regioes/${r.id}/edit|}">Editar</a>
@@ -56,7 +56,7 @@
         </tbody>
     </table>
 
-    <!-- pagination -->
+    <!-- PAGINACAO -->
     <nav th:if="${regiaoPage.totalPages > 1}">
         <ul class="pagination">
             <li class="page-item" th:classappend="${regiaoPage.first} ? 'disabled'">

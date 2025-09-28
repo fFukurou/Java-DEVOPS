@@ -7,7 +7,7 @@
 <div class="container">
     <h2 th:text="${patioId != null} ? 'Editar Pátio' : 'Novo Pátio'"></h2>
 
-    <!-- CREATE form -->
+    <!-- CREATE -->
     <form th:if="${patioId == null}"
           th:action="@{/patios}"
           th:object="${createForm}"
@@ -54,7 +54,7 @@
         </div>
     </form>
 
-    <!-- EDIT form -->
+    <!-- EDIT -->
     <form th:if="${patioId != null}"
           th:action="@{|/patios/${patioId}|}"
           th:object="${updateForm}"

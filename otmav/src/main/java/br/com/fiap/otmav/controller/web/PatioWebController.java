@@ -35,7 +35,7 @@ public class PatioWebController {
     @Autowired
     private RegiaoRepository regiaoRepository;
 
-    // LIST (existing)
+    // LIST
     @GetMapping
     public String list(
             @RequestParam(required = false) Integer totalMotos,
@@ -66,7 +66,7 @@ public class PatioWebController {
         return "patios/list";
     }
 
-    // SHOW CREATE FORM (existing)
+    // SHOW CREATE FORM
     @GetMapping("/new")
     public String newForm(Model model) {
         model.addAttribute("createForm", new PatioCreateForm());
@@ -79,7 +79,7 @@ public class PatioWebController {
         return "patios/form";
     }
 
-    // CREATE (existing)
+    // CREATE
     @PostMapping
     public String create(
             @ModelAttribute("createForm") @Valid PatioCreateForm form,
@@ -104,7 +104,7 @@ public class PatioWebController {
         return "redirect:/patios";
     }
 
-    // SHOW single Patio (NEW)
+    // SHOW  Patio
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
         ReadPatioDto rd = patioService.findById(id);
@@ -112,7 +112,7 @@ public class PatioWebController {
         return "patios/show";
     }
 
-    // EDIT FORM (existing)
+    // EDIT FORM
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
         ReadPatioDto p = patioService.findById(id);
@@ -128,7 +128,7 @@ public class PatioWebController {
         return "patios/form";
     }
 
-    // UPDATE (existing)
+    // UPDATE
     @PostMapping("/{id}")
     public String update(
             @PathVariable Long id,
@@ -155,7 +155,7 @@ public class PatioWebController {
         return "redirect:/patios";
     }
 
-    // DELETE (existing)
+    // DELETE
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         patioService.delete(id);

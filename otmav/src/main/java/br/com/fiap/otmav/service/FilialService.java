@@ -29,7 +29,7 @@ public class FilialService {
         Endereco endereco = null;
         if (dto.enderecoId() != null) {
             endereco = enderecoRepository.findById(dto.enderecoId())
-                    .orElseThrow(() -> new NotFoundException("Endereco not found with id: " + dto.enderecoId()));
+                    .orElseThrow(() -> new NotFoundException("Endereco nao encontrado com id: " + dto.enderecoId()));
         }
 
         Filial filial = new Filial();
@@ -68,20 +68,20 @@ public class FilialService {
     public ReadFilialDto findById(Long id) {
         return filialRepository.findById(id)
                 .map(ReadFilialDto::new)
-                .orElseThrow(() -> new NotFoundException("Filial not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Filial nao encontrada com id: " + id));
     }
 
     // UPDATE
     @Transactional
     public ReadFilialDto update(Long id, UpdateFilialDto dto) {
         Filial filial = filialRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Filial not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Filial nao encontrada com id: " + id));
 
         if (dto.nome() != null) filial.setNome(dto.nome());
 
         if (dto.enderecoId() != null) {
             Endereco endereco = enderecoRepository.findById(dto.enderecoId())
-                    .orElseThrow(() -> new NotFoundException("Endereco not found with id: " + dto.enderecoId()));
+                    .orElseThrow(() -> new NotFoundException("Endereco nao encontrado com id: " + dto.enderecoId()));
             filial.setEndereco(endereco);
         }
 

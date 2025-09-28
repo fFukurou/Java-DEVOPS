@@ -28,6 +28,7 @@ public class FilialController {
     @Autowired
     private FilialService filialService;
 
+    // CREATE
     @Operation(summary = "Cadastrar nova filial")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Filial criada com sucesso"),
@@ -63,21 +64,23 @@ public class FilialController {
     }
 
 
-    @Operation(summary = "Buscar filial por ID")
+    // GET BY ID
+    @Operation(summary = "Get Filial By ID")
     @GetMapping("/{id}")
     public ResponseEntity<ReadFilialDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(filialService.findById(id));
     }
 
-    @Operation(summary = "Atualizar filial existente")
+    // UPDATE
+    @Operation(summary = "Update Filial")
     @PutMapping("/{id}")
     public ResponseEntity<ReadFilialDto> update(
             @PathVariable Long id,
             @RequestBody @Valid UpdateFilialDto dto) {
         return ResponseEntity.ok(filialService.update(id, dto));
     }
-
-    @Operation(summary = "Excluir filial")
+    // DELETE
+    @Operation(summary = "Delete Filial")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Filial excluída")
     })

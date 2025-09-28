@@ -20,13 +20,14 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/situacoes")
-@Tag(name = "Situacoes", description = "CRUD for situacao")
+@Tag(name = "Situacoes", description = "CRUD para SITUACOES")
 public class SituacaoController {
 
     @Autowired
     private SituacaoService situacaoService;
 
-    @Operation(summary = "Create situacao")
+    // CREATE
+    @Operation(summary = "CREATE SITUACAO")
     @PostMapping
     public ResponseEntity<ReadSituacaoDto> create(@RequestBody @Valid CreateSituacaoDto dto, UriComponentsBuilder uriBuilder) {
         ReadSituacaoDto created = situacaoService.create(dto);
@@ -34,14 +35,15 @@ public class SituacaoController {
         return ResponseEntity.created(uri).body(created);
     }
 
-    @Operation(summary = "List situacoes (paginated, optional filters)")
+    // GET
+    @Operation(summary = "LISTAR SITUACOES")
     @ApiResponse(responseCode = "200", description = "List returned")
     @GetMapping
     public ResponseEntity<Page<ReadSituacaoDto>> findAll(
-            @Parameter(description = "Name (partial)", example = "Active")
+            @Parameter(description = "Name (parcial)", example = "ATIVO")
             @RequestParam(required = false) String nome,
 
-            @Parameter(description = "Status filter")
+            @Parameter(description = "STATUS")
             @RequestParam(required = false) SituacaoStatus status,
 
             @Parameter(hidden = true)
@@ -50,18 +52,21 @@ public class SituacaoController {
         return ResponseEntity.ok(situacaoService.findAllFiltered(nome, status, pageable));
     }
 
+    // GET BY ID
     @Operation(summary = "Get situacao by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ReadSituacaoDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(situacaoService.findById(id));
     }
 
+    // UPDATE
     @Operation(summary = "Update situacao")
     @PutMapping("/{id}")
     public ResponseEntity<ReadSituacaoDto> update(@PathVariable Long id, @RequestBody @Valid UpdateSituacaoDto dto) {
         return ResponseEntity.ok(situacaoService.update(id, dto));
     }
 
+    // DELETE
     @Operation(summary = "Delete situacao")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

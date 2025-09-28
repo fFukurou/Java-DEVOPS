@@ -11,18 +11,14 @@ public class FuncionarioUpdateForm {
     private Long dadosId;
     private Long filialId;
 
-    // default constructor (used by Spring form binding)
     public FuncionarioUpdateForm() {}
 
-    // 3-arg constructor (already present)
     public FuncionarioUpdateForm(String cargo, Long dadosId, Long filialId) {
         this.cargo = cargo;
         this.dadosId = dadosId;
         this.filialId = filialId;
     }
 
-    // 2-arg convenience constructor used by your controller:
-    // new FuncionarioUpdateForm(rf.cargo(), rf.filial() != null ? rf.filial().id() : null);
     public FuncionarioUpdateForm(String cargo, Long filialId) {
         this.cargo = cargo;
         this.dadosId = null;

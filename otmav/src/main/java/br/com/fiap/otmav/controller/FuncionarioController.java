@@ -26,7 +26,7 @@ public class FuncionarioController {
     @Autowired
     private FuncionarioService funcionarioService;
 
-    // Create
+    // CREATE
     @Operation(summary = "Create new Funcionario (employee)")
     @ApiResponse(responseCode = "201", description = "Funcionario created")
     @PostMapping
@@ -38,7 +38,7 @@ public class FuncionarioController {
         return ResponseEntity.created(uri).body(created);
     }
 
-    // GET list with filters
+    // GET (FILTERED)
     @Operation(summary = "List funcionarios with optional filters")
     @ApiResponse(responseCode = "200", description = "List returned")
     @GetMapping
@@ -58,14 +58,14 @@ public class FuncionarioController {
         return ResponseEntity.ok(funcionarioService.findAllFiltered(cargo, filialId, dadosId, pageable));
     }
 
-    // GET by id
+    // GET By ID
     @Operation(summary = "Get Funcionario by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ReadFuncionarioDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(funcionarioService.findById(id));
     }
 
-    // PUT update
+    // UPDATE
     @Operation(summary = "Update Funcionario")
     @PutMapping("/{id}")
     public ResponseEntity<ReadFuncionarioDto> update(
@@ -74,7 +74,7 @@ public class FuncionarioController {
         return ResponseEntity.ok(funcionarioService.update(id, dto));
     }
 
-    // DELETE (restricted to ADMIN in your SecurityConfig)
+    // DELETE
     @Operation(summary = "Delete Funcionario")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

@@ -31,22 +31,51 @@ public class ModeloCreateForm {
         return new CreateModeloDto(nomeModelo, frenagem, sisPartida, tanque, tipoCombustivel, consumo);
     }
 
-    // getters / setters
-    public String getNomeModelo() { return nomeModelo; }
-    public void setNomeModelo(String nomeModelo) { this.nomeModelo = nomeModelo; }
+    public String getNomeModelo() {
+        return nomeModelo;
+    }
 
-    public String getFrenagem() { return frenagem; }
-    public void setFrenagem(String frenagem) { this.frenagem = frenagem; }
+    public void setNomeModelo(String nomeModelo) {
+        this.nomeModelo = nomeModelo;
+    }
 
-    public String getSisPartida() { return sisPartida; }
-    public void setSisPartida(String sisPartida) { this.sisPartida = sisPartida; }
+    public String getFrenagem() {
+        return frenagem;
+    }
 
-    public Integer getTanque() { return tanque; }
-    public void setTanque(Integer tanque) { this.tanque = tanque; }
+    public void setFrenagem(String frenagem) {
+        this.frenagem = frenagem;
+    }
 
-    public String getTipoCombustivel() { return tipoCombustivel; }
-    public void setTipoCombustivel(String tipoCombustivel) { this.tipoCombustivel = tipoCombustivel; }
+    public String getSisPartida() {
+        return sisPartida;
+    }
 
-    public Integer getConsumo() { return consumo; }
-    public void setConsumo(Integer consumo) { this.consumo = consumo; }
+    public void setSisPartida(String sisPartida) {
+        this.sisPartida = sisPartida;
+    }
+
+    public Integer getTanque() {
+        return tanque;
+    }
+
+    public void setTanque(Integer tanque) {
+        this.tanque = tanque;
+    }
+
+    public String getTipoCombustivel() {
+        return tipoCombustivel;
+    }
+
+    public void setTipoCombustivel(String tipoCombustivel) {
+        this.tipoCombustivel = tipoCombustivel;
+    }
+
+    public Integer getConsumo() {
+        return consumo;
+    }
+
+    public void setConsumo(Integer consumo) {
+        this.consumo = consumo;
+    }
 }

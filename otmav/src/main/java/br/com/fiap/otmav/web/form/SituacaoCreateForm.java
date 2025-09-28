@@ -24,7 +24,6 @@ public class SituacaoCreateForm {
         return new CreateSituacaoDto(nome, descricao, status);
     }
 
-    // getters / setters
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 

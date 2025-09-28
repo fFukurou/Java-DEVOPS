@@ -37,13 +37,13 @@ public class EnderecoService {
     public ReadEnderecoDto findById(Long id) {
         return enderecoRepository.findById(id)
                 .map(ReadEnderecoDto::new)
-                .orElseThrow(() -> new NotFoundException("Endereco not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Endereco nao encontrado com id: " + id));
     }
 
     @Transactional
     public ReadEnderecoDto update(Long id, UpdateEnderecoDto dto) {
         Endereco e = enderecoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Endereco not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Endereco nao encontrado com id: " + id));
 
         if (dto.numero() != null) e.setNumero(dto.numero());
         if (dto.estado() != null) e.setEstado(dto.estado());
@@ -58,7 +58,7 @@ public class EnderecoService {
     @Transactional
     public void delete(Long id) {
         if (!enderecoRepository.existsById(id)) {
-            throw new NotFoundException("Endereco not found with id: " + id);
+            throw new NotFoundException("Endereco nao encontrado com id: " + id);
         }
         enderecoRepository.deleteById(id);
     }

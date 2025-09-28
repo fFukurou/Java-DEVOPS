@@ -75,7 +75,7 @@ public class FilialWebController {
         return "redirect:/filiais";
     }
 
-    // SHOW single Filial
+    // SHOW Filial
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
         ReadFilialDto rd = filialService.findById(id);

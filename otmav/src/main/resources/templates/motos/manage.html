@@ -9,12 +9,11 @@
         <h1>Gerenciar Motos</h1>
         <a class="btn btn-secondary" th:href="@{/motos}">Voltar à lista</a>
     </div>
-
-    <!-- flash messages -->
+<!--    PAGINACAO -->
     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-    <!-- filters -->
+    <!-- FILTROS -->
     <form class="row g-2 mb-3" th:action="@{/motos/manage}" method="get">
         <div class="col-auto">
             <input class="form-control" type="text" name="placa" th:value="${placa}" placeholder="Placa"/>
@@ -30,7 +29,6 @@
         </div>
     </form>
 
-    <!-- motos table -->
     <div class="table-responsive mb-4">
         <table class="table table-striped">
             <thead>
@@ -63,7 +61,7 @@
     </div>
 
     <div class="row">
-        <!-- Transfer form -->
+        <!-- TRANSFER FORM -->
         <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-header">Transferir Moto para outro Setor</div>
@@ -96,7 +94,7 @@
             </div>
         </div>
 
-        <!-- Assign driver form -->
+        <!-- ASSIGN-DRIVER FORM -->
         <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-header">Atribuir Motorista à Moto</div>

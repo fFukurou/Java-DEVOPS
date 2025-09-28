@@ -29,17 +29,17 @@ public class DadosService {
     @Transactional
     public ReadDadosDto create(CreateDadosDto dto) {
         if (dto.cpf() != null && dadosRepository.existsByCpf(dto.cpf())) {
-            throw new DuplicateEntryException("CPF already registered");
+            throw new DuplicateEntryException("CPF ja cadastrado");
         }
         if (dto.email() != null && dadosRepository.findByEmail(dto.email()).isPresent()) {
-            throw new DuplicateEntryException("Email already registered");
+            throw new DuplicateEntryException("Email ja cadastrado");
         }
 
         Dados dados = new Dados();
         dados.setCpf(dto.cpf());
         dados.setTelefone(dto.telefone());
         dados.setEmail(dto.email());
-        // Hash the password before saving
+        // PASSWORD HASH
         if (dto.senha() != null) {
             dados.setSenha(passwordEncoder.encode(dto.senha()));
         } else {
@@ -51,7 +51,7 @@ public class DadosService {
         return new ReadDadosDto(saved);
     }
 
-    // LIST (paginated)
+    // LIST
     public Page<ReadDadosDto> findAll(Pageable pageable) {
         return dadosRepository.findAll(pageable).map(ReadDadosDto::new);
     }
@@ -60,19 +60,19 @@ public class DadosService {
     public ReadDadosDto findById(Long id) {
         return dadosRepository.findById(id)
                 .map(ReadDadosDto::new)
-                .orElseThrow(() -> new NotFoundException("Dados not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Dados nao encontrado com id: " + id));
     }
 
     // UPDATE
     @Transactional
     public ReadDadosDto update(Long id, UpdateDadosDto dto) {
         Dados dados = dadosRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Dados not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Dados nao encontrado com id: " + id));
 
         if (dto.telefone() != null) dados.setTelefone(dto.telefone());
         if (dto.email() != null) dados.setEmail(dto.email());
         if (dto.senha() != null) {
-            // encode new password
+
             dados.setSenha(passwordEncoder.encode(dto.senha()));
         }
         if (dto.nome() != null) dados.setNome(dto.nome());
@@ -85,7 +85,7 @@ public class DadosService {
     @Transactional
     public void delete(Long id) {
         if (!dadosRepository.existsById(id)) {
-            throw new NotFoundException("Dados not found with id: " + id);
+            throw new NotFoundException("Dados nao encontrado com id: " + id);
         }
         dadosRepository.deleteById(id);
     }

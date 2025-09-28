@@ -20,13 +20,14 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/modelos")
-@Tag(name = "Modelos", description = "CRUD for vehicle models")
+@Tag(name = "Modelos", description = "CRUD para Modelos")
 public class ModeloController {
 
     @Autowired
     private ModeloService modeloService;
 
-    @Operation(summary = "Create new Modelo")
+    // CREATE
+    @Operation(summary = "CIAR MODELO")
     @PostMapping
     public ResponseEntity<ReadModeloDto> create(@RequestBody @Valid CreateModeloDto dto, UriComponentsBuilder uriBuilder) {
         ReadModeloDto created = modeloService.create(dto);
@@ -34,17 +35,18 @@ public class ModeloController {
         return ResponseEntity.created(uri).body(created);
     }
 
-    @Operation(summary = "List modelos (paginated, optional filters)")
+    // GET
+    @Operation(summary = "LIST MODELOS")
     @ApiResponse(responseCode = "200", description = "List returned")
     @GetMapping
     public ResponseEntity<Page<ReadModeloDto>> findAll(
-            @Parameter(description = "Model name (partial match)", example = "Civic")
+            @Parameter(description = "Nome do Modelo", example = "Civic")
             @RequestParam(required = false) String nome,
 
-            @Parameter(description = "Fuel type (partial or exact)", example = "Gasoline")
+            @Parameter(description = "TIPO DE COMBUSTIVEL", example = "Gasolina")
             @RequestParam(required = false) String tipoCombustivel,
 
-            @Parameter(description = "Tank capacity (exact)", example = "50")
+            @Parameter(description = "CAPACIDADE DO TANQUE", example = "50")
             @RequestParam(required = false) Integer tanque,
 
             @Parameter(hidden = true)
@@ -53,18 +55,21 @@ public class ModeloController {
         return ResponseEntity.ok(modeloService.findAllFiltered(nome, tipoCombustivel, tanque, pageable));
     }
 
+    // GET BY ID
     @Operation(summary = "Get Modelo by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ReadModeloDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(modeloService.findById(id));
     }
 
+    // UPDATE
     @Operation(summary = "Update Modelo")
     @PutMapping("/{id}")
     public ResponseEntity<ReadModeloDto> update(@PathVariable Long id, @RequestBody @Valid UpdateModeloDto dto) {
         return ResponseEntity.ok(modeloService.update(id, dto));
     }
 
+    // DELETE
     @Operation(summary = "Delete Modelo")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

@@ -19,7 +19,7 @@ public class OpenApiConfig {
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")))
-                .info(new Info().title("OTMAV API").version("v1").description("API Backend for the Sprint 3 of the 2025 Challenge Project - ADS FIAP"))
+                .info(new Info().title("OTMAV API").version("v1").description("API Backend para a Spring #3 do 'Challenge' - ADS FIAP"))
                 .addSecurityItem(new SecurityRequirement().addList("bearer-key"));
     }
 }

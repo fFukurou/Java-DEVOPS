@@ -37,13 +37,13 @@ public class ModeloService {
     public ReadModeloDto findById(Long id) {
         return modeloRepository.findById(id)
                 .map(ReadModeloDto::new)
-                .orElseThrow(() -> new NotFoundException("Modelo not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Modelo nao encontrado com id: " + id));
     }
 
     @Transactional
     public ReadModeloDto update(Long id, UpdateModeloDto dto) {
         Modelo m = modeloRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Modelo not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Modelo nao encontrado com id: " + id));
 
         if (dto.nomeModelo() != null) m.setNomeModelo(dto.nomeModelo());
         if (dto.frenagem() != null) m.setFrenagem(dto.frenagem());
@@ -58,7 +58,7 @@ public class ModeloService {
     @Transactional
     public void delete(Long id) {
         if (!modeloRepository.existsById(id)) {
-            throw new NotFoundException("Modelo not found with id: " + id);
+            throw new NotFoundException("Modelo nao encontrado com id: " + id);
         }
         modeloRepository.deleteById(id);
     }

@@ -64,6 +64,7 @@ public class MotoWebController {
         Pageable pageable = PageRequest.of(page, size);
         Page<ReadMotoDto> motos = motoService.findAllFiltered(placa, chassi, condicao, motoristaId, modeloId, setorId, situacaoId, pageable);
 
+        // deus me ajude
         model.addAttribute("motosPage", motos);
         model.addAttribute("placa", placa);
         model.addAttribute("chassi", chassi);
@@ -73,7 +74,6 @@ public class MotoWebController {
         model.addAttribute("setorId", setorId);
         model.addAttribute("situacaoId", situacaoId);
 
-        // for filters selects
         model.addAttribute("motoristas", motoristaRepository.findAll());
         model.addAttribute("modelos", modeloRepository.findAll());
         model.addAttribute("setores", setorRepository.findAll());
@@ -82,7 +82,7 @@ public class MotoWebController {
         return "motos/list";
     }
 
-    //    VIEW SINGLE MOTO
+    //    VIEW MOTO
     @GetMapping(path = "/{id}", produces = MediaType.TEXT_HTML_VALUE)
     public String show(@PathVariable Long id, Model model) {
         ReadMotoDto moto = motoService.findById(id);
@@ -127,7 +127,6 @@ public class MotoWebController {
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
         ReadMotoDto rf = motoService.findById(id);
-        // build update form populated with existing values
         MotoUpdateForm form = new MotoUpdateForm(
                 rf.placa(),
                 rf.chassi(),
@@ -181,9 +180,7 @@ public class MotoWebController {
         return "redirect:/motos";
     }
 
-    /**
-     * Manage page for motos: lists motos and provides forms to transfer or assign driver.
-     */
+    // MANAGE
     @GetMapping("/manage")
     public String managePage(
             @RequestParam(required = false) String placa,
@@ -191,11 +188,9 @@ public class MotoWebController {
             @RequestParam(required = false) String condicao,
             Model model) {
 
-        // list a reasonable amount for selects (100). If you expect more, add pagination UI later.
         Pageable big = PageRequest.of(0, 200);
         var motosPage = motoService.findAllFiltered(placa, chassi, condicao, null, null, null, null, big);
 
-        // fetch selects options
         List<Setor> setores = setorRepository.findAll();
         List<Motorista> motoristas = motoristaRepository.findAll();
 
@@ -203,21 +198,15 @@ public class MotoWebController {
         model.addAttribute("setores", setores);
         model.addAttribute("motoristas", motoristas);
 
-        // forms
         model.addAttribute("transferForm", new TransferForm());
         model.addAttribute("assignForm", new AssignForm());
 
-        // filter echo
         model.addAttribute("placa", placa);
         model.addAttribute("chassi", chassi);
         model.addAttribute("condicao", condicao);
 
         return "motos/manage";
     }
-
-    /**
-     * Handle transfer form submission.
-     */
     @PostMapping("/manage/transfer")
     public String transferSubmit(@ModelAttribute("transferForm") @Valid TransferForm form,
                                  RedirectAttributes redirectAttrs) {
@@ -233,9 +222,7 @@ public class MotoWebController {
         return "redirect:/motos/manage";
     }
 
-    /**
-     * Handle assign driver form submission.
-     */
+
     @PostMapping("/manage/assign")
     public String assignSubmit(@ModelAttribute("assignForm") @Valid AssignForm form,
                                RedirectAttributes redirectAttrs) {
@@ -250,4 +237,17 @@ public class MotoWebController {
 
         return "redirect:/motos/manage";
     }
+
+    // GETs QUE VÃO REDIRECIONAR PARA 'MANAGE'
+    // (por causa do login handler, que redireciona pra última página visitada com um GET, preciso colocar uns redirects aqui)
+    @GetMapping("/manage/assign")
+    public String redirectAssignGet() {
+        return "redirect:/motos/manage";
+    }
+
+    @GetMapping("/manage/transfer")
+    public String redirectTransferGet() {
+        return "redirect:/motos/manage";
+    }
+
 }

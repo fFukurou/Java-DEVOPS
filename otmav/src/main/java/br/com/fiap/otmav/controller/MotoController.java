@@ -20,13 +20,14 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/motos")
-@Tag(name = "Motos", description = "CRUD for motos")
+@Tag(name = "Motos", description = "CRUD para Motos")
 public class MotoController {
 
     @Autowired
     private MotoService motoService;
 
-    @Operation(summary = "Create moto")
+    // CREATE
+    @Operation(summary = "CRIAR MOTO")
     @PostMapping
     public ResponseEntity<ReadMotoDto> create(@RequestBody @Valid CreateMotoDto dto, UriComponentsBuilder uriBuilder) {
         ReadMotoDto created = motoService.create(dto);
@@ -34,13 +35,14 @@ public class MotoController {
         return ResponseEntity.created(uri).body(created);
     }
 
-    @Operation(summary = "List motos (filters)")
+    // GET
+    @Operation(summary = "LISTAR MOTOS")
     @ApiResponse(responseCode = "200", description = "List returned")
     @GetMapping
     public ResponseEntity<Page<ReadMotoDto>> findAll(
-            @Parameter(description = "Plate (partial)") @RequestParam(required = false) String placa,
-            @Parameter(description = "Chassi (partial)") @RequestParam(required = false) String chassi,
-            @Parameter(description = "Condition (exact)") @RequestParam(required = false) String condicao,
+            @Parameter(description = "Plate") @RequestParam(required = false) String placa,
+            @Parameter(description = "Chassi") @RequestParam(required = false) String chassi,
+            @Parameter(description = "Condition") @RequestParam(required = false) String condicao,
             @Parameter(description = "Motorista id") @RequestParam(required = false) Long motoristaId,
             @Parameter(description = "Modelo id") @RequestParam(required = false) Long modeloId,
             @Parameter(description = "Setor id") @RequestParam(required = false) Long setorId,
@@ -50,18 +52,22 @@ public class MotoController {
         return ResponseEntity.ok(motoService.findAllFiltered(placa, chassi, condicao, motoristaId, modeloId, setorId, situacaoId, pageable));
     }
 
-    @Operation(summary = "Get moto by ID")
+    // GET BY ID
+    @Operation(summary = "Get MOTO by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ReadMotoDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(motoService.findById(id));
     }
 
+    // UPDATE
     @Operation(summary = "Update moto")
     @PutMapping("/{id}")
     public ResponseEntity<ReadMotoDto> update(@PathVariable Long id, @RequestBody @Valid UpdateMotoDto dto) {
         return ResponseEntity.ok(motoService.update(id, dto));
     }
 
+
+    // DELETE
     @Operation(summary = "Delete moto")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
@@ -69,8 +75,8 @@ public class MotoController {
         return ResponseEntity.noContent().build();
     }
 
-    // ----- NEW FLOW: transfer moto to another setor -----
-    @Operation(summary = "Transfer moto to another setor")
+    // TRANSFER
+    @Operation(summary = "Transfere Moto para outro Setor")
     @PostMapping("/{id}/transfer")
     public ResponseEntity<ReadMotoDto> transferToSetor(
             @PathVariable Long id,
@@ -79,8 +85,8 @@ public class MotoController {
         return ResponseEntity.ok(updated);
     }
 
-    // ----- NEW FLOW: assign driver to moto -----
-    @Operation(summary = "Assign motorista to moto")
+    // ASSIGN
+    @Operation(summary = "Atribui Motorista para X Moto")
     @PostMapping("/{id}/assign-driver")
     public ResponseEntity<ReadMotoDto> assignDriver(
             @PathVariable Long id,

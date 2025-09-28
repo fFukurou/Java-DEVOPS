@@ -12,7 +12,7 @@
 
     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 
-    <!-- filters -->
+
     <form class="row g-2 mb-3" th:action="@{/dados}" method="get">
         <div class="col-auto">
             <input class="form-control" type="text" name="cpf" th:value="${cpf}" placeholder="CPF"/>
@@ -41,7 +41,7 @@
             <td th:text="${d.nome}">Nome</td>
             <td th:text="${d.email}">email@x</td>
             <td>
-                <!-- VIEW button -->
+
                 <a class="btn btn-sm btn-outline-secondary" th:href="@{|/dados/${d.id}|}">Ver</a>
 
                 <a class="btn btn-sm btn-outline-primary" th:href="@{|/dados/${d.id}/edit|}">Editar</a>
@@ -55,7 +55,7 @@
         </tbody>
     </table>
 
-    <!-- pagination -->
+
     <nav th:if="${dadosPage.totalPages > 1}">
         <ul class="pagination">
             <li class="page-item" th:classappend="${dadosPage.first} ? 'disabled'">

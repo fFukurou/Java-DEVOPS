@@ -23,13 +23,14 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/dados")
-@Tag(name = "Dados", description = "CRUD for Dados")
+@Tag(name = "Dados", description = "CRUD Para Dados")
 public class DadosController {
 
     @Autowired
     private DadosService dadosService;
 
-    @Operation(summary = "Create new Dados record")
+    // CREATE
+    @Operation(summary = "Cria Dados")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Created"),
             @ApiResponse(responseCode = "400", description = "Invalid data")
@@ -66,13 +67,14 @@ public class DadosController {
         return ResponseEntity.ok(dadosService.findAllFiltered(cpf, nome, email, pageable));
     }
 
-
+    // GET BY ID
     @Operation(summary = "Get Dados by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ReadDadosDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(dadosService.findById(id));
     }
 
+    // UPDATE
     @Operation(summary = "Update Dados")
     @PutMapping("/{id}")
     public ResponseEntity<ReadDadosDto> update(
@@ -81,6 +83,7 @@ public class DadosController {
         return ResponseEntity.ok(dadosService.update(id, dto));
     }
 
+    // DELETE
     @Operation(summary = "Delete Dados")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Deleted"),

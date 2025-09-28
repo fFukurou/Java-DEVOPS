@@ -35,12 +35,12 @@ public class SetorService {
 
         if (dto.patioId() != null) {
             var patio = patioRepository.findById(dto.patioId())
-                    .orElseThrow(() -> new NotFoundException("Patio not found with id: " + dto.patioId()));
+                    .orElseThrow(() -> new NotFoundException("Pátio não encontrado com o id: " + dto.patioId()));
             s.setPatio(patio);
         }
         if (dto.regiaoId() != null) {
             var regiao = regiaoRepository.findById(dto.regiaoId())
-                    .orElseThrow(() -> new NotFoundException("Regiao not found with id: " + dto.regiaoId()));
+                    .orElseThrow(() -> new NotFoundException("Região não encontrada com o id: " + dto.regiaoId()));
             s.setRegiao(regiao);
         }
         return new ReadSetorDto(setorRepository.save(s));
@@ -54,13 +54,13 @@ public class SetorService {
     public ReadSetorDto findById(Long id) {
         return setorRepository.findById(id)
                 .map(ReadSetorDto::new)
-                .orElseThrow(() -> new NotFoundException("Setor not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Setor não encontrado com o id: " + id));
     }
 
     @Transactional
     public ReadSetorDto update(Long id, UpdateSetorDto dto) {
         Setor s = setorRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Setor not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Setor não encontrado com o id: " + id));
 
         if (dto.qtdMoto() != null) s.setQtdMoto(dto.qtdMoto());
         if (dto.capacidade() != null) s.setCapacidade(dto.capacidade());
@@ -70,12 +70,12 @@ public class SetorService {
 
         if (dto.patioId() != null) {
             var patio = patioRepository.findById(dto.patioId())
-                    .orElseThrow(() -> new NotFoundException("Patio not found with id: " + dto.patioId()));
+                    .orElseThrow(() -> new NotFoundException("Pátio não encontrado com o id: " + dto.patioId()));
             s.setPatio(patio);
         }
         if (dto.regiaoId() != null) {
             var regiao = regiaoRepository.findById(dto.regiaoId())
-                    .orElseThrow(() -> new NotFoundException("Regiao not found with id: " + dto.regiaoId()));
+                    .orElseThrow(() -> new NotFoundException("Região não encontrada com o id: " + dto.regiaoId()));
             s.setRegiao(regiao);
         }
 
@@ -85,7 +85,7 @@ public class SetorService {
     @Transactional
     public void delete(Long id) {
         if (!setorRepository.existsById(id)) {
-            throw new NotFoundException("Setor not found with id: " + id);
+            throw new NotFoundException("Setor não encontrado com o id: " + id);
         }
         setorRepository.deleteById(id);
     }

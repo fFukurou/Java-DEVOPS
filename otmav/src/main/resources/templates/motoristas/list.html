@@ -12,7 +12,7 @@
 
     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 
-    <!-- filters -->
+    <!-- FILTROS -->
     <form class="row g-2 mb-3" th:action="@{/motoristas}" method="get">
         <div class="col-auto">
             <select class="form-select" name="plano">
@@ -53,7 +53,7 @@
         </tbody>
     </table>
 
-    <!-- pagination -->
+    <!-- PAGINACAO -->
     <nav th:if="${motoristasPage.totalPages > 1}">
         <ul class="pagination">
             <li class="page-item" th:classappend="${motoristasPage.first} ? 'disabled'">

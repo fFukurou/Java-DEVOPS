@@ -12,7 +12,7 @@
 
     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 
-    <!-- filters -->
+    <!-- FILTROS -->
     <form class="row g-2 mb-3" th:action="@{/situacoes}" method="get">
         <div class="col-auto">
             <input class="form-control" type="text" name="nome" th:value="${nome}" placeholder="Nome"/>
@@ -41,7 +41,7 @@
             <td th:text="${s.descricao != null ? ( #strings.length(s.descricao) > 80 ? #strings.substring(s.descricao,0,80) + '...' : s.descricao ) : '-' }">Desc</td>
             <td th:text="${s.status}">ATIVO</td>
             <td>
-                <!-- VIEW button -->
+                <!-- 'VER' -->
                 <a class="btn btn-sm btn-outline-secondary" th:href="@{|/situacoes/${s.id}|}">Ver</a>
 
                 <a class="btn btn-sm btn-outline-primary" th:href="@{|/situacoes/${s.id}/edit|}">Editar</a>
@@ -55,7 +55,7 @@
         </tbody>
     </table>
 
-    <!-- pagination -->
+    <!-- PAGINACAO -->
     <nav th:if="${situacoesPage.totalPages > 1}">
         <ul class="pagination">
             <li class="page-item" th:classappend="${situacoesPage.first} ? 'disabled'">

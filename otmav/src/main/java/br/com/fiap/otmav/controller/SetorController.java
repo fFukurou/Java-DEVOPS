@@ -38,10 +38,10 @@ public class SetorController {
     @ApiResponse(responseCode = "200", description = "List returned")
     @GetMapping
     public ResponseEntity<Page<ReadSetorDto>> findAll(
-            @Parameter(description = "Qtd moto (exact)") @RequestParam(required = false) Integer qtdMoto,
-            @Parameter(description = "Capacidade (exact)") @RequestParam(required = false) Integer capacidade,
-            @Parameter(description = "Name (partial)") @RequestParam(required = false) String nome,
-            @Parameter(description = "Color (exact, case-insensitive)") @RequestParam(required = false) String cor,
+            @Parameter(description = "Qtd moto (exato)") @RequestParam(required = false) Integer qtdMoto,
+            @Parameter(description = "Capacidade (exato)") @RequestParam(required = false) Integer capacidade,
+            @Parameter(description = "Name (parcial)") @RequestParam(required = false) String nome,
+            @Parameter(description = "Color (exato)") @RequestParam(required = false) String cor,
             @Parameter(description = "Patio id") @RequestParam(required = false) Long patioId,
             @Parameter(description = "Regiao id") @RequestParam(required = false) Long regiaoId,
             @Parameter(hidden = true) @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {

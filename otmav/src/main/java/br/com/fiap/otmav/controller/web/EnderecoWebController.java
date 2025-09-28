@@ -71,7 +71,7 @@ public class EnderecoWebController {
         return "redirect:/enderecos";
     }
 
-    // SHOW single Endereco
+    // SHOW Endereco
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
         ReadEnderecoDto rd = enderecoService.findById(id);

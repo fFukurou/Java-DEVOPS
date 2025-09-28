@@ -19,14 +19,14 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Helper: decide if the request wants HTML
+    // VERIFICA SE A REQUEST PRECISA DE HTML
     private boolean wantsHtml(HttpServletRequest request) {
         String accept = request.getHeader("Accept");
         if (accept == null) return false;
         return accept.contains("text/html");
     }
 
-    // Generic builder for JSON ErrorResponse
+    // BUILDER PARA ErrorResponse JSON
     private ResponseEntity<ErrorResponse> buildJson(HttpStatus status, String error, String message) {
         ErrorResponse err = new ErrorResponse(status.value(), error, message);
         return new ResponseEntity<>(err, status);
@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
         return buildJson(HttpStatus.NOT_FOUND, "Resource not found", ex.getMessage());
     }
 
-    // ========== Validation errors ==========
+    // ========== Validation ERRORS ==========
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Object handleValidationErrors(MethodArgumentNotValidException ex, HttpServletRequest request) {
         List<String> errors = ex.getBindingResult()
@@ -124,7 +124,7 @@ public class GlobalExceptionHandler {
         return buildJson(HttpStatus.CONFLICT, "Data integrity violation", "Operation would violate data integrity constraints");
     }
 
-    // ========== Authentication exceptions (app-specific) ==========
+    // ========== Authentication exceptions ==========
     @ExceptionHandler(AuthenticationException.class)
     public Object handleAuthentication(AuthenticationException ex, HttpServletRequest request) {
         if (wantsHtml(request)) {
@@ -144,11 +144,11 @@ public class GlobalExceptionHandler {
             ModelAndView mav = new ModelAndView("error/error");
             mav.addObject("status", HttpStatus.UNAUTHORIZED.value());
             mav.addObject("error", "Authentication failed");
-            mav.addObject("message", "Invalid login or password");
+            mav.addObject("message", "Login ou Senha inválidos.");
             mav.addObject("path", request.getRequestURI());
             return mav;
         }
-        return buildJson(HttpStatus.UNAUTHORIZED, "Authentication failed", "Invalid login or password");
+        return buildJson(HttpStatus.UNAUTHORIZED, "Authentication failed", "Login ou Senha Inválida");
     }
 
     @ExceptionHandler(DisabledException.class)
@@ -157,25 +157,24 @@ public class GlobalExceptionHandler {
             ModelAndView mav = new ModelAndView("error/error");
             mav.addObject("status", HttpStatus.UNAUTHORIZED.value());
             mav.addObject("error", "Authentication failed");
-            mav.addObject("message", "User account is disabled");
+            mav.addObject("message", "Conta Desativada");
             mav.addObject("path", request.getRequestURI());
             return mav;
         }
-        return buildJson(HttpStatus.UNAUTHORIZED, "Authentication failed", "User account is disabled");
+        return buildJson(HttpStatus.UNAUTHORIZED, "Authentication failed", "Conta Desativada");
     }
 
-    // ========== Generic fallback ==========
+    // ========== GEENRIC ==========
     @ExceptionHandler(Exception.class)
     public Object handleGenericException(Exception ex, HttpServletRequest request) {
-        // Log the exception server-side if you want (not included here to keep file small)
         if (wantsHtml(request)) {
             ModelAndView mav = new ModelAndView("error/error");
             mav.addObject("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
-            mav.addObject("error", "An unexpected error occurred");
+            mav.addObject("error", "Erro Inesperado Aconteceu");
             mav.addObject("message", ex.getMessage());
             mav.addObject("path", request.getRequestURI());
             return mav;
         }
-        return buildJson(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", ex.getMessage());
+        return buildJson(HttpStatus.INTERNAL_SERVER_ERROR, "Erro Inesperado Aconteceu", ex.getMessage());
     }
 }

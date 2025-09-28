@@ -24,7 +24,6 @@ public class EnderecoUpdateForm {
 
     public EnderecoUpdateForm() {}
 
-    // constructor used in edit form
     public EnderecoUpdateForm(Integer numero, String estado, String codigoPais, String codigoPostal, String complemento, String rua) {
         this.numero = numero;
         this.estado = estado;
@@ -38,22 +37,51 @@ public class EnderecoUpdateForm {
         return new UpdateEnderecoDto(numero, estado, codigoPais, codigoPostal, complemento, rua);
     }
 
-    // getters / setters
-    public Integer getNumero() { return numero; }
-    public void setNumero(Integer numero) { this.numero = numero; }
+    public Integer getNumero() {
+        return numero;
+    }
 
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
+    public void setNumero(Integer numero) {
+        this.numero = numero;
+    }
 
-    public String getCodigoPais() { return codigoPais; }
-    public void setCodigoPais(String codigoPais) { this.codigoPais = codigoPais; }
+    public String getEstado() {
+        return estado;
+    }
 
-    public String getCodigoPostal() { return codigoPostal; }
-    public void setCodigoPostal(String codigoPostal) { this.codigoPostal = codigoPostal; }
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 
-    public String getComplemento() { return complemento; }
-    public void setComplemento(String complemento) { this.complemento = complemento; }
+    public String getCodigoPais() {
+        return codigoPais;
+    }
 
-    public String getRua() { return rua; }
-    public void setRua(String rua) { this.rua = rua; }
+    public void setCodigoPais(String codigoPais) {
+        this.codigoPais = codigoPais;
+    }
+
+    public String getCodigoPostal() {
+        return codigoPostal;
+    }
+
+    public void setCodigoPostal(String codigoPostal) {
+        this.codigoPostal = codigoPostal;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
+    }
+
+    public String getRua() {
+        return rua;
+    }
+
+    public void setRua(String rua) {
+        this.rua = rua;
+    }
 }

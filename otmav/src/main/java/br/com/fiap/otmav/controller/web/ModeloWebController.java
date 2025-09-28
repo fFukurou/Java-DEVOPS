@@ -106,8 +106,7 @@ public class ModeloWebController {
         return "redirect:/modelos";
     }
 
-    // --------- SHOW (VIEW) ----------
-    // GET /modelos/{id}
+    // SHOW
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
         ReadModeloDto rd = modeloService.findById(id);

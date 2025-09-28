@@ -34,7 +34,7 @@ public class WebAuthController {
     @Autowired
     private TokenBlacklistService blacklistService;
 
-    // show login form
+    // LOGIN FORM
     @GetMapping("/login")
     public String loginForm(@RequestParam(value = "redirectTo", required = false) String redirectTo, Model model) {
         model.addAttribute("loginDto", new LoginDto("", ""));
@@ -42,7 +42,7 @@ public class WebAuthController {
         return "auth/login";
     }
 
-    // process form login, call your service that returns token, set cookie and redirect
+
     @PostMapping("/login")
     public String loginProcess(@ModelAttribute("loginDto") @Valid LoginDto dto,
                                BindingResult binding,
@@ -54,7 +54,7 @@ public class WebAuthController {
             return "auth/login";
         }
 
-        // call service: it already returns ResponseEntity<TokenResponse>
+        // VERIFICA CREDENCIAIS
         try {
             var resp = funcionarioService.login(dto);
             if (!resp.getStatusCode().is2xxSuccessful() || resp.getBody() == null) {
@@ -62,53 +62,49 @@ public class WebAuthController {
                 return "redirect:/login";
             }
 
+            // TOKEN
             TokenResponse tokenResponse = resp.getBody();
             String token = tokenResponse.token();
 
-            // set cookie
+            // COOKIE
             Cookie cookie = new Cookie("OTMAV_TOKEN", token);
             cookie.setHttpOnly(true);
             cookie.setPath("/");
-            cookie.setMaxAge((int) Duration.ofHours(8).getSeconds()); // adjust TTL
-            // consider cookie.setSecure(true) in production with HTTPS
+            cookie.setMaxAge((int) Duration.ofHours(8).getSeconds());
+
             response.addCookie(cookie);
 
-            // 1) Prefer saved request (Spring Security RequestCache)
+            // REDIRECIONA PARA A URL ANTERIOR
             HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
             SavedRequest saved = requestCache.getRequest(request, response);
             if (saved != null) {
                 String targetUrl = saved.getRedirectUrl();
-                // Basic safety: don't redirect to external sites
                 if (isLocalUrl(targetUrl, request)) {
-                    // remove saved request so it won't persist
                     requestCache.removeRequest(request, response);
                     return "redirect:" + targetUrl;
                 }
             }
 
-            // 2) fallback to redirectTo param (if present & safe)
             if (redirectTo != null && !redirectTo.isBlank() && isLocalUrl(redirectTo, request)) {
                 return "redirect:" + redirectTo;
             }
 
-            // 3) final fallback
-            return "redirect:/filiais"; // or "/"
+            return "redirect:/filiais";
         } catch (Exception ex) {
             redirectAttrs.addFlashAttribute("error", "Erro ao autenticar: " + ex.getMessage());
             return "redirect:/login";
         }
     }
 
-    // Helper pra evitar redirecionamento para links externos (ataques)
+    // NAO REDIRECIONAR PARA LINKS EXTERNOS
     private boolean isLocalUrl(String url, HttpServletRequest request) {
         if (url == null || url.isBlank()) return false;
-        // Accept only relative (startsWith "/") or context-path-prefixed URLs
         if (url.startsWith("/")) return true;
         String ctx = request.getContextPath();
         return ctx != null && !ctx.isEmpty() && url.startsWith(ctx + "/");
     }
 
-    // web logout: blacklist cookie token and remove cookie
+    // REMOVE E BLACKLIST TOKEN & COOKIE
     @PostMapping("/logout-web")
     public String logoutWeb(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttrs) {
         String token = null;
@@ -117,7 +113,6 @@ public class WebAuthController {
             for (Cookie c : cookies) {
                 if ("OTMAV_TOKEN".equals(c.getName())) {
                     token = c.getValue();
-                    // clear cookie
                     Cookie clear = new Cookie("OTMAV_TOKEN", "");
                     clear.setPath("/");
                     clear.setMaxAge(0);
@@ -136,7 +131,6 @@ public class WebAuthController {
         return "redirect:/";
     }
 
-    // access denied page
     @GetMapping("/access-denied")
     public String accessDenied(Model model) {
         model.addAttribute("error", "Acesso negado: você não tem permissão para acessar este recurso.");

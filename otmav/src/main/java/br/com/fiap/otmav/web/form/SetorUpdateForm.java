@@ -40,7 +40,6 @@ public class SetorUpdateForm {
         return new UpdateSetorDto(qtdMoto, capacidade, nomeSetor, descricao, cor, patioId, regiaoId);
     }
 
-    // getters / setters
     public Integer getQtdMoto() { return qtdMoto; }
     public void setQtdMoto(Integer qtdMoto) { this.qtdMoto = qtdMoto; }
 

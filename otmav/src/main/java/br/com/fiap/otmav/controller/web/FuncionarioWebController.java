@@ -47,11 +47,11 @@ public class FuncionarioWebController {
         model.addAttribute("funcionariosPage", pageResult);
         model.addAttribute("cargo", cargo);
         model.addAttribute("filialId", filialId);
-        model.addAttribute("filiais", filialService.findAll()); // helper method on service expected, if not replace with repo call
+        model.addAttribute("filiais", filialService.findAll());
         return "funcionarios/list";
     }
 
-    // SHOW single funcionario
+    // SHOW  funcionario
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
         ReadFuncionarioDto rf = funcionarioService.findById(id);
@@ -59,7 +59,7 @@ public class FuncionarioWebController {
         return "funcionarios/show";
     }
 
-    // SHOW CREATE FORM (inline Dados)
+    // SHOW CREATE FORM
     @GetMapping("/new")
     public String newForm(Model model) {
         model.addAttribute("createForm", new FuncionarioCreateForm());
@@ -67,7 +67,7 @@ public class FuncionarioWebController {
         return "funcionarios/form";
     }
 
-    // HANDLE CREATE: create Dados then create Funcionario (one flow)
+    // HANDLE CREATE (DADOS + FUNCIONARIOS)
     @PostMapping
     public String create(
             @ModelAttribute("createForm") @Valid FuncionarioCreateForm form,
@@ -80,7 +80,6 @@ public class FuncionarioWebController {
             return "funcionarios/form";
         }
 
-        // Build CreateDadosDto for dadosService.create(...)
         CreateDadosDto createDados = new CreateDadosDto(
                 form.getCpf(),
                 form.getTelefone(),
@@ -89,10 +88,10 @@ public class FuncionarioWebController {
                 form.getNome()
         );
 
-        // create dados (dadosService will hash password and validate duplicates)
+
         var readDados = dadosService.create(createDados);
 
-        // call existing create flow: CreateFuncionarioDto expects cargo, dadosId, filialId
+        // CREATE FUNCIONARIO COM TODOS AS INFOS
         CreateFuncionarioDto createFuncionarioDto = new CreateFuncionarioDto(
                 form.getCargo(),
                 readDados.id(),
@@ -131,10 +130,9 @@ public class FuncionarioWebController {
             return "funcionarios/form";
         }
 
-        // Build Update DTO (you already have UpdateFuncionarioDto in domain)
         var dto = new br.com.fiap.otmav.domain.funcionario.UpdateFuncionarioDto(
                 form.getCargo(),
-                null, // not editing dados from this form
+                null,
                 form.getFilialId()
         );
 

@@ -36,9 +36,8 @@ public class MotoService {
 
     @Transactional
     public ReadMotoDto create(CreateMotoDto dto) {
-        // unique placa validation
         if (dto.placa() != null && motoRepository.existsByPlaca(dto.placa())) {
-            throw new DuplicateEntryException("Plate already in use: " + dto.placa());
+            throw new DuplicateEntryException("Placa ja em uso: " + dto.placa());
         }
 
         Moto m = new Moto();
@@ -49,32 +48,31 @@ public class MotoService {
 
         if (dto.motoristaId() != null) {
             var motorista = motoristaRepository.findById(dto.motoristaId())
-                    .orElseThrow(() -> new NotFoundException("Motorista not found with id: " + dto.motoristaId()));
+                    .orElseThrow(() -> new NotFoundException("Motorista nao encontrado com id: " + dto.motoristaId()));
             m.setMotorista(motorista);
         }
         if (dto.modeloId() != null) {
             var modelo = modeloRepository.findById(dto.modeloId())
-                    .orElseThrow(() -> new NotFoundException("Modelo not found with id: " + dto.modeloId()));
+                    .orElseThrow(() -> new NotFoundException("Modelo nao encontrado com id: " + dto.modeloId()));
             m.setModelo(modelo);
         }
         if (dto.setorId() != null) {
             var setor = setorRepository.findById(dto.setorId())
-                    .orElseThrow(() -> new NotFoundException("Setor not found with id: " + dto.setorId()));
-            // check capacity
+                    .orElseThrow(() -> new NotFoundException("Setor nao encontrado com id: " + dto.setorId()));
+
             if (setor.getQtdMoto() != null && setor.getCapacidade() != null && setor.getQtdMoto() >= setor.getCapacidade()) {
-                throw new IllegalStateException("Target setor is at capacity");
+                throw new IllegalStateException("Setor cheio");
             }
-            // increment count
+
             setor.setQtdMoto((setor.getQtdMoto() == null ? 0 : setor.getQtdMoto()) + 1);
             m.setSetor(setor);
         }
         if (dto.situacaoId() != null) {
             var situacao = situacaoRepository.findById(dto.situacaoId())
-                    .orElseThrow(() -> new NotFoundException("Situacao not found with id: " + dto.situacaoId()));
+                    .orElseThrow(() -> new NotFoundException("Situacao nao encontrada com id: " + dto.situacaoId()));
             m.setSituacao(situacao);
         }
 
-        // save both entities where needed (setor is managed if fetched; but save explicitly to be safe)
         if (m.getSetor() != null) setorRepository.save(m.getSetor());
 
         return new ReadMotoDto(motoRepository.save(m));
@@ -88,17 +86,17 @@ public class MotoService {
     public ReadMotoDto findById(Long id) {
         return motoRepository.findById(id)
                 .map(ReadMotoDto::new)
-                .orElseThrow(() -> new NotFoundException("Moto not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Moto nao encontrada com id: " + id));
     }
 
     @Transactional
     public ReadMotoDto update(Long id, UpdateMotoDto dto) {
         Moto m = motoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Moto not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Moto nao encontrada com id: " + id));
 
         if (dto.placa() != null) {
             if (motoRepository.existsByPlacaAndIdNot(dto.placa(), id)) {
-                throw new DuplicateEntryException("Plate already in use by another moto: " + dto.placa());
+                throw new DuplicateEntryException("Placa ja em uso por outra moto: " + dto.placa());
             }
             m.setPlaca(dto.placa());
         }
@@ -108,22 +106,21 @@ public class MotoService {
 
         if (dto.motoristaId() != null) {
             var motorista = motoristaRepository.findById(dto.motoristaId())
-                    .orElseThrow(() -> new NotFoundException("Motorista not found with id: " + dto.motoristaId()));
+                    .orElseThrow(() -> new NotFoundException("Motorista nao encontrado com id: " + dto.motoristaId()));
             m.setMotorista(motorista);
         }
         if (dto.modeloId() != null) {
             var modelo = modeloRepository.findById(dto.modeloId())
-                    .orElseThrow(() -> new NotFoundException("Modelo not found with id: " + dto.modeloId()));
+                    .orElseThrow(() -> new NotFoundException("Modelo nao encontrado com id: " + dto.modeloId()));
             m.setModelo(modelo);
         }
         if (dto.setorId() != null) {
             var setor = setorRepository.findById(dto.setorId())
-                    .orElseThrow(() -> new NotFoundException("Setor not found with id: " + dto.setorId()));
-            // capacity check
+                    .orElseThrow(() -> new NotFoundException("Setor nao encontrado com id: " + dto.setorId()));
+
             if (setor.getQtdMoto() != null && setor.getCapacidade() != null && setor.getQtdMoto() >= setor.getCapacidade()) {
-                throw new IllegalStateException("Target setor is at capacity");
+                throw new IllegalStateException("Setor cheio");
             }
-            // adjust counts: decrement old setor if present, increment new
             var oldSetor = m.getSetor();
             if (oldSetor != null) {
                 oldSetor.setQtdMoto(Math.max(0, (oldSetor.getQtdMoto() == null ? 0 : oldSetor.getQtdMoto()) - 1));
@@ -135,7 +132,7 @@ public class MotoService {
         }
         if (dto.situacaoId() != null) {
             var situacao = situacaoRepository.findById(dto.situacaoId())
-                    .orElseThrow(() -> new NotFoundException("Situacao not found with id: " + dto.situacaoId()));
+                    .orElseThrow(() -> new NotFoundException("Situacao nao encontrada com id: " + dto.situacaoId()));
             m.setSituacao(situacao);
         }
 
@@ -145,40 +142,36 @@ public class MotoService {
     @Transactional
     public void delete(Long id) {
         if (!motoRepository.existsById(id)) {
-            throw new NotFoundException("Moto not found with id: " + id);
+            throw new NotFoundException("Moto nao encontrada com id: " + id);
         }
         motoRepository.deleteById(id);
     }
 
-    // --------------------
-    // New flow: transfer moto to another setor
-    // --------------------
+
     @Transactional
     public ReadMotoDto transferToSetor(Long motoId, TransferSetorDto dto) {
         Moto moto = motoRepository.findById(motoId)
-                .orElseThrow(() -> new NotFoundException("Moto not found with id: " + motoId));
+                .orElseThrow(() -> new NotFoundException("Moto nao encontrada com id: " + motoId));
 
         Setor target = setorRepository.findById(dto.setorId())
-                .orElseThrow(() -> new NotFoundException("Target setor not found with id: " + dto.setorId()));
+                .orElseThrow(() -> new NotFoundException("Setor nao encontrado com id: " + dto.setorId()));
 
         if (moto.getSetor() != null && moto.getSetor().getId().equals(target.getId())) {
-            throw new IllegalArgumentException("Moto is already in the target setor");
+            throw new IllegalArgumentException("Moto já est[a nesse setor");
         }
 
         Integer targetQtd = target.getQtdMoto() == null ? 0 : target.getQtdMoto();
         Integer targetCap = target.getCapacidade() == null ? 0 : target.getCapacidade();
         if (targetCap > 0 && targetQtd >= targetCap) {
-            throw new IllegalStateException("Target setor is at capacity");
+            throw new IllegalStateException("Setor cheio");
         }
 
-        // decrement old setor count
         var oldSetor = moto.getSetor();
         if (oldSetor != null) {
             oldSetor.setQtdMoto(Math.max(0, (oldSetor.getQtdMoto() == null ? 0 : oldSetor.getQtdMoto()) - 1));
             setorRepository.save(oldSetor);
         }
 
-        // increment target count and assign
         target.setQtdMoto(targetQtd + 1);
         setorRepository.save(target);
 
@@ -186,16 +179,14 @@ public class MotoService {
         return new ReadMotoDto(motoRepository.save(moto));
     }
 
-    // --------------------
-    // New flow: assign driver to moto
-    // --------------------
+
     @Transactional
     public ReadMotoDto assignDriver(Long motoId, AssignMotoristaDto dto) {
         Moto moto = motoRepository.findById(motoId)
-                .orElseThrow(() -> new NotFoundException("Moto not found with id: " + motoId));
+                .orElseThrow(() -> new NotFoundException("Moto nao encontrada com id : " + motoId));
 
         var motorista = motoristaRepository.findById(dto.motoristaId())
-                .orElseThrow(() -> new NotFoundException("Motorista not found with id: " + dto.motoristaId()));
+                .orElseThrow(() -> new NotFoundException("Motorista nao encontrado com id: " + dto.motoristaId()));
 
         moto.setMotorista(motorista);
         return new ReadMotoDto(motoRepository.save(moto));

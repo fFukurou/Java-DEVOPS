@@ -60,10 +60,8 @@ public class SetorWebController {
         model.addAttribute("patioId", patioId);
         model.addAttribute("regiaoId", regiaoId);
 
-        // patios (entities are fine: templates will show patio.id + maybe filial inside)
         model.addAttribute("patios", patioRepository.findAll());
 
-        // convert regioes to DTOs for using .localizacao / .area in template
         List<ReadRegiaoDto> regioes = regiaoRepository.findAll().stream().map(ReadRegiaoDto::new).collect(Collectors.toList());
         model.addAttribute("regioes", regioes);
 
@@ -147,6 +145,7 @@ public class SetorWebController {
         return "redirect:/setores";
     }
 
+    // SHOW
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
         ReadSetorDto rd = setorService.findById(id);

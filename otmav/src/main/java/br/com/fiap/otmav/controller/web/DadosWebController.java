@@ -110,7 +110,7 @@ public class DadosWebController {
         return "redirect:/dados";
     }
 
-    // SHOW (view single Dados)
+    // SHOW
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
         ReadDadosDto rd = dadosService.findById(id);

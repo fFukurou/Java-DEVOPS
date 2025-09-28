@@ -20,13 +20,14 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/patios")
-@Tag(name = "Patios", description = "CRUD for patios")
+@Tag(name = "Patios", description = "CRUD para PATIOS")
 public class PatioController {
 
     @Autowired
     private PatioService patioService;
 
-    @Operation(summary = "Create patio")
+    // CREATE
+    @Operation(summary = "CREATE PATIO")
     @PostMapping
     public ResponseEntity<ReadPatioDto> create(@RequestBody @Valid CreatePatioDto dto, UriComponentsBuilder uriBuilder) {
         ReadPatioDto created = patioService.create(dto);
@@ -34,31 +35,34 @@ public class PatioController {
         return ResponseEntity.created(uri).body(created);
     }
 
-    @Operation(summary = "List patios (paginated filters)")
+    // GET
+    @Operation(summary = "Listar Patios")
     @ApiResponse(responseCode = "200", description = "List returned")
     @GetMapping
     public ResponseEntity<Page<ReadPatioDto>> findAll(
-            @Parameter(description = "Total motos (exact)") @RequestParam(required = false) Integer totalMotos,
-            @Parameter(description = "Capacidade moto (exact)") @RequestParam(required = false) Integer capacidadeMoto,
-            @Parameter(description = "Filial id (optional)") @RequestParam(required = false) Long filialId,
-            @Parameter(description = "Regiao id (optional)") @RequestParam(required = false) Long regiaoId,
+            @Parameter(description = "Total motos (exato)") @RequestParam(required = false) Integer totalMotos,
+            @Parameter(description = "Capacidade moto (exato)") @RequestParam(required = false) Integer capacidadeMoto,
+            @Parameter(description = "Filial id (opcional)") @RequestParam(required = false) Long filialId,
+            @Parameter(description = "Regiao id (opcional)") @RequestParam(required = false) Long regiaoId,
             @Parameter(hidden = true) @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
         return ResponseEntity.ok(patioService.findAllFiltered(totalMotos, capacidadeMoto, filialId, regiaoId, pageable));
     }
-
+    // GET BY ID
     @Operation(summary = "Get patio by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ReadPatioDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(patioService.findById(id));
     }
 
+    //  UPDATE
     @Operation(summary = "Update patio")
     @PutMapping("/{id}")
     public ResponseEntity<ReadPatioDto> update(@PathVariable Long id, @RequestBody @Valid UpdatePatioDto dto) {
         return ResponseEntity.ok(patioService.update(id, dto));
     }
 
+    // DELETE
     @Operation(summary = "Delete patio")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

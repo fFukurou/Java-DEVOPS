@@ -7,7 +7,7 @@
 <div class="container">
     <h2 th:text="${funcionarioId != null} ? 'Editar Funcionário' : 'Novo Funcionário'"></h2>
 
-    <!-- CREATE form -->
+    <!-- CREATE -->
     <form th:if="${funcionarioId == null}"
           th:action="@{/funcionarios}"
           th:object="${createForm}"
@@ -65,7 +65,7 @@
         </div>
     </form>
 
-    <!-- EDIT form -->
+    <!-- EDIT -->
     <form th:if="${funcionarioId != null}"
           th:action="@{|/funcionarios/${funcionarioId}|}"
           th:object="${updateForm}"

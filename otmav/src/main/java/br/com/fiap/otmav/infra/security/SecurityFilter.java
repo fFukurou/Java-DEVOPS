@@ -41,12 +41,12 @@ public class SecurityFilter extends OncePerRequestFilter {
         try {
             var token = recoverToken(request);
             if (token != null) {
-                // check blacklist first
+
                 if (tokenBlacklistService.isBlacklisted(token)) {
                     logger.debug("Rejected request with blacklisted token for {}", request.getRequestURI());
-                    // Do not set authentication; let security handle unauthenticated requests
+
                 } else {
-                    var email = tokenService.validateToken(token); // returns subject/email or null
+                    var email = tokenService.validateToken(token);
                     if (email != null) {
                         var userOpt = funcionarioRepository.findByDadosEmailFetchDados(email);
                         if (userOpt.isPresent()) {

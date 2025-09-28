@@ -34,7 +34,7 @@ public class FuncionarioService {
     private final FilialRepository filialRepository;
 
     @Autowired
-    private final DadosService dadosService; // re-use to create Dados with hashed password
+    private final DadosService dadosService;
 
     @Autowired
     private final AuthenticationManager authenticationManager;
@@ -42,28 +42,25 @@ public class FuncionarioService {
     @Autowired
     private final TokenService tokenService;
 
-    // Register: create Dados (hashing done in DadosService.create) and create Funcionario linking it
     @Transactional
     public ReadFuncionarioDto register(RegisterFuncionarioDto dto) {
-        // create Dados (this will validate duplicates and hash password)
+
         var createDadosDto = dto.dados();
         var readDados = dadosService.create(createDadosDto);
 
-        // fetch the created Dados entity to link it
         Dados dadosEntity = dadosRepository.findById(readDados.id())
-                .orElseThrow(() -> new IllegalStateException("Dados created but not found with id: " + readDados.id()));
+                .orElseThrow(() -> new IllegalStateException("Dados criados porem nao encontrados com id: " + readDados.id()));
 
         Filial filial = null;
         if (dto.filialId() != null) {
             filial = filialRepository.findById(dto.filialId())
-                    .orElseThrow(() -> new NotFoundException("Filial not found with id: " + dto.filialId()));
+                    .orElseThrow(() -> new NotFoundException("Filial nao encontrada com id: " + dto.filialId()));
         }
 
-        // ensure Dados isn't linked to another funcionario (defensive)
         boolean exists = funcionarioRepository.findAll().stream()
                 .anyMatch(f -> f.getDados() != null && f.getDados().getId().equals(dadosEntity.getId()));
         if (exists) {
-            throw new DuplicateEntryException("Dados already linked to another Funcionario");
+            throw new DuplicateEntryException("Dados ja relacionados com outro funcionario");
         }
 
         Funcionario func = new Funcionario();
@@ -75,23 +72,22 @@ public class FuncionarioService {
         return new ReadFuncionarioDto(saved);
     }
 
-    // CREATE (if you still want the separate endpoint)
+    // CREATE
     @Transactional
     public ReadFuncionarioDto create(CreateFuncionarioDto dto) {
         Dados dados = dadosRepository.findById(dto.dadosId())
-                .orElseThrow(() -> new NotFoundException("Dados not found with id: " + dto.dadosId()));
+                .orElseThrow(() -> new NotFoundException("Dados nao encontrado com id: " + dto.dadosId()));
 
-        // Ensure dados isn't already linked to another funcionario (optional)
         boolean exists = funcionarioRepository.findAll().stream()
                 .anyMatch(f -> f.getDados() != null && f.getDados().getId().equals(dto.dadosId()));
         if (exists) {
-            throw new DuplicateEntryException("Dados already linked to another Funcionario");
+            throw new DuplicateEntryException("Dados ja relacionados com outro funcionario");
         }
 
         Filial filial = null;
         if (dto.filialId() != null) {
             filial = filialRepository.findById(dto.filialId())
-                    .orElseThrow(() -> new NotFoundException("Filial not found with id: " + dto.filialId()));
+                    .orElseThrow(() -> new NotFoundException("Filia nao encontrada com id: " + dto.filialId()));
         }
 
         Funcionario func = new Funcionario();
@@ -118,26 +114,26 @@ public class FuncionarioService {
     public ReadFuncionarioDto findById(Long id) {
         return funcionarioRepository.findById(id)
                 .map(ReadFuncionarioDto::new)
-                .orElseThrow(() -> new NotFoundException("Funcionario not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Funcionario nao encontrado com id: " + id));
     }
 
     // UPDATE
     @Transactional
     public ReadFuncionarioDto update(Long id, UpdateFuncionarioDto dto) {
         Funcionario func = funcionarioRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Funcionario not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("Funcionario nao encontrado com id: " + id));
 
         if (dto.cargo() != null) func.setCargo(dto.cargo());
 
         if (dto.dadosId() != null) {
             Dados dados = dadosRepository.findById(dto.dadosId())
-                    .orElseThrow(() -> new NotFoundException("Dados not found with id: " + dto.dadosId()));
+                    .orElseThrow(() -> new NotFoundException("Dados nao encontrados com id: " + dto.dadosId()));
             func.setDados(dados);
         }
 
         if (dto.filialId() != null) {
             Filial filial = filialRepository.findById(dto.filialId())
-                    .orElseThrow(() -> new NotFoundException("Filial not found with id: " + dto.filialId()));
+                    .orElseThrow(() -> new NotFoundException("Filial nao encontrada com id: " + dto.filialId()));
             func.setFilial(filial);
         }
 
@@ -154,7 +150,7 @@ public class FuncionarioService {
         funcionarioRepository.deleteById(id);
     }
 
-    // LOGIN -> returns TokenResponse
+    // LOGIN
     public ResponseEntity<TokenResponse> login(LoginDto request) {
         try {
             var authToken = new UsernamePasswordAuthenticationToken(request.email(), request.password());
@@ -168,12 +164,12 @@ public class FuncionarioService {
             } else {
                 var email = request.email();
                 var funcionario = funcionarioRepository.findByDadosEmail(email)
-                        .orElseThrow(() -> new NotFoundException("Funcionario not found for email: " + email));
+                        .orElseThrow(() -> new NotFoundException("Funcionario nao encontrado com o email: " + email));
                 var token = tokenService.generateToken(funcionario);
                 return ResponseEntity.ok(new TokenResponse(token));
             }
         } catch (org.springframework.security.core.AuthenticationException e) {
-            throw new br.com.fiap.otmav.exception.AuthenticationException("Invalid email or password");
+            throw new br.com.fiap.otmav.exception.AuthenticationException("Email ou Senha Invalidos");
         }
     }
 }

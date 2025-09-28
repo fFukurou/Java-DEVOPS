@@ -34,11 +34,10 @@ public class TokenBlacklistService {
             }
 
             TokenBlacklist entry = new TokenBlacklist(token, expiresAt == null ? Instant.now().plusSeconds(3600) : expiresAt);
-            repository.saveAndFlush(entry); // force immediate INSERT
+            repository.saveAndFlush(entry);
             logger.info("Blacklisted token (truncated) {} exp={}", token.substring(0, Math.min(token.length(), 32)), entry.getExpiresAt());
         } catch (Exception e) {
             logger.error("Failed to persist token blacklist entry", e);
-            // don't rethrow - logout should not break the API flow
         }
     }
 
@@ -52,5 +51,4 @@ public class TokenBlacklistService {
         }
     }
 
-    // ... optional cleanupExpired method remains ...
 }

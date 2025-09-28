@@ -20,13 +20,14 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/motoristas")
-@Tag(name = "Motoristas", description = "CRUD for drivers and plans")
+@Tag(name = "Motoristas", description = "CRUD para Motoristas")
 public class MotoristaController {
 
     @Autowired
     private MotoristaService motoristaService;
 
-    @Operation(summary = "Create motorista")
+    // CREATE
+    @Operation(summary = "CREATE MOTORISTA")
     @PostMapping
     public ResponseEntity<ReadMotoristaDto> create(@RequestBody @Valid CreateMotoristaDto dto, UriComponentsBuilder uriBuilder) {
         ReadMotoristaDto created = motoristaService.create(dto);
@@ -34,29 +35,33 @@ public class MotoristaController {
         return ResponseEntity.created(uri).body(created);
     }
 
-    @Operation(summary = "List motoristas")
+    // GET
+    @Operation(summary = "Listar Motoristas")
     @ApiResponse(responseCode = "200", description = "List returned")
     @GetMapping
     public ResponseEntity<Page<ReadMotoristaDto>> findAll(
-            @Parameter(description = "Plano (optional)", example = "MottuConquiste") @RequestParam(required = false) MotoristaPlano plano,
-            @Parameter(description = "Dados ID (optional)", example = "1") @RequestParam(required = false) Long dadosId,
+            @Parameter(description = "Plano (opcional)", example = "MottuConquiste") @RequestParam(required = false) MotoristaPlano plano,
+            @Parameter(description = "Dados ID (opcional)", example = "1") @RequestParam(required = false) Long dadosId,
             @Parameter(hidden = true) @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
         return ResponseEntity.ok(motoristaService.findAllFiltered(plano, dadosId, pageable));
     }
 
-    @Operation(summary = "Get motorista by ID")
+    // GET BY ID
+    @Operation(summary = "Get MOTORISTA by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ReadMotoristaDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(motoristaService.findById(id));
     }
 
+    // UPDATE
     @Operation(summary = "Update motorista")
     @PutMapping("/{id}")
     public ResponseEntity<ReadMotoristaDto> update(@PathVariable Long id, @RequestBody @Valid UpdateMotoristaDto dto) {
         return ResponseEntity.ok(motoristaService.update(id, dto));
     }
 
+    // DELETE
     @Operation(summary = "Delete motorista")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

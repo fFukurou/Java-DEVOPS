@@ -107,7 +107,7 @@ public class RegiaoWebController {
         return "redirect:/regioes";
     }
 
-    // SHOW single Regiao
+    // SHOW Regiao
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
         ReadRegiaoDto r = regiaoService.findById(id);

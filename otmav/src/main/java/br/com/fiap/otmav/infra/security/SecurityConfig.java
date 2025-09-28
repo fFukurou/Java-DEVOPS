@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,7 +13,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * CONTROLE DE SEGURANÇA
+ *
+ * - ENDPOINTS DE API --> /api/
+ * - MVC -> /
+ */
 
 @Configuration
 @EnableWebSecurity
@@ -27,91 +34,113 @@ public class SecurityConfig {
                           CookieBlacklistLogoutHandler cookieLogoutHandler) {
         this.securityFilter = securityFilter;
         this.cookieLogoutHandler = cookieLogoutHandler;
-
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-                .authorizeHttpRequests(authorize -> authorize
 
-//                        // static and swagger
-//                        .requestMatchers("/swagger-ui.html/**").permitAll()
-//                        .requestMatchers("/swagger-ui/**").permitAll()
-//                        .requestMatchers("/error/**").permitAll()
-//                        .requestMatchers("/error").permitAll()
-//                        .requestMatchers("/v3/api-docs/**").permitAll()
-//                        .requestMatchers("/webjars/**", "/images/**").permitAll()
-//                        .requestMatchers("/", "/index", "/css/**", "/js/**", "/static/**", "/favicon.ico").permitAll()
-//
-//                        // protect mutating actions (API + MVC forms)
-//                        .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
-//                        .requestMatchers(HttpMethod.POST, "/api/filiais/**").hasRole("ADMIN")
-//                        .requestMatchers(HttpMethod.DELETE, "/filiais/**").hasRole("ADMIN")
-//                        .requestMatchers(HttpMethod.POST, "/filiais/**").hasRole("ADMIN")
-//
-//                        // admin-only reads if needed
-//                        .requestMatchers(HttpMethod.GET, "/api/regioes/**").hasRole("ADMIN")
-//
-//                        // other authenticated API actions
-//                        .requestMatchers(HttpMethod.PUT, "/api/filiais/**").authenticated()
-//                        .requestMatchers(HttpMethod.PUT, "/api/dados/**").authenticated()
-//                        .requestMatchers(HttpMethod.POST, "/api/auth/logout").authenticated()
-//
-//                        // public API endpoints
-//                        .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register", "/login", "/logout").permitAll()
-//                        .requestMatchers(HttpMethod.GET,"/login", "/logout", "/access-denied", "access-denied").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/api/funcionarios").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/api/dados/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/api/filiais/**").permitAll()
-//
-//                        // Filiais pages: allow viewing but require auth for create/edit/delete routes
-//                        .requestMatchers(HttpMethod.GET, "/motoristas/**").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/motoristas/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/filiais/**").permitAll()
-//                        .requestMatchers("/dados/**").hasRole("ADMIN")
-//                        .requestMatchers(HttpMethod.DELETE, "/enderecos/**").hasRole("ADMIN")
-//                        .requestMatchers(HttpMethod.DELETE, "/api/enderecos/**").hasRole("ADMIN")
-//                        .requestMatchers("/enderecos/**").authenticated()
+                .authorizeHttpRequests(auth -> auth
 
-                        .anyRequest().permitAll()
+                        // --------------------------
+                        // RECURSOS PUBLICOS / STATICS
+                        // --------------------------
+                        .requestMatchers("/", "/index", "/home").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
+                        .requestMatchers("/swagger-ui.html/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/error", "/error/**").permitAll()
+
+                        // --------------------------
+                        // AUTH
+                        // --------------------------
+                        .requestMatchers("/login", "/login/**", "/logout", "/access-denied").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+
+                        // --------------------------
+                        // API
+                        // --------------------------
+                        // PUBLICO
+                        .requestMatchers(HttpMethod.GET, "/api/filiais/**", "/api/modelos/**", "/api/situacoes/**", "/api/motos", "/api/motos/*").permitAll()
+
+                        // AUTHENTICADO
+                        .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/filiais/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/filiais/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/dados/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/motoristas").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/funcionarios").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/motos/*/transfer", "/api/motos/*/assign-driver").authenticated()
+
+                        // --------------------------
+                        // WEB MVC
+                        // --------------------------
+
+                        // NAVEGACAO PUBLICA
+                        .requestMatchers(HttpMethod.GET, "/motos", "/motos/*", "/motoristas", "/motoristas/*", "/filiais", "/filiais/*", "/situacoes", "/situacoes/*").permitAll()
+
+                        // GERENCIAMENTO DE MOTOS --> AUTHENTICADO
+                        .requestMatchers(HttpMethod.GET, "/motos/manage").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/motos/manage/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/motos/manage/**").authenticated()
+
+                        // ADMIN ONLY --> RECURSOS ESSENCIAIS
+                        .requestMatchers(HttpMethod.GET, "/dados").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/motos/*/delete").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/filiais/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/enderecos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/funcionarios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/motoristas/*/delete").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/motoristas/**").hasRole("ADMIN")
+
+                        .requestMatchers("/motoristas/new", "/motoristas").permitAll()
+
+                        .anyRequest().authenticated()
                 )
+
+                // REQUISIÇÕES WEB MANDARÃO O USUÁRIO PARA UM REDIRECT DE LOGIN;
+                // REQUISIÇÕES DIRETAMENTE NA API RETORNARÃO 401 UNAUTHORIZED;
+                // EXCEPTION DE AUTENTICAÇÃO
                 .exceptionHandling(ex -> ex
-                        // redirect browser requests to login page
                         .authenticationEntryPoint((req, res, authEx) -> {
                             String accept = req.getHeader("Accept");
                             if (accept != null && accept.contains("text/html")) {
-                                // append redirectTo so user returns after login
                                 String redirectTo = req.getRequestURI();
                                 res.sendRedirect("/login?redirectTo=" + java.net.URLEncoder.encode(redirectTo, java.nio.charset.StandardCharsets.UTF_8));
                             } else {
                                 res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                             }
                         })
-//                        SE FOR WEB, ACCESS DENIED SERÁ UM REDIRECT; SE FOR JSON, SERÁ UM 403;
                         .accessDeniedHandler(new CustomAccessDeniedHandler())
                 )
+
+                // ADICIONANDO O FILTRO DE SEGURANÇA ANTES DAS REQUISIÇOES
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-                // we keep formLogin so Spring knows login page; but we actually use our WebAuthController
+
+                // PASSANDO 'EMAIL' COMO 'USERNAME' PRO SECURITY COOPERAR ;)
                 .formLogin(login -> login
-                        .loginPage("/login")// your login GET page
+                        .loginPage("/login")
                         .permitAll()
-                        .loginProcessingUrl("/permit_login")       // form POST target
-                        .usernameParameter("email")         // <input name="email">
+                        .loginProcessingUrl("/permit_login")
+                        .usernameParameter("email")
                         .passwordParameter("password")
                         .defaultSuccessUrl("/", false)
                         .failureUrl("/login?error")
                 )
+
+                // LOGOUT VAI INVALIDAR A SESSÃO E MATAR OS COOKIES
+                // A /API VAI ADICIONAR O TOKEN À UMA BLACKLIST
                 .logout(logout -> logout
-                        .logoutUrl("/logout-web")            // match the form action
-                        .addLogoutHandler(cookieLogoutHandler)     // <- register it here
-                        .logoutSuccessUrl("/?logout")        // where to go after logout
+                        .logoutUrl("/logout-web")
+                        .addLogoutHandler(cookieLogoutHandler)
+                        .logoutSuccessUrl("/?logout")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                 );
-
         return http.build();
     }
 
@@ -120,6 +149,7 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
+    // CRIPTOGRAFAR A SENHA, CLARO
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
