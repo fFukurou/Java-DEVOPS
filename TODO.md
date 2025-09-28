@@ -1,2 +1,1 @@
-- Gravar e Editar Vídeo
-- Atualizar README (endpoints, DB Connection...)
+-- DONE --

@@ -8,6 +8,7 @@
 4. Optional: se quiser rodar o projeto no seu próprio banco de dados Oracle, trocar as credenciais em 'application.properties' (linhas 5 e 6; o Flywya criará as migrations na sua DB).
 5. Rodar o arquivo 'OtmavApplication' no root do projeto.
 6. Abrir 'http://localhost:8080' para ser dirigido à Home do projeto.
+   6.5 (Optional) : Link Swagger (OpenAPI): http://localhost:8080/swagger-ui/index.html
 7. O Flyway rodará as migrations automataicamente, e criará um usuário "teste" normal e um usuário "Admin" com permissões extras.
 8. a -- email: teste@gmail.com | senha: teste
 
@@ -32,19 +33,3 @@ Se ao executar o projeto, o IntelliJ cuspir o erro "java: cannot find symbol", v
 Os Três cavaleiros do Apocalipse tem como objetivo auxiliar a empresa Mottu no problema de mapeamento das motos em seus pátios, principalmente poder separará-las por setores personalizados dentro do próprio pátio.
 
 ---
-
-# Parte DevOps
-
-## Modo de Execução
-
-- Abrir o terminal
-- Clonar o Repositorio - "git clone https://github.com/Os-Tres-Motoqueiros-do-Apocalipse-Verde/Java-Advanced.git"
-- Abrir o projeto - "cd Java-Advanced"
-- Logar na Azure - "az login"
-- rodar o .sh - "./criar_otmav.sh"
-
-## Integrantes
-
-- Vicenzo Massao - 554833
-- Luiz Heimberg - 556864
-- Erick Alves - 556862
