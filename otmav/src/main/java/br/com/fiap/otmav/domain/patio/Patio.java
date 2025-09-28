@@ -39,6 +39,6 @@ public class Patio {
     @JoinColumn(name = "id_regiao", referencedColumnName = "id_regiao")
     private Regiao regiao;
 
-    @OneToMany(mappedBy = "patio", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "patio")
     private List<Setor> setores;
 }

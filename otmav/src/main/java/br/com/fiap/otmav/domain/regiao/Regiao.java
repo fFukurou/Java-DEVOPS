@@ -32,9 +32,9 @@ public class Regiao {
     @Column(name = "area", nullable = false)
     private Double area;
 
-    @OneToMany(mappedBy = "regiao", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "regiao")
     private List<Patio> patios;
 
-    @OneToMany(mappedBy = "regiao", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "regiao")
     private List<Setor> setores;
 }

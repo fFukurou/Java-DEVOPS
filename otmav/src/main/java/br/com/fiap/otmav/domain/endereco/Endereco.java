@@ -51,6 +51,6 @@ public class Endereco {
     @Column(name = "rua", length = 100, nullable = false)
     private String rua;
 
-    @OneToMany(mappedBy = "endereco", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "endereco")
     private List<Filial> filiais;
 }

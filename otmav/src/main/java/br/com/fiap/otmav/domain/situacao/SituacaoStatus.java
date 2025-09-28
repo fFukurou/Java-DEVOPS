@@ -6,5 +6,6 @@ public enum SituacaoStatus {
     MANUTENCAO,
     PENDENTE,
     SUSPENSO,
-    CANCELADO
+    CANCELADO,
+    FINALIZADO
 }

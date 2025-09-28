@@ -56,6 +56,6 @@ public class Setor {
     @JoinColumn(name = "id_regiao", referencedColumnName = "id_regiao")
     private Regiao regiao;
 
-    @OneToMany(mappedBy = "setor", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "setor")
     private List<Moto> motos;
 }

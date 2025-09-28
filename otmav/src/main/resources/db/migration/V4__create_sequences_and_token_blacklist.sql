@@ -1,8 +1,6 @@
--- V3__create_sequences_and_tokenblacklist.sql
--- Defensive migration: creates sequences if missing, creates token_blacklist table if missing,
--- and only sets DEFAULT ... NEXTVAL when the column is NOT an IDENTITY column.
+-- V4__create_sequences_and_token_blacklist
 
--- 1) create sequences if not exist
+-- 1) CREATE SEQUENCES
 DECLARE
     v_count NUMBER;
 BEGIN
@@ -61,7 +59,7 @@ BEGIN
         EXECUTE IMMEDIATE 'CREATE SEQUENCE SITUACAO_SEQ START WITH 1000 INCREMENT BY 1 NOCACHE';
     END IF;
 
-    -- token blacklist seq
+
     SELECT COUNT(*) INTO v_count FROM user_sequences WHERE sequence_name = 'SEQ_TOKEN_BLACKLIST';
     IF v_count = 0 THEN
         EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_TOKEN_BLACKLIST START WITH 1 INCREMENT BY 1 NOCACHE';
@@ -69,10 +67,11 @@ BEGIN
 
 EXCEPTION
     WHEN OTHERS THEN
-        NULL; -- ignore
+        NULL;
 END;
 /
--- 2) create token_blacklist table (if missing) and attach default using seq only if column is not identity
+
+
 DECLARE
     v_count NUMBER;
 BEGIN
@@ -85,7 +84,7 @@ BEGIN
                 expires_at  TIMESTAMP WITH TIME ZONE NOT NULL
             )
         }';
-        -- if id_token is not identity, set default
+
         BEGIN
             SELECT COUNT(*) INTO v_count
             FROM user_tab_cols
@@ -101,7 +100,7 @@ BEGIN
 EXCEPTION WHEN OTHERS THEN NULL;
 END;
 /
--- 3) For each existing table, set DEFAULT seq NEXTVAL if the id column is NOT an identity column
+-- 2) NEXVALS
 DECLARE
     v_is_identity NUMBER;
 BEGIN

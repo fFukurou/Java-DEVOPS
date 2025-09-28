@@ -1,5 +1,5 @@
--- Core tables: dados, endereco, modelo, situacao, regiao, filial, funcionario, motorista
-
+-- V2__create_core_tables.sql
+-- Tabelas: dados, endereco, modelo, situacao, regiao, filial, funcionario, motorista
 
 CREATE TABLE dados (
     id_dados NUMBER(15) PRIMARY KEY,
@@ -44,33 +44,32 @@ CREATE TABLE regiao (
 );
 
 CREATE TABLE filial (
-    id_filial            NUMBER(17) PRIMARY KEY,
-    nome_filial          VARCHAR2(150),
-    id_endereco          NUMBER(20)
+    id_filial   NUMBER(17) PRIMARY KEY,
+    nome_filial VARCHAR2(150),
+    id_endereco NUMBER(20),
+    CONSTRAINT fk_filial_endereco FOREIGN KEY (id_endereco)
+        REFERENCES endereco(id_endereco)
+        ON DELETE SET NULL
 );
-
-ALTER TABLE filial
-ADD CONSTRAINT fk_filial_endereco FOREIGN KEY (id_endereco) REFERENCES endereco(id_endereco);
 
 CREATE TABLE funcionario (
-    id_func      NUMBER(17) PRIMARY KEY,
-    cargo        VARCHAR2(100) NOT NULL,
-    id_dados     NUMBER(15),
-    id_filial    NUMBER(17)
+    id_func   NUMBER(17) PRIMARY KEY,
+    cargo     VARCHAR2(100) NOT NULL,
+    id_dados  NUMBER(15) NOT NULL,
+    id_filial NUMBER(17),
+    CONSTRAINT fk_func_dados FOREIGN KEY (id_dados)
+        REFERENCES dados(id_dados),
+    CONSTRAINT fk_func_filial FOREIGN KEY (id_filial)
+        REFERENCES filial(id_filial)
+        ON DELETE SET NULL
 );
-
-ALTER TABLE funcionario
-ADD CONSTRAINT fk_func_dados FOREIGN KEY (id_dados) REFERENCES dados(id_dados);
-
-ALTER TABLE funcionario
-ADD CONSTRAINT fk_func_filial FOREIGN KEY (id_filial) REFERENCES filial(id_filial);
-
 
 CREATE TABLE motorista (
     id_motorista NUMBER(15) PRIMARY KEY,
     plano        VARCHAR2(40) NOT NULL,
-    id_dados     NUMBER(15)
+    id_dados     NUMBER(15) NOT NULL,
+    CONSTRAINT fk_motorista_dados FOREIGN KEY (id_dados)
+        REFERENCES dados(id_dados)
 );
 
-ALTER TABLE motorista
-ADD CONSTRAINT fk_motorista_dados FOREIGN KEY (id_dados) REFERENCES dados(id_dados);
+COMMIT;

@@ -33,6 +33,6 @@ public class Motorista {
     @JoinColumn(name = "id_dados", referencedColumnName = "id_dados", nullable = false)
     private Dados dados;
 
-    @OneToMany(mappedBy = "motorista", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "motorista")
     private List<Moto> motos;
 }

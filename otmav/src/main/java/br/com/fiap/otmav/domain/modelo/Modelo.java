@@ -49,6 +49,6 @@ public class Modelo {
     @Column(name = "consumo")
     private Integer consumo;
 
-    @OneToMany(mappedBy = "modelo", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "modelo")
     private List<Moto> motos;
 }

@@ -36,7 +36,6 @@ public class Moto {
     @Column(name = "condicao", length = 255, nullable = false)
     private String condicao;
 
-    // mapped as text WKT — column name kept as localizacao_moto in DB
     @Column(name = "localizacao_moto", length = 4000, nullable = false)
     private String localizacaoWkt;
 

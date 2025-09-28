@@ -33,10 +33,10 @@ public class Filial {
     @JoinColumn(name = "id_endereco", referencedColumnName = "id_endereco")
     private Endereco endereco;
 
-    @OneToMany(mappedBy = "filial", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "filial")
     private List<Patio> patios;
 
-    @OneToMany(mappedBy = "filial", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "filial")
     private List<Funcionario> funcionarios;
 
 

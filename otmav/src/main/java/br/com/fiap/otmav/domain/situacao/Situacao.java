@@ -35,6 +35,6 @@ public class Situacao {
     @Column(name = "status", length = 50, nullable = false)
     private SituacaoStatus status;
 
-    @OneToMany(mappedBy = "situacao", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "situacao")
     private List<Moto> motos;
 }
