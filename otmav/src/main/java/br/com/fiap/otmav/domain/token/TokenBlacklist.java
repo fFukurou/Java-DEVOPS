@@ -22,7 +22,6 @@ public class TokenBlacklist {
     @Column(name = "token", length = 2000, nullable = false, unique = true)
     private String token;
 
-    // store expiration to allow cleanup of old rows
     @Column(name = "expires_at", nullable = false)
     private Instant expiresAt;
 

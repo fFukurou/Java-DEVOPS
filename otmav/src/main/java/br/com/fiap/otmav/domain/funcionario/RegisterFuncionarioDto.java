@@ -5,9 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-/**
- * DTO used to register (create) both Dados and Funcionario in one request.
- */
+
 public record RegisterFuncionarioDto(
         @NotBlank
         @Size(max = 100)

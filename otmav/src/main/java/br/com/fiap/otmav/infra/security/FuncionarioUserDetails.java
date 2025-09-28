@@ -11,26 +11,25 @@ import java.util.List;
 
 public class FuncionarioUserDetails implements UserDetails {
 
-    private final String username; // email from Dados
-    private final Funcionario funcionario; // keep the whole object
-    private final String password; // hashed password from Dados
+    private final String username;
+    private final Funcionario funcionario;
+    private final String password;
     private final List<GrantedAuthority> authorities;
 
+    // MAPEIA O FUNCIONARIO PARA UM OBJETO 'USER' DO SECURITY...
     public FuncionarioUserDetails(Funcionario funcionario) {
         this.funcionario = funcionario;
 
-        // Because repository will fetch Dados with JOIN FETCH, this access is safe
         Dados dados = funcionario.getDados();
 
         this.username = dados.getEmail();
         this.password = dados.getSenha();
 
-        // map cargo -> ROLE_*
+        // SE FOR UM 'ADMIN', SECURITY VAI MAPEAR PRA 'ROLE_ADMIN', CASO CONTRÁRIO, UM FUNCIONÁRIO NORMAL
         String cargo = funcionario.getCargo();
         if (cargo != null && cargo.equalsIgnoreCase("Admin")) {
             this.authorities = List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
         } else {
-            // default to a normal user role for any other cargo
             this.authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
         }
     }

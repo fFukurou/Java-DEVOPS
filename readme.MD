@@ -5,13 +5,21 @@
 1. Clonar o projeto.
 2. Abrir o projeto (de preferência com IntelliJ).
 3. Ter o Lombok Plugin instalado e habilitar o processamento de anotações quando ele pedir.
-4. Optional: se quiser rodar o projeto no seu próprio banco de dados Oracle, trocar as credenciais em 'application.properties' e rodar o arquivo 'ChallengeSchema.sql'.
-5. Rodar o arquivo 'SensoriumApplication' no root do projeto.
-6. Abrir 'http://localhost:8080/swagger-ui/index.html/' no browser para ver todas as routes documentadas.
+4. Optional: se quiser rodar o projeto no seu próprio banco de dados Oracle, trocar as credenciais em 'application.properties' (linhas 5 e 6; o Flywya criará as migrations na sua DB).
+5. Rodar o arquivo 'OtmavApplication' no root do projeto.
+6. Abrir 'http://localhost:8080' para ser dirigido à Home do projeto.
+7. O Flyway rodará as migrations automataicamente, e criará um usuário "teste" normal e um usuário "Admin" com permissões extras.
+8. a -- email: teste@gmail.com | senha: teste
+
+   b -- email: admin@gmail.com | senha: admin
 
 ## IMPORTANTE:
 
-Se ao executar o projeto, o IntelliJ cuspir o erro "java: cannot find symbol", vá em File -> Settings (atalho CTRL + ALT + S) -> Build, Execution, Deployment -> Compiler -> Annotation Processors -> Selecione "sensorium" - > Marque a opção "Obtain processors from project classpath" ao invés de "Processor path:"
+Se ao executar o projeto, o IntelliJ cuspir o erro "java: cannot find symbol", vá em File -> Settings (atalho CTRL + ALT + S) -> Build, Execution, Deployment -> Compiler -> Annotation Processors -> Selecione "otmav" - > Marque a opção "Obtain processors from project classpath" ao invés de "Processor path:"
+
+## Link do Vídeo:
+
+- https://www.youtube.com/watch?v=YJk8cI60Bwc
 
 ## Integrantes
 
@@ -21,7 +29,7 @@ Se ao executar o projeto, o IntelliJ cuspir o erro "java: cannot find symbol", v
 
 ## Descrição
 
-Os Três cavaleiros do Apocalipse tem como objetivo auxiliar a empresa Mottu no problema de mapeamento das motos em seus pátios, onde usamos tecnologias IOT e um mapa interativo para mapear a região do pátio, além de poder separar por setores personalizados o próprio pátio.
+Os Três cavaleiros do Apocalipse tem como objetivo auxiliar a empresa Mottu no problema de mapeamento das motos em seus pátios, principalmente poder separará-las por setores personalizados dentro do próprio pátio.
 
 ---
 

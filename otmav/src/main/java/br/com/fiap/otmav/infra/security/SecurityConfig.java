@@ -72,7 +72,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.POST, "/api/dados/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/motoristas").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/funcionarios").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/funcionarios").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/api/motos/*/transfer", "/api/motos/*/assign-driver").authenticated()
 
@@ -80,8 +80,8 @@ public class SecurityConfig {
                         // WEB MVC
                         // --------------------------
 
-                        // NAVEGACAO PUBLICA
-                        .requestMatchers(HttpMethod.GET, "/motos", "/motos/*", "/motoristas", "/motoristas/*", "/filiais", "/filiais/*", "/situacoes", "/situacoes/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/filiais/new").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/motos", "/motos/*", "/motoristas", "/motoristas/*", "/filiais", "/filiais/*", "/situacoes", "/situacoes/*", "/funcionarios", "/funcionarios/*").permitAll()
 
                         // GERENCIAMENTO DE MOTOS --> AUTHENTICADO
                         .requestMatchers(HttpMethod.GET, "/motos/manage").authenticated()
@@ -93,10 +93,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/motos/*/delete").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/filiais/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/enderecos/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/funcionarios/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/motoristas/*/delete").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/funcionarios/*/delete").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/motoristas/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/funcionarios/**").hasRole("ADMIN")
 
+                        .requestMatchers("/funcionarios/new", "/funcionarios").permitAll()
                         .requestMatchers("/motoristas/new", "/motoristas").permitAll()
 
                         .anyRequest().authenticated()

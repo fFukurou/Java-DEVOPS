@@ -25,15 +25,12 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         String accept = request.getHeader("Accept");
         boolean htmlPreferred = accept != null && accept.contains("text/html");
 
-        // For UI/browser -> redirect to nice page (will cause a GET)
         if (htmlPreferred) {
-            // preserve context path
             String redirectUrl = request.getContextPath() + "/access-denied";
             response.sendRedirect(redirectUrl);
             return;
         }
 
-        // For API / non-HTML -> send HTTP 403 without forwarding
         response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
     }
 }
