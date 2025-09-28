@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 
 public class MotoUpdateForm {
 
-    @Size(max = 7)
+    @Size(max = 100)
     private String placa;
 
     @Size(max = 17)

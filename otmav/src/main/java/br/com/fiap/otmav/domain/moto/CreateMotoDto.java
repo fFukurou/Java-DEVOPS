@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record CreateMotoDto(
-        @Size(max = 7) String placa,
+        @Size(max = 100) String placa,
         @Size(max = 17) String chassi,
         @NotBlank String condicao,
         @NotNull String localizacao,

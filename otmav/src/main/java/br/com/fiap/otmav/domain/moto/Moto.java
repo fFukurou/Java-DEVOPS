@@ -24,8 +24,8 @@ public class Moto {
     @Column(name = "id_moto")
     private Long id;
 
-    @Size(max = 7)
-    @Column(name = "placa", length = 7)
+    @Size(max = 100)
+    @Column(name = "placa", length = 100)
     private String placa;
 
     @Size(max = 17)
@@ -39,7 +39,7 @@ public class Moto {
     @Column(name = "localizacao_moto", length = 4000, nullable = false)
     private String localizacaoWkt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_motorista", referencedColumnName = "id_motorista")
     private Motorista motorista;
 
@@ -47,7 +47,7 @@ public class Moto {
     @JoinColumn(name = "id_modelo", referencedColumnName = "id_modelo")
     private Modelo modelo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_setor", referencedColumnName = "id_setor")
     private Setor setor;
 

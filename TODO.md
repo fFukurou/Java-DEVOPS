@@ -1,5 +1,5 @@
 - Update SecurityConfig after routing is done;
+- Some validators (if there's time)
 - Analyze and refactor code
 - Gravar e Editar Vídeo
 - Atualizar README (endpoints, DB Connection...)
-- Some validators (if there's time)
