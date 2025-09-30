@@ -24,9 +24,14 @@ Se ao executar o projeto, o IntelliJ cuspir o erro "java: cannot find symbol", v
 
 ## Integrantes
 
+2TDSPM:
+
 - Vicenzo Massao - 554833
-- Luiz Heimberg - 556864
 - Erick Alves - 556862
+
+2TDSPX:
+
+- Luiz Heimberg - 556864
 
 ## Descrição
 
