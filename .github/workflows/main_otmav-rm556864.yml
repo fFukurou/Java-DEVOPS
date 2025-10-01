@@ -35,4 +35,4 @@ jobs:
         app-name: 'otmav-rm556864'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_7ba63d57b1774e7e8dc1cbf23a6bc8c1 }}
-        package: '${{ github.workspace }}/target/*.jar'
+        package: '${{ github.workspace }}/otmav/target/*.jar'
