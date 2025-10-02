@@ -96,7 +96,7 @@
 <dependency>
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-database-sqlserver</artifactId>
-
+</dependency>
 <dependency>
     <groupId>com.microsoft.sqlserver</groupId>
     <artifactId>mssql-jdbc</artifactId>
